@@ -341,7 +341,7 @@ def load_sensor_data():
 
 @st.cache_data
 def load_air_quality():
-    df = pd.read_csv(DATA_DIR / "air_quality.csv")
+    df = pd.read_csv(DATA_DIR / "breathe_london_air_quality.csv")
     df.columns = ["timestamp", "pm25", "no2"]
     df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
     df["night"] = df["timestamp"].apply(
@@ -351,7 +351,7 @@ def load_air_quality():
 
 @st.cache_data
 def load_sleep_data():
-    df = pd.read_csv(DATA_DIR / "ultrahuman_sleep.csv")
+    df = pd.read_csv(DATA_DIR / "ultrahuman_sleep_data.csv")
     df["Date"] = pd.to_datetime(df["Date"]).dt.date
     return df
 
