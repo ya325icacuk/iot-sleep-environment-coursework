@@ -401,7 +401,7 @@ nightly = build_nightly_summary()
 st.sidebar.markdown("""
 <div style="padding: 0 1.5rem; margin-bottom: 0;">
     <div style="font-size: 3.5rem; font-weight: 900; color: #E8937A; letter-spacing: 1px; line-height: 1;">RestNet</div>
-    <div style="font-size: 1.7rem; color: #94A3B8; margin-top: 0.75rem; font-weight: 300; letter-spacing: 1.2px; text-transform: uppercase; white-space: nowrap;">Sleep Environment Monitor</div>
+    <div style="font-size: 1.2rem; color: #94A3B8; margin-top: 0.75rem; font-weight: 300; letter-spacing: 1.2px; text-transform: uppercase;">Sleep Environment Monitor</div>
 </div>
 <div class="sb-divider-logo"></div>
 """, unsafe_allow_html=True)
