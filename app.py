@@ -28,6 +28,12 @@ st.set_page_config(page_title="RestNet", page_icon="🌙", layout="wide")
 # ============================================================
 st.markdown("""
 <style>
+    /* ── Sidebar width ── */
+    [data-testid="stSidebar"] {
+        min-width: 260px;
+        max-width: 260px;
+    }
+
     /* ── Metric Cards — shared base style ── */
     .metric-card {
         border-radius: 14px;
