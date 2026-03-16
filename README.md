@@ -59,6 +59,11 @@ pip install -r requirements.txt
 
 ### Running the Dashboard
 
+The dashboard is deployed and accessible online at:
+**https://sleep-monitor.streamlit.app**
+
+Alternatively, to run locally:
+
 ```bash
 streamlit run app.py
 ```
