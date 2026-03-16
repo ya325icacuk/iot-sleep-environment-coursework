@@ -30,7 +30,7 @@ sleep-monitor/
 │   ├── breathe_london_air_quality.csv                       # Air quality from API
 │   └── ultrahuman_sleep_data.csv                            # Sleep metrics from ring
 ├── notebooks/
-│   └── data_collection.ipynb                                # Data collection and methodology
+│   └── sleep_analysis.ipynb                                  # Data collection, analysis and visualisation
 ├── streamlit/
 │   └── config.toml                                          # Streamlit theme config
 ├── app.py                                                   # Streamlit dashboard application
@@ -68,10 +68,13 @@ Alternatively, to run locally:
 streamlit run app.py
 ```
 
-## Data Collection
+## Notebook
 
-The data collection process is documented in `notebooks/data_collection.ipynb`. The notebook covers:
+The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in two parts:
 
+**Part 1: Data Collection** - documents the methodology and code for collecting data from all three sources:
 1. **Bedroom environment sensors** - serial logging from the Heltec board, one reading per minute. Each night produces a separate CSV file (14 in total), which are then combined into a single `bedroom_sensors.csv` for analysis
 2. **External air quality** - bulk retrieval from the Breathe London API after the collection period
 3. **Personal sleep metrics** - manual export from the Ultrahuman app
+
+**Part 2: Analysis and Visualisation** - explores the collected data to investigate relationships between environmental conditions and sleep quality
