@@ -1298,19 +1298,21 @@ elif page == "My Sleep Insights":
         def snapshot_card(row, label, card_class, accent_color):
             date_str = row["night"].strftime("%A %-d %b")
             return f"""
-            <div class="metric-card {card_class}" style="min-height: 240px;">
+            <div class="metric-card {card_class}" style="min-height: 260px;">
                 <div class="metric-label-top" style="font-size: 0.95rem;">{label}</div>
                 <div style="font-size: 1.05rem; color: #94A3B8; margin-bottom: 0.5rem;">{date_str}</div>
+                <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">Sleep Score</div>
                 <div class="metric-value" style="font-size: 3.5rem;">{int(row["Sleep Score"])}<span class="metric-unit" style="font-size: 1.3rem;">/ 100</span></div>
-                <div style="font-size: 1.1rem; color: {accent_color}; margin-top: 0.3rem; font-weight: 500;">
-                    {fmt_duration(row["Total Sleep"])} total · {fmt_duration(row["Deep Sleep"])} deep · {int(row["Sleep Awake Time"])}m awake
+                <div style="font-size: 1.1rem; color: #94A3B8; margin-top: 0.3rem; font-weight: 500;">
+                    {fmt_duration(row["Total Sleep"])} sleep · {fmt_duration(row["Deep Sleep"])} deep · {int(row["Sleep Awake Time"])}m awake
                 </div>
-                <div class="snapshot-env" style="gap: 0.6rem 1.4rem; margin-top: 1rem;">
-                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["avg_temp"]:.1f}°C</strong> temp</div>
-                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["avg_humidity"]:.0f}%</strong> humidity</div>
-                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["avg_sound"]:.0f}</strong> noise</div>
-                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["std_sound"]:.1f}</strong> noise variability</div>
-                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["range_temp"]:.1f}°C</strong> temp range</div>
+                <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1rem; margin-bottom: 0.3rem;">Bedroom Conditions</div>
+                <div class="snapshot-env" style="gap: 0.6rem 1.4rem; margin-top: 0;">
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["avg_temp"]:.1f}°C</strong> temp</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["avg_humidity"]:.0f}%</strong> humidity</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["avg_sound"]:.0f}</strong> noise</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["std_sound"]:.1f}</strong> noise variability</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["range_temp"]:.1f}°C</strong> temp range</div>
                 </div>
             </div>"""
 
