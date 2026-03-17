@@ -1107,7 +1107,7 @@ elif page == "Night Explorer":
                 <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem;
                             padding: 0.7rem 1rem; background: rgba(184, 154, 222, 0.04);
                             border: 1px solid rgba(184, 154, 222, 0.10); border-radius: 10px;">
-                    <div style="font-size: 1.1rem; line-height: 1; margin-top: 0.2rem; color: {dot_color};">&#9679;</div>
+                    <div style="font-size: 1.8rem; line-height: 1; margin-top: 0.1rem; color: {dot_color};">&#9679;</div>
                     <div>
                         <div style="font-size: 1rem; font-weight: 600; color: #94A3B8;">
                             {pred["label"]}:
