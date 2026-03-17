@@ -404,10 +404,10 @@ nightly = build_nightly_summary()
 # Only factors with p < 0.05 are included.
 # ============================================================
 SLEEP_PREDICTORS = [
-    {"feature": "std_sound",    "label": "Noise variability",  "r": -0.80, "p": 0.001, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Your strongest sleep predictor. Variable noise disrupts sleep.",     "verdict_good": "Your strongest sleep predictor. Steady noise tonight."},
-    {"feature": "avg_humidity", "label": "Humidity",            "r": -0.70, "p": 0.005, "unit": "%",  "good": "low",  "bad": "high",  "verdict_bad": "Higher humidity linked to lower sleep scores.",                     "verdict_good": "Humidity was in the better range for your sleep."},
-    {"feature": "avg_sound",    "label": "Noise level",         "r": -0.69, "p": 0.006, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Louder nights linked to worse sleep.",                              "verdict_good": "A quieter night, linked to better sleep."},
-    {"feature": "range_temp",   "label": "Temperature stability","r": -0.56, "p": 0.037, "unit": "°C", "good": "low",  "bad": "high",  "verdict_bad": "Wide temperature swings linked to poorer sleep.",                   "verdict_good": "Stable temperature, no concern."},
+    {"feature": "std_sound",    "label": "Noise variability",  "r": -0.80, "p": 0.001, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Your strongest sleep predictor. Variable noise disrupts sleep.",     "verdict_neutral": "Close to your usual level. Noise variability is your strongest sleep predictor.", "verdict_good": "Your strongest sleep predictor. Steady noise tonight."},
+    {"feature": "avg_humidity", "label": "Humidity",            "r": -0.70, "p": 0.005, "unit": "%",  "good": "low",  "bad": "high",  "verdict_bad": "Higher humidity linked to lower sleep scores.",                     "verdict_neutral": "Close to your usual humidity level.",                                            "verdict_good": "Humidity was in the better range for your sleep."},
+    {"feature": "avg_sound",    "label": "Noise level",         "r": -0.69, "p": 0.006, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Louder nights linked to worse sleep.",                              "verdict_neutral": "Close to your usual noise level.",                                               "verdict_good": "A quieter night, linked to better sleep."},
+    {"feature": "range_temp",   "label": "Temperature stability","r": -0.56, "p": 0.037, "unit": "°C", "good": "low",  "bad": "high",  "verdict_bad": "Wide temperature swings linked to poorer sleep.",                   "verdict_neutral": "Temperature range was typical for you.",                                         "verdict_good": "Stable temperature, no concern."},
 ]
 NON_SIGNIFICANT = ["Light exposure", "PM2.5", "NO₂"]
 
@@ -1028,6 +1028,13 @@ elif page == "Night Explorer":
             st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Why This Night?</div>', unsafe_allow_html=True)
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your 14-night study, based on factors that correlated with sleep quality.</div>', unsafe_allow_html=True)
 
+            st.markdown("""
+            <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; color: #64748B;">
+                <span>🟢 Better than usual</span>
+                <span>🟡 Close to usual</span>
+                <span>🔴 Worse than usual</span>
+            </div>""", unsafe_allow_html=True)
+
             predictor_html = ""
             for pred in SLEEP_PREDICTORS:
                 col = pred["feature"]
@@ -1057,7 +1064,12 @@ elif page == "Night Explorer":
                     dot_color = "#9EDEBE"  # green — good direction
                     dot_icon = "🟢"
 
-                verdict = pred["verdict_bad"] if is_bad else pred["verdict_good"]
+                if abs_diff_pct < 10:
+                    verdict = pred["verdict_neutral"]
+                elif is_bad:
+                    verdict = pred["verdict_bad"]
+                else:
+                    verdict = pred["verdict_good"]
                 direction = "above" if diff_from_median > 0 else "below"
                 unit = pred["unit"]
 
