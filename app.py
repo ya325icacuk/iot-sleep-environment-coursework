@@ -375,7 +375,10 @@ def build_nightly_summary():
         avg_humidity=("humidity_pct", "mean"),
         avg_sound=("sound_avg", "mean"),
         std_sound=("sound_avg", "std"),
+        range_temp=("temperature_c", lambda x: x.max() - x.min()),
+        light_pct=("light_detected", "mean"),
     ).round(1)
+    sensor_nightly["light_pct"] = (sensor_nightly["light_pct"] * 100).round(1)
 
     air_nightly = air.groupby("night").agg(
         avg_pm25=("pm25", "mean"),
@@ -393,6 +396,20 @@ def build_nightly_summary():
     return summary
 
 nightly = build_nightly_summary()
+
+# ============================================================
+# CORRELATION FINDINGS (from notebook Part 2, Subpart 2)
+# Hardcoded Spearman correlations between environment features
+# and Sleep Score, computed over the 14-night study period.
+# Only factors with p < 0.05 are included.
+# ============================================================
+SLEEP_PREDICTORS = [
+    {"feature": "std_sound",    "label": "Noise variability",  "r": -0.80, "p": 0.001, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Your strongest sleep predictor — variable noise disrupts sleep.",    "verdict_good": "Your strongest sleep predictor — steady noise tonight."},
+    {"feature": "avg_humidity", "label": "Humidity",            "r": -0.70, "p": 0.005, "unit": "%",  "good": "low",  "bad": "high",  "verdict_bad": "Higher humidity linked to lower sleep scores.",                     "verdict_good": "Humidity was in the better range for your sleep."},
+    {"feature": "avg_sound",    "label": "Noise level",         "r": -0.69, "p": 0.006, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Louder nights linked to worse sleep.",                              "verdict_good": "A quieter night — linked to better sleep."},
+    {"feature": "range_temp",   "label": "Temperature stability","r": -0.56, "p": 0.037, "unit": "°C", "good": "low",  "bad": "high",  "verdict_bad": "Wide temperature swings linked to poorer sleep.",                   "verdict_good": "Stable temperature — no concern."},
+]
+NON_SIGNIFICANT = ["Light exposure", "PM2.5", "NO₂"]
 
 # ============================================================
 # SIDEBAR
@@ -997,6 +1014,79 @@ elif page == "Night Explorer":
                     with cols[col_i]:
                         st.markdown(insight_cards[card_idx], unsafe_allow_html=True)
                     card_idx += 1
+
+    # ============================================================
+    # SECTION 5: WHY THIS NIGHT?
+    # Contextualises this night's environment against the 14-night
+    # study using hardcoded Spearman correlation findings from the
+    # notebook (Part 2, Subpart 2).
+    # ============================================================
+    night_row = nightly[nightly["night"] == pd.Timestamp(selected_night)]
+    if not night_row.empty and len(night_sensors) > 0:
+        night_row = night_row.iloc[0]
+        with st.container(border=True):
+            st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Why This Night?</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your 14-night study, based on factors that correlated with sleep quality.</div>', unsafe_allow_html=True)
+
+            predictor_html = ""
+            for pred in SLEEP_PREDICTORS:
+                col = pred["feature"]
+                value = night_row.get(col, None)
+                if value is None or pd.isna(value):
+                    continue
+
+                median_val = nightly[col].median()
+                diff_from_median = value - median_val
+
+                # Determine if this night was in the good or bad direction
+                # All significant predictors have negative r, so higher = worse
+                if pred["bad"] == "high":
+                    is_bad = value > median_val
+                else:
+                    is_bad = value < median_val
+
+                # Traffic light colour
+                abs_diff_pct = abs(diff_from_median) / median_val * 100 if median_val != 0 else 0
+                if abs_diff_pct < 10:
+                    dot_color = "#C4A44E"  # yellow — close to median
+                    dot_icon = "🟡"
+                elif is_bad:
+                    dot_color = "#E09C9C"  # red — bad direction
+                    dot_icon = "🔴"
+                else:
+                    dot_color = "#9EDEBE"  # green — good direction
+                    dot_icon = "🟢"
+
+                verdict = pred["verdict_bad"] if is_bad else pred["verdict_good"]
+                direction = "above" if diff_from_median > 0 else "below"
+                unit = pred["unit"]
+
+                predictor_html += f"""
+                <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem;
+                            padding: 0.7rem 1rem; background: rgba(184, 154, 222, 0.04);
+                            border: 1px solid rgba(184, 154, 222, 0.10); border-radius: 10px;">
+                    <div style="font-size: 1.3rem; line-height: 1; margin-top: 0.1rem;">{dot_icon}</div>
+                    <div>
+                        <div style="font-size: 1rem; font-weight: 600; color: #E2E8F0;">
+                            {pred["label"]}:
+                            <span style="color: {dot_color};">{value:.1f}{unit}</span>
+                            <span style="color: #64748B; font-weight: 400;"> (your median: {median_val:.1f}{unit})</span>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem; line-height: 1.4;">
+                            <em>{verdict}</em>
+                        </div>
+                    </div>
+                </div>"""
+
+            st.markdown(predictor_html, unsafe_allow_html=True)
+
+            # Non-significant factors note
+            non_sig_str = ", ".join(NON_SIGNIFICANT)
+            st.markdown(f"""
+            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.5rem;">
+                <em>{non_sig_str} showed no statistically significant correlation with sleep quality
+                in this 14-night study (Spearman, p > 0.05).</em>
+            </div>""", unsafe_allow_html=True)
 
 # ============================================================
 # PAGE 3: MY COMFORT ZONE
