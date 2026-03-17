@@ -110,6 +110,18 @@ st.markdown("""
     .metric-card.card-rose .metric-value { color: #D47A98; }
     .metric-card.card-rose .metric-unit { color: rgba(212, 122, 152, 0.50); }
 
+    /* ── Night Explorer graph cards (gold boxes) ── */
+    [class*="st-key-env-card-"] {
+        background: rgba(196, 164, 78, 0.06);
+        border: 1px solid rgba(196, 164, 78, 0.18);
+        border-radius: 14px;
+        padding: 0.45rem 0.95rem 0.35rem 0.95rem;
+        margin: 0.25rem 0 0.65rem 0;
+    }
+    [class*="st-key-env-card-"] [data-testid="stPlotlyChart"] {
+        margin-top: -0.2rem;
+    }
+
     .metric-label-top {
         font-size: 0.7rem;
         text-transform: uppercase;
@@ -856,20 +868,22 @@ elif page == "Night Explorer":
                     tickfont=dict(size=13, color="#94A3B8"), gridcolor="rgba(51,65,85,0.3)")
                 return fig
 
-            st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #7BC8A4; margin-top: 0.75rem; margin-bottom: 0;">Temperature</div>', unsafe_allow_html=True)
-            st.plotly_chart(make_env_line(time_vals, temp_vals, "Temp", "°C", "#7BC8A4", "°C"),
-                            use_container_width=True, config={"displayModeBar": False})
+            with st.container(key="env-card-temp"):
+                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #7BC8A4; margin-top: 0.2rem; margin-bottom: 0;">Temperature</div>', unsafe_allow_html=True)
+                st.plotly_chart(make_env_line(time_vals, temp_vals, "Temp", "°C", "#7BC8A4", "°C"),
+                                use_container_width=True, config={"displayModeBar": False})
 
-            st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #4ECDC4; margin-top: 0.25rem; margin-bottom: 0;">Humidity</div>', unsafe_allow_html=True)
-            st.plotly_chart(make_env_line(time_vals, humid_vals, "Humidity", "%", "#4ECDC4", "%"),
-                            use_container_width=True, config={"displayModeBar": False})
+            with st.container(key="env-card-humidity"):
+                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #4ECDC4; margin-top: 0.2rem; margin-bottom: 0;">Humidity</div>', unsafe_allow_html=True)
+                st.plotly_chart(make_env_line(time_vals, humid_vals, "Humidity", "%", "#4ECDC4", "%"),
+                                use_container_width=True, config={"displayModeBar": False})
 
-            st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #5B8FB9; margin-top: 0.25rem; margin-bottom: 0;">Noise Level</div>', unsafe_allow_html=True)
-            st.plotly_chart(make_env_line(time_vals, sound_vals, "Noise", "Sensor Units", "#5B8FB9", "", fill=True),
-                            use_container_width=True, config={"displayModeBar": False})
+            with st.container(key="env-card-noise"):
+                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #5B8FB9; margin-top: 0.2rem; margin-bottom: 0;">Noise Level</div>', unsafe_allow_html=True)
+                st.plotly_chart(make_env_line(time_vals, sound_vals, "Noise", "Sensor Units", "#5B8FB9", "", fill=True),
+                                use_container_width=True, config={"displayModeBar": False})
 
             # Light — binary strip (inherently categorical)
-            st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #94A3B8; margin-top: 0.25rem; margin-bottom: 0;">Light On / Off</div>', unsafe_allow_html=True)
             time_labels_light = night_sensors["timestamp"].dt.strftime("%H:%M").tolist()
             if time_labels_light and time_labels_light[-1] != "09:00":
                 time_labels_light[-1] = "09:00"
@@ -888,7 +902,9 @@ elif page == "Night Explorer":
             fig_light.update_xaxes(tickmode="array", tickvals=tickvals_light, tickangle=0,
                 tickfont=dict(size=13, color="#94A3B8"), gridcolor="rgba(51,65,85,0.3)")
             fig_light.update_yaxes(showticklabels=False, gridcolor="rgba(51,65,85,0.3)")
-            st.plotly_chart(fig_light, use_container_width=True, config={"displayModeBar": False})
+            with st.container(key="env-card-light"):
+                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #94A3B8; margin-top: 0.2rem; margin-bottom: 0;">Light On / Off</div>', unsafe_allow_html=True)
+                st.plotly_chart(fig_light, use_container_width=True, config={"displayModeBar": False})
 
     # ============================================================
     # SECTION 3: AIR QUALITY VERDICT
