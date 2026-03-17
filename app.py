@@ -1098,7 +1098,7 @@ elif page == "Night Explorer":
                 <span><span style="font-size: 1.2rem; color: #E09C9C;">&#9679;</span> Worse than usual</span>
             </div>""", unsafe_allow_html=True)
 
-            predictor_html = ""
+            predictor_items = []
             for pred in SLEEP_PREDICTORS:
                 col = pred["feature"]
                 value = night_row.get(col, None)
@@ -1133,10 +1133,9 @@ elif page == "Night Explorer":
                 direction = "above" if diff_from_median > 0 else "below"
                 unit = pred["unit"]
 
-                predictor_html += f"""
-                <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem;
-                            padding: 0.7rem 1rem; background: rgba(184, 154, 222, 0.04);
-                            border: 1px solid rgba(184, 154, 222, 0.10); border-radius: 10px;">
+                predictor_items.append(f"""
+                <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.55rem;
+                            padding: 0.35rem 0.15rem;">
                     <div style="font-size: 2.4rem; line-height: 1; margin-top: 0.1rem; color: {dot_color};">&#9679;</div>
                     <div>
                         <div style="font-size: 1rem; font-weight: 600; color: #94A3B8;">
@@ -1148,9 +1147,15 @@ elif page == "Night Explorer":
                             <em>{verdict}</em>
                         </div>
                     </div>
-                </div>"""
+                </div>""")
 
-            st.markdown(predictor_html, unsafe_allow_html=True)
+            if predictor_items:
+                predictor_html = f"""
+                <div style="background: rgba(184, 154, 222, 0.06); border: 1px solid rgba(184, 154, 222, 0.18);
+                            border-radius: 12px; padding: 0.55rem 0.95rem 0.35rem 0.95rem; margin-top: 0.2rem;">
+                    {''.join(predictor_items)}
+                </div>"""
+                st.markdown(predictor_html, unsafe_allow_html=True)
 
             # Non-significant factors note
             non_sig_str = ", ".join(NON_SIGNIFICANT)
