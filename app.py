@@ -130,6 +130,13 @@ st.markdown("""
         padding: 0.65rem 0.75rem 0.4rem 0.75rem;
         margin-top: 0.25rem;
     }
+    .night-glance-item {
+        border-radius: 10px;
+        padding: 0.85rem 0.9rem;
+        background: rgba(232, 147, 122, 0.05);
+        border: 1px solid rgba(232, 147, 122, 0.12);
+        height: 100%;
+    }
 
     .metric-label-top {
         font-size: 0.7rem;
@@ -1007,8 +1014,7 @@ elif page == "Night Explorer":
 
         def insight_card(icon, value, description, accent="#CBD5E1"):
             return f"""
-            <div style="border-radius: 10px; padding: 0.85rem 0.9rem; background: rgba(15, 23, 42, 0.24);
-                        border: 1px solid rgba(148, 163, 184, 0.14); height: 100%;">
+            <div class="night-glance-item">
                 <div style="font-size: 2.8rem; margin-bottom: 0.3rem;">{icon}</div>
                 <div style="font-size: 1.15rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.2rem;">{value}</div>
                 <div style="font-size: 0.8rem; color: #64748B; line-height: 1.4;">{description}</div>
