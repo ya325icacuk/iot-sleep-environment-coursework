@@ -1431,7 +1431,12 @@ elif page == "My Sleep Insights":
 
         import pandas as pd
         df_ranges = pd.DataFrame(rows_data)
-        st.dataframe(df_ranges, use_container_width=True, hide_index=True)
+        st.markdown("""<style>
+        [data-testid="stDataFrame"] table { font-size: 1.15rem !important; }
+        [data-testid="stDataFrame"] th { font-size: 1.05rem !important; font-weight: 600 !important; }
+        [data-testid="stDataFrame"] td { font-size: 1.15rem !important; padding: 0.75rem 1rem !important; }
+        </style>""", unsafe_allow_html=True)
+        st.dataframe(df_ranges, use_container_width=True, hide_index=True, height=210)
 
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
