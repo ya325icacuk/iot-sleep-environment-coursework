@@ -477,7 +477,7 @@ if page == "Sleep Dashboard":
     st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">Two-Week Overview | 9 – 23 February 2026</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
-        <span style="color: #8892a5; font-size: 1.575rem;">This report summarises your sleep quality and bedroom conditions over a 2-week study period (9–22 February 2026).
+        <span style="color: #8892a5; font-size: 1.575rem;">This report summarises your sleep quality and bedroom conditions over 14 nights (9–22 February 2026).
         It covers three areas: </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">how well you slept</span><span style="color: #8892a5; font-size: 1.575rem;">,
         </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">what your bedroom environment looked like</span><span style="color: #8892a5; font-size: 1.575rem;"> (temperature, humidity, noise),
         and </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">the outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> around your home.
@@ -548,7 +548,7 @@ if page == "Sleep Dashboard":
         fig_score.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
         st.plotly_chart(fig_score, use_container_width=True)
 
-        st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Score categories are approximate; Ultrahuman does not publish official thresholds.</em></div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Sleep scores are provided by the Ultrahuman Ring. Score categories (Excellent, Good, Fair, Poor) are defined by this dashboard and are not official Ultrahuman classifications.</em></div>', unsafe_allow_html=True)
 
     # ── SECTION 2: BEDROOM ENVIRONMENT ──
     with st.container(border=True):
@@ -1026,7 +1026,7 @@ elif page == "Night Explorer":
         night_row = night_row.iloc[0]
         with st.container(border=True):
             st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Why This Night?</div>', unsafe_allow_html=True)
-            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your 14-night study, based on factors that correlated with sleep quality.</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your usual, based on what affected your sleep.</div>', unsafe_allow_html=True)
 
             st.markdown("""
             <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; color: #64748B;">
@@ -1097,7 +1097,7 @@ elif page == "Night Explorer":
             st.markdown(f"""
             <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.5rem;">
                 <em>{non_sig_str} showed no statistically significant correlation with sleep quality
-                in this 14-night study (Spearman, p > 0.05).</em>
+                across your 14 nights of data.</em>
             </div>""", unsafe_allow_html=True)
 
 # ============================================================
@@ -1232,7 +1232,7 @@ elif page == "My Sleep Insights":
                     border: 1px solid rgba(107, 140, 174, 0.15); border-radius: 10px;
                     padding: 0.8rem 1.2rem; margin-bottom: 1.5rem; line-height: 1.5;">
             Based on <strong style="color: #CBD5E1;">{n_nights} nights</strong> of data.
-            Correlations are preliminary — patterns may strengthen or change with more data.
+            Patterns may become clearer with more nights.
         </div>""", unsafe_allow_html=True)
 
         scatter_vars = [
