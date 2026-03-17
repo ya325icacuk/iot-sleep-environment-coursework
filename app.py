@@ -383,7 +383,7 @@ def build_nightly_summary():
 
     summary = sensor_nightly.join(air_nightly, how="outer")
     summary = summary.join(
-        sleep.set_index("Date")[["Sleep Score", "Total Sleep"]],
+        sleep.set_index("Date")[["Sleep Score", "Total Sleep", "Sleep Awake Time", "Deep Sleep", "REM Sleep", "Light Sleep"]],
         how="outer"
     )
     summary.index.name = "night"
@@ -1075,26 +1075,8 @@ elif page == "My Comfort Zone":
     </style>
     """, unsafe_allow_html=True)
 
-    # ── SYNTHETIC DATA — replace with real data merge later ──
-    np.random.seed(42)
-    synth_dates = pd.date_range("2026-02-09", periods=14, freq="D")
-    analysis = pd.DataFrame({
-        "night": synth_dates,
-        "avg_temp": np.random.normal(20.5, 1.2, 14).round(1),
-        "avg_humidity": np.random.normal(45, 5, 14).round(1),
-        "avg_sound": np.random.normal(90, 15, 14).round(0),
-        "avg_pm25": np.random.normal(12, 5, 14).clip(1).round(1),
-        "avg_no2": np.random.normal(20, 6, 14).clip(2).round(1),
-        "Sleep Score": [88, 72, 91, 65, 83, 79, 85, 70, 93, 77, 81, 68, 86, 74],
-        "Total Sleep": [510, 390, 540, 360, 480, 440, 500, 375, 555, 460, 490, 350, 520, 410],
-        "Sleep Awake Time": [10, 55, 8, 70, 20, 35, 15, 60, 5, 30, 18, 80, 12, 45],
-        "Deep Sleep": [95, 55, 110, 40, 85, 70, 90, 50, 115, 75, 80, 35, 100, 60],
-        "REM Sleep": [160, 100, 175, 85, 150, 130, 155, 90, 180, 140, 150, 80, 165, 115],
-        "Light Sleep": [245, 180, 247, 165, 225, 205, 240, 175, 255, 215, 242, 155, 243, 190],
-    })
-    analysis["avg_temp"] = (22.5 - (analysis["Sleep Score"] - 65) * 0.06 + np.random.normal(0, 0.4, 14)).round(1)
-    analysis["avg_sound"] = (130 - (analysis["Sleep Score"] - 65) * 1.2 + np.random.normal(0, 8, 14)).round(0)
-    # ── END SYNTHETIC DATA ──
+    # ── Real data from nightly summary ──
+    analysis = nightly.dropna(subset=["Sleep Score"]).copy()
 
     n_nights = len(analysis)
 
