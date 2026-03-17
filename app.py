@@ -1381,8 +1381,11 @@ elif page == "My Sleep Insights":
             fig, r, p = make_scatter(col_name, title, x_label, unit, explanation)
             correlations[col_name] = {"r": r, "p": p, "title": title, "unit": unit}
             with grid_positions[i]:
-                st.markdown(f'<div style="font-size: 1.5rem; font-weight: 600; color: #CBD5E1; margin-bottom: 0.1rem; text-align: center;">{title}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div style="font-size: 1.1rem; color: #64748B; margin-bottom: 0.25rem; text-align: center;">Spearman r = {r:+.2f}</div>', unsafe_allow_html=True)
+                st.markdown(f"""<div style="background: rgba(92, 184, 178, 0.08); border: 1px solid rgba(92, 184, 178, 0.18);
+                    border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 600; color: #5CB8B2;">{title}</div>
+                    <div style="font-size: 1.1rem; color: #64748B;">Spearman r = {r:+.2f}</div>
+                </div>""", unsafe_allow_html=True)
                 st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
                 st.markdown(f'<div style="font-size: 0.9rem; color: #94A3B8; text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">{explanation}</div>', unsafe_allow_html=True)
 
