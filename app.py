@@ -138,6 +138,15 @@ st.markdown("""
         height: 100%;
     }
 
+    /* ── Night Explorer predictor pair boxes ── */
+    [class*="st-key-predictor-pair-"] {
+        background: rgba(184, 154, 222, 0.06);
+        border: 1px solid rgba(184, 154, 222, 0.18);
+        border-radius: 12px;
+        padding: 0.55rem 0.8rem 0.35rem 0.8rem;
+        margin-top: 0.2rem;
+    }
+
     .metric-label-top {
         font-size: 0.7rem;
         text-transform: uppercase;
@@ -1113,7 +1122,7 @@ elif page == "Night Explorer":
                 <span><span style="font-size: 1.2rem; color: #E09C9C;">&#9679;</span> Worse than usual</span>
             </div>""", unsafe_allow_html=True)
 
-            predictor_items = []
+            predictor_cards = {}
             for pred in SLEEP_PREDICTORS:
                 col = pred["feature"]
                 value = night_row.get(col, None)
@@ -1145,10 +1154,9 @@ elif page == "Night Explorer":
                     verdict = pred["verdict_bad"]
                 else:
                     verdict = pred["verdict_good"]
-                direction = "above" if diff_from_median > 0 else "below"
                 unit = pred["unit"]
 
-                predictor_items.append(f"""
+                predictor_cards[col] = f"""
                 <div style="display: flex; align-items: flex-start; gap: 0.85rem; padding: 0.45rem 0.35rem;">
                     <div style="font-size: 2.6rem; line-height: 1; margin-top: 0.05rem; color: {dot_color};">&#9679;</div>
                     <div>
@@ -1161,18 +1169,29 @@ elif page == "Night Explorer":
                             <em>{verdict}</em>
                         </div>
                     </div>
-                </div>""")
-
-            if predictor_items:
-                predictor_html = f"""
-                <div style="background: rgba(184, 154, 222, 0.06); border: 1px solid rgba(184, 154, 222, 0.18);
-                            border-radius: 12px; padding: 0.55rem 0.95rem 0.35rem 0.95rem; margin-top: 0.2rem;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-                                column-gap: 1rem; row-gap: 0.55rem;">
-                        {''.join(predictor_items)}
-                    </div>
                 </div>"""
-                st.markdown(predictor_html, unsafe_allow_html=True)
+
+            if predictor_cards:
+                group_defs = [
+                    ("Noise Statistics", ["std_sound", "avg_sound"], "predictor-pair-noise"),
+                    ("Humidity & Temperature", ["avg_humidity", "range_temp"], "predictor-pair-climate"),
+                ]
+                group_cols = st.columns(2, gap="large")
+                for i, (title, features, key) in enumerate(group_defs):
+                    cards = [predictor_cards[f] for f in features if f in predictor_cards]
+                    if not cards:
+                        continue
+                    with group_cols[i]:
+                        with st.container(key=key):
+                            st.markdown(
+                                f'<div style="font-size: 0.9rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.3rem;">{title}</div>',
+                                unsafe_allow_html=True,
+                            )
+                            inner_cols = st.columns(2)
+                            for j in range(2):
+                                with inner_cols[j]:
+                                    if j < len(cards):
+                                        st.markdown(cards[j], unsafe_allow_html=True)
 
             # Non-significant factors note
             non_sig_str = ", ".join(NON_SIGNIFICANT)
