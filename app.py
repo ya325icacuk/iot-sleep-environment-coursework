@@ -1412,56 +1412,40 @@ elif page == "My Sleep Insights":
             ("range_temp", "Temp Range", "°C", "more stable", "less stable"),
         ]
 
-        dumbbell_labels, good_means, poor_means, finding_texts = [], [], [], []
-
-        for col_name, label, unit, less_word, more_word in range_vars:
-            t_mean = good[col_name].mean()
-            b_mean = poor[col_name].mean()
-            diff = t_mean - b_mean
-            dumbbell_labels.append(label)
-            good_means.append(t_mean)
-            poor_means.append(b_mean)
-            direction = less_word if diff < 0 else more_word
-            finding_texts.append(f"<strong>{abs(diff):.1f}{unit}</strong> {direction} on good nights")
-
-        fig_dumbbell = go.Figure()
-        for i, label in enumerate(dumbbell_labels):
-            t_val, b_val = good_means[i], poor_means[i]
-            fig_dumbbell.add_trace(go.Scatter(x=[t_val, b_val], y=[label, label],
-                mode="lines", line=dict(color="#475569", width=3), showlegend=False, hoverinfo="skip"))
-            fig_dumbbell.add_trace(go.Scatter(x=[t_val], y=[label], mode="markers",
-                marker=dict(size=18, color="#9EDEBE", symbol="circle", line=dict(width=2, color="rgba(158,222,190,0.3)")),
-                name="Good nights" if i == 0 else None, showlegend=(i == 0),
-                hovertemplate=f"<b>{label}</b> (Good)<br>{t_val:.1f}<extra></extra>"))
-            fig_dumbbell.add_trace(go.Scatter(x=[b_val], y=[label], mode="markers",
-                marker=dict(size=18, color="#E09C9C", symbol="circle", line=dict(width=2, color="rgba(224,156,156,0.3)")),
-                name="Poor nights" if i == 0 else None, showlegend=(i == 0),
-                hovertemplate=f"<b>{label}</b> (Poor)<br>{b_val:.1f}<extra></extra>"))
-
-        fig_dumbbell.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#E2E8F0", size=16), height=350,
-            margin=dict(l=120, r=40, t=20, b=40),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0.5, xanchor="center",
-                        font=dict(size=16, color="#94A3B8"), bgcolor="rgba(0,0,0,0)"),
-            xaxis=dict(visible=False), yaxis=dict(gridcolor="rgba(51,65,85,0.3)", tickfont=dict(size=16)))
-        st.plotly_chart(fig_dumbbell, use_container_width=True, config={"displayModeBar": False})
-
-        st.markdown('<div style="font-size: 1.1rem; font-weight: 600; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 0.75rem;">Key Differences</div>', unsafe_allow_html=True)
-
-        # Hardcoded r values for predictors not in scatter correlations dict
         predictor_r = {"std_sound": -0.80, "avg_humidity": -0.70, "avg_sound": -0.69, "range_temp": -0.56}
-        findings_with_r = []
-        for i, (col_name, label, unit, lw, mw) in enumerate(range_vars):
-            abs_r = abs(predictor_r.get(col_name, 0))
-            findings_with_r.append((abs_r, finding_texts[i], label))
-        findings_with_r.sort(key=lambda x: x[0], reverse=True)
 
-        findings_html = ""
-        for rank, (abs_r, text, label) in enumerate(findings_with_r):
-            highlight = "border-left: 3px solid #E8937A; padding-left: 0.8rem;" if rank == 0 else "border-left: 3px solid transparent; padding-left: 0.8rem;"
-            badge = '<span style="font-size: 0.7rem; background: rgba(232,147,122,0.15); color: #E8937A; padding: 0.15rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; font-weight: 600;">STRONGEST</span>' if rank == 0 else ""
-            findings_html += f'<div style="{highlight} margin-bottom: 0.6rem; font-size: 1rem; color: #CBD5E1; line-height: 1.5;">{text}{badge}</div>'
-        st.markdown(findings_html, unsafe_allow_html=True)
+        table_rows = ""
+        for col_name, label, unit, less_word, more_word in range_vars:
+            g_mean = good[col_name].mean()
+            p_mean = poor[col_name].mean()
+            diff = g_mean - p_mean
+            direction = less_word if diff < 0 else more_word
+            abs_r = abs(predictor_r.get(col_name, 0))
+            is_strongest = (col_name == "std_sound")
+            badge = ' <span style="font-size: 0.75rem; background: rgba(232,147,122,0.15); color: #E8937A; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 600;">STRONGEST</span>' if is_strongest else ""
+            row_bg = "background: rgba(232, 147, 122, 0.06);" if is_strongest else ""
+            table_rows += f"""
+            <tr style="{row_bg}">
+                <td style="padding: 0.8rem 1rem; font-weight: 600; color: #CBD5E1; font-size: 1.05rem;">{label}{badge}</td>
+                <td style="padding: 0.8rem 1rem; color: #9EDEBE; font-size: 1.05rem; text-align: center; font-weight: 600;">{g_mean:.1f}{unit}</td>
+                <td style="padding: 0.8rem 1rem; color: #E09C9C; font-size: 1.05rem; text-align: center; font-weight: 600;">{p_mean:.1f}{unit}</td>
+                <td style="padding: 0.8rem 1rem; color: #94A3B8; font-size: 1.05rem; text-align: center;">{abs(diff):.1f}{unit} {direction}</td>
+            </tr>"""
+
+        st.markdown(f"""
+        <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid rgba(232, 147, 122, 0.20);">
+                    <th style="padding: 0.6rem 1rem; text-align: left; font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em;">Condition</th>
+                    <th style="padding: 0.6rem 1rem; text-align: center; font-size: 0.85rem; color: #9EDEBE; text-transform: uppercase; letter-spacing: 0.05em;">Good nights avg</th>
+                    <th style="padding: 0.6rem 1rem; text-align: center; font-size: 0.85rem; color: #E09C9C; text-transform: uppercase; letter-spacing: 0.05em;">Poor nights avg</th>
+                    <th style="padding: 0.6rem 1rem; text-align: center; font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em;">Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                {table_rows}
+            </tbody>
+        </table>""", unsafe_allow_html=True)
 
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
