@@ -1309,12 +1309,10 @@ elif page == "My Sleep Insights":
                     </div>
                     <div style="flex: 1; border-left: 1px solid rgba(148, 163, 184, 0.15); padding-left: 1.5rem;">
                         <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Bedroom Conditions</div>
-                        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["avg_temp"]:.1f}°C</strong> temp</div>
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["avg_humidity"]:.0f}%</strong> humidity</div>
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["avg_sound"]:.0f}</strong> noise</div>
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["std_sound"]:.1f}</strong> noise variability</div>
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">{row["range_temp"]:.1f}°C</strong> temp range</div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">Avg temp:</strong> {row["avg_temp"]:.1f}°C <span style="color: #64748B;">(range: {row["range_temp"]:.1f}°C)</span></div>
+                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">Avg humidity:</strong> {row["avg_humidity"]:.0f}%</div>
+                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">Avg noise:</strong> {row["avg_sound"]:.0f} <span style="color: #64748B;">(variability: {row["std_sound"]:.1f})</span></div>
                         </div>
                     </div>
                 </div>
