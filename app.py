@@ -1020,7 +1020,8 @@ elif page == "Night Explorer":
                 <div style="font-size: 0.8rem; color: #64748B; line-height: 1.4;">{description}</div>
             </div>"""
 
-        insight_cards = []
+        extreme_cards = []
+        context_cards = []
 
         def fmt_hour(h):
             if h == 0: return "12 AM"
@@ -1034,49 +1035,55 @@ elif page == "Night Explorer":
             hourly_temp = night_sensors.groupby("hour")["temperature_c"].mean()
             coolest_hr = hourly_temp.idxmin()
             warmest_hr = hourly_temp.idxmax()
-            insight_cards.append(insight_card("❄️", f"{hourly_temp[coolest_hr]:.1f}°C at {fmt_hour(coolest_hr)}", "Coolest hour", "#7BC8A4"))
-            insight_cards.append(insight_card("🔥", f"{hourly_temp[warmest_hr]:.1f}°C at {fmt_hour(warmest_hr)}", "Warmest hour", "#E8937A"))
+            extreme_cards.append(insight_card("❄️", f"{hourly_temp[coolest_hr]:.1f}°C at {fmt_hour(coolest_hr)}", "Coolest hour", "#7BC8A4"))
+            extreme_cards.append(insight_card("🔥", f"{hourly_temp[warmest_hr]:.1f}°C at {fmt_hour(warmest_hr)}", "Warmest hour", "#E8937A"))
 
             hourly_sound = night_sensors.groupby("hour")["sound_avg"].mean()
             quietest_hr = hourly_sound.idxmin()
             noisiest_hr = hourly_sound.idxmax()
-            insight_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)}, avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
-            insight_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)}, avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
+            extreme_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)}, avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
+            extreme_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)}, avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
 
             night_avg_humidity = night_sensors["humidity_pct"].mean()
             overall_avg_humidity = nightly["avg_humidity"].mean()
-            insight_cards.append(insight_card("💧", f"{night_avg_humidity:.1f}%", f"Avg humidity (14-night avg: {overall_avg_humidity:.1f}%)", "#5CB8B2"))
+            context_cards.append(insight_card("💧", f"{night_avg_humidity:.1f}%", f"Avg humidity (14-night avg: {overall_avg_humidity:.1f}%)", "#5CB8B2"))
 
             night_avg_sound = night_sensors["sound_avg"].mean()
             overall_avg_sound = nightly["avg_sound"].mean()
-            insight_cards.append(insight_card("🔉", f"{night_avg_sound:.0f}", f"Avg noise level (14-night avg: {overall_avg_sound:.0f})", "#D4A574"))
+            context_cards.append(insight_card("🔉", f"{night_avg_sound:.0f}", f"Avg noise level (14-night avg: {overall_avg_sound:.0f})", "#D4A574"))
 
             light_on_minutes = int(night_sensors["light_detected"].sum())
             total_minutes = len(night_sensors)
             light_pct = (light_on_minutes / total_minutes) * 100
-            insight_cards.append(insight_card("💡", f"{light_on_minutes} of {total_minutes} min ({light_pct:.0f}%)", "Light exposure", "#94A3B8"))
+            context_cards.append(insight_card("💡", f"{light_on_minutes} of {total_minutes} min ({light_pct:.0f}%)", "Light exposure", "#94A3B8"))
 
         if len(night_air) > 0:
             if pm25_ok and no2_ok:
-                insight_cards.append(insight_card("🌿", "Within WHO guidelines", "Overnight air quality", "#9EDEBE"))
+                context_cards.append(insight_card("🌿", "Within WHO guidelines", "Overnight air quality", "#9EDEBE"))
             else:
                 exceeded_names = []
                 if not pm25_ok: exceeded_names.append("PM2.5")
                 if not no2_ok: exceeded_names.append("NO₂")
-                insight_cards.append(insight_card("⚠️", f"{' & '.join(exceeded_names)} elevated", "Overnight air quality", "#E09C9C"))
+                context_cards.append(insight_card("⚠️", f"{' & '.join(exceeded_names)} elevated", "Overnight air quality", "#E09C9C"))
+        else:
+            context_cards.append(insight_card("🌫️", "Data unavailable", "Overnight air quality", "#94A3B8"))
 
-        # Render 4-column grid
-        n_cols = 4
-        rows_needed = (len(insight_cards) + n_cols - 1) // n_cols
-        card_idx = 0
-        with st.container(key="night-glance-group"):
-            for row_i in range(rows_needed):
-                cols = st.columns(n_cols)
-                for col_i in range(n_cols):
-                    if card_idx < len(insight_cards):
-                        with cols[col_i]:
-                            st.markdown(insight_cards[card_idx], unsafe_allow_html=True)
-                        card_idx += 1
+        def render_group_box(title, cards, key):
+            if not cards:
+                return
+            with st.container(key=key):
+                st.markdown(
+                    f'<div style="font-size: 0.95rem; font-weight: 600; color: #E8937A; margin-bottom: 0.45rem;">{title}</div>',
+                    unsafe_allow_html=True,
+                )
+                cols = st.columns(4)
+                for i in range(4):
+                    with cols[i]:
+                        if i < len(cards):
+                            st.markdown(cards[i], unsafe_allow_html=True)
+
+        render_group_box("Night Extremes", extreme_cards, "night-glance-group-extremes")
+        render_group_box("Night Averages & Context", context_cards, "night-glance-group-context")
 
     # ============================================================
     # SECTION 5: WHAT WAS DIFFERENT?
