@@ -1385,9 +1385,9 @@ elif page == "My Sleep Insights":
                     border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; text-align: center;">
                     <div style="font-size: 1.5rem; font-weight: 600; color: #5CB8B2;">{title}</div>
                     <div style="font-size: 1.1rem; color: #64748B;">Spearman r = {r:+.2f}</div>
+                    <div style="font-size: 0.95rem; color: #94A3B8; margin-top: 0.3rem;">{explanation}</div>
                 </div>""", unsafe_allow_html=True)
                 st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-                st.markdown(f'<div style="font-size: 0.9rem; color: #94A3B8; text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">{explanation}</div>', unsafe_allow_html=True)
 
         st.markdown('<div style="font-size: 0.9rem; color: #64748B; font-style: italic; margin-top: 0.5rem;">Temperature, PM2.5, and NO₂ were also tested but showed no significant correlation with sleep quality.</div>', unsafe_allow_html=True)
 
