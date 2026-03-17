@@ -1299,8 +1299,7 @@ elif page == "My Sleep Insights":
             date_str = row["night"].strftime("%A, %-d %B")
             return f"""
             <div class="metric-card {card_class}" style="min-height: 200px;">
-                <div class="metric-label-top" style="font-size: 0.95rem;">{label}</div>
-                <div style="font-size: 1.05rem; color: #94A3B8; margin-bottom: 0.5rem;">{date_str}</div>
+                <div class="metric-label-top" style="font-size: 0.95rem;">{label}: {date_str}</div>
                 <div style="display: flex; gap: 2rem; align-items: flex-start;">
                     <div style="flex: 1;">
                         <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">Sleep Score</div>
