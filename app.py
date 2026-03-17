@@ -122,6 +122,15 @@ st.markdown("""
         margin-top: -0.2rem;
     }
 
+    /* ── Night at a Glance grouped panel ── */
+    [class*="st-key-night-glance-group"] {
+        background: rgba(232, 147, 122, 0.06);
+        border: 1px solid rgba(232, 147, 122, 0.18);
+        border-radius: 14px;
+        padding: 0.65rem 0.75rem 0.4rem 0.75rem;
+        margin-top: 0.25rem;
+    }
+
     .metric-label-top {
         font-size: 0.7rem;
         text-transform: uppercase;
@@ -998,8 +1007,8 @@ elif page == "Night Explorer":
 
         def insight_card(icon, value, description, accent="#CBD5E1"):
             return f"""
-            <div style="border-radius: 12px; padding: 0.9rem 1rem; background: rgba(232, 147, 122, 0.06);
-                        border: 1px solid rgba(232, 147, 122, 0.15); height: 100%;">
+            <div style="border-radius: 10px; padding: 0.85rem 0.9rem; background: rgba(15, 23, 42, 0.24);
+                        border: 1px solid rgba(148, 163, 184, 0.14); height: 100%;">
                 <div style="font-size: 2.8rem; margin-bottom: 0.3rem;">{icon}</div>
                 <div style="font-size: 1.15rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.2rem;">{value}</div>
                 <div style="font-size: 0.8rem; color: #64748B; line-height: 1.4;">{description}</div>
@@ -1054,13 +1063,14 @@ elif page == "Night Explorer":
         n_cols = 4
         rows_needed = (len(insight_cards) + n_cols - 1) // n_cols
         card_idx = 0
-        for row_i in range(rows_needed):
-            cols = st.columns(n_cols)
-            for col_i in range(n_cols):
-                if card_idx < len(insight_cards):
-                    with cols[col_i]:
-                        st.markdown(insight_cards[card_idx], unsafe_allow_html=True)
-                    card_idx += 1
+        with st.container(key="night-glance-group"):
+            for row_i in range(rows_needed):
+                cols = st.columns(n_cols)
+                for col_i in range(n_cols):
+                    if card_idx < len(insight_cards):
+                        with cols[col_i]:
+                            st.markdown(insight_cards[card_idx], unsafe_allow_html=True)
+                        card_idx += 1
 
     # ============================================================
     # SECTION 5: WHAT WAS DIFFERENT?
