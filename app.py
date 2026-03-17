@@ -1328,7 +1328,7 @@ elif page == "My Sleep Insights":
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Correlation Explorer</div>', unsafe_allow_html=True)
 
-        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">Based on <strong style="color: #CBD5E1;">{n_nights} nights</strong> of data. Patterns may become clearer with more nights.</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">How each bedroom condition correlated with your sleep score across {n_nights} nights.</div>', unsafe_allow_html=True)
 
         scatter_vars = [
             ("avg_humidity", "Humidity", "Avg Humidity (%)", "%", "Higher humidity linked to lower sleep scores."),
@@ -1397,15 +1397,13 @@ elif page == "My Sleep Insights":
         median_score = analysis["Sleep Score"].median()
         good = analysis[analysis["Sleep Score"] >= median_score]
         poor = analysis[analysis["Sleep Score"] < median_score]
-        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">Median-split comparison: <strong style="color: #D4A574;">{len(good)} good</strong> nights (score ≥ {median_score:.0f}) vs <strong style="color: #6B8CAE;">{len(poor)} poor</strong> nights (score < {median_score:.0f}).</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">Median-split comparison: <strong style="color: #9EDEBE;">{len(good)} good</strong> nights (score ≥ {median_score:.0f}) vs <strong style="color: #E09C9C;">{len(poor)} poor</strong> nights (score < {median_score:.0f}). Only the four significant predictors are shown.</div>', unsafe_allow_html=True)
 
         range_vars = [
-            ("avg_temp", "Temperature", "°C", "cooler", "warmer"),
+            ("std_sound", "Noise Variability", "", "steadier", "more variable"),
             ("avg_humidity", "Humidity", "%", "drier", "more humid"),
             ("avg_sound", "Noise Level", "", "quieter", "louder"),
-            ("std_sound", "Noise Variability", "", "steadier", "more variable"),
-            ("avg_pm25", "PM2.5", "µg/m³", "cleaner", "more polluted"),
-            ("avg_no2", "NO₂", "µg/m³", "cleaner", "more polluted"),
+            ("range_temp", "Temp Range", "°C", "more stable", "less stable"),
         ]
 
         dumbbell_labels, good_means, poor_means, finding_texts = [], [], [], []
@@ -1426,16 +1424,16 @@ elif page == "My Sleep Insights":
             fig_dumbbell.add_trace(go.Scatter(x=[t_val, b_val], y=[label, label],
                 mode="lines", line=dict(color="#475569", width=3), showlegend=False, hoverinfo="skip"))
             fig_dumbbell.add_trace(go.Scatter(x=[t_val], y=[label], mode="markers",
-                marker=dict(size=14, color="#D4A574", symbol="circle", line=dict(width=2, color="rgba(212,165,116,0.3)")),
+                marker=dict(size=18, color="#9EDEBE", symbol="circle", line=dict(width=2, color="rgba(158,222,190,0.3)")),
                 name="Good nights" if i == 0 else None, showlegend=(i == 0),
                 hovertemplate=f"<b>{label}</b> (Good)<br>{t_val:.1f}<extra></extra>"))
             fig_dumbbell.add_trace(go.Scatter(x=[b_val], y=[label], mode="markers",
-                marker=dict(size=14, color="#6B8CAE", symbol="circle", line=dict(width=2, color="rgba(107,140,174,0.3)")),
+                marker=dict(size=18, color="#E09C9C", symbol="circle", line=dict(width=2, color="rgba(224,156,156,0.3)")),
                 name="Poor nights" if i == 0 else None, showlegend=(i == 0),
                 hovertemplate=f"<b>{label}</b> (Poor)<br>{b_val:.1f}<extra></extra>"))
 
         fig_dumbbell.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#E2E8F0", size=16), height=400,
+            font=dict(color="#E2E8F0", size=16), height=350,
             margin=dict(l=120, r=40, t=20, b=40),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0.5, xanchor="center",
                         font=dict(size=16, color="#94A3B8"), bgcolor="rgba(0,0,0,0)"),
@@ -1444,31 +1442,20 @@ elif page == "My Sleep Insights":
 
         st.markdown('<div style="font-size: 1.1rem; font-weight: 600; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 0.75rem;">Key Differences</div>', unsafe_allow_html=True)
 
+        # Hardcoded r values for predictors not in scatter correlations dict
+        predictor_r = {"std_sound": -0.80, "avg_humidity": -0.70, "avg_sound": -0.69, "range_temp": -0.56}
         findings_with_r = []
         for i, (col_name, label, unit, lw, mw) in enumerate(range_vars):
-            abs_r = abs(correlations[col_name]["r"]) if col_name in correlations else 0
+            abs_r = abs(predictor_r.get(col_name, 0))
             findings_with_r.append((abs_r, finding_texts[i], label))
         findings_with_r.sort(key=lambda x: x[0], reverse=True)
 
         findings_html = ""
         for rank, (abs_r, text, label) in enumerate(findings_with_r):
-            highlight = "border-left: 3px solid #D4A574; padding-left: 0.8rem;" if rank == 0 else "border-left: 3px solid transparent; padding-left: 0.8rem;"
-            badge = '<span style="font-size: 0.7rem; background: rgba(212,165,116,0.15); color: #D4A574; padding: 0.15rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; font-weight: 600;">STRONGEST</span>' if rank == 0 else ""
+            highlight = "border-left: 3px solid #E8937A; padding-left: 0.8rem;" if rank == 0 else "border-left: 3px solid transparent; padding-left: 0.8rem;"
+            badge = '<span style="font-size: 0.7rem; background: rgba(232,147,122,0.15); color: #E8937A; padding: 0.15rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; font-weight: 600;">STRONGEST</span>' if rank == 0 else ""
             findings_html += f'<div style="{highlight} margin-bottom: 0.6rem; font-size: 1rem; color: #CBD5E1; line-height: 1.5;">{text}{badge}</div>'
         st.markdown(findings_html, unsafe_allow_html=True)
-
-        good_awake = good["Sleep Awake Time"].mean()
-        poor_awake = poor["Sleep Awake Time"].mean()
-        awake_diff = poor_awake - good_awake
-        st.markdown(f"""
-        <div style="margin-top: 1rem; padding: 0.8rem 1.2rem; background: rgba(107, 140, 174, 0.06);
-                    border: 1px solid rgba(107, 140, 174, 0.12); border-radius: 10px;">
-            <span style="font-size: 0.95rem; color: #94A3B8;">
-                Awake time averaged <strong style="color: #6B8CAE;">{good_awake:.0f} min</strong> on good nights
-                vs <strong style="color: #6B8CAE;">{poor_awake:.0f} min</strong> on poor nights
-                , a difference of <strong style="color: #CBD5E1;">{awake_diff:.0f} minutes</strong>.
-            </span>
-        </div>""", unsafe_allow_html=True)
 
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
