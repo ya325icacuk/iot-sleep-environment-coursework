@@ -1360,7 +1360,7 @@ elif page == "My Sleep Insights":
                 hovertemplate=f"<b>{title}</b>: %{{x:.1f}} {unit}<br>Sleep Score: %{{y}}<extra></extra>",
                 showlegend=False))
             fig.add_trace(go.Scatter(x=x_trend, y=y_trend, mode="lines",
-                line=dict(color="#94A3B8", width=2.5, dash="dot"),
+                line=dict(color="#E09C9C", width=3),
                 showlegend=False, hoverinfo="skip"))
 
             fig.update_layout(**PLOTLY_LAYOUT, height=400)
@@ -1368,7 +1368,8 @@ elif page == "My Sleep Insights":
             fig.update_xaxes(title_text=x_label, title_font=dict(size=14),
                              tickfont=dict(size=12), gridcolor="#1E293B")
             fig.update_yaxes(title_text="Sleep Score", title_font=dict(size=14),
-                             tickfont=dict(size=12), gridcolor="#1E293B")
+                             tickfont=dict(size=12), gridcolor="#1E293B",
+                             gridwidth=1, griddash="dash")
             return fig, r, p
 
         correlations = {}
