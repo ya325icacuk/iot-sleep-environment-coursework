@@ -1134,16 +1134,15 @@ elif page == "Night Explorer":
                 unit = pred["unit"]
 
                 predictor_items.append(f"""
-                <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.55rem;
-                            padding: 0.35rem 0.15rem;">
-                    <div style="font-size: 2.4rem; line-height: 1; margin-top: 0.1rem; color: {dot_color};">&#9679;</div>
+                <div style="display: flex; align-items: flex-start; gap: 0.85rem; padding: 0.45rem 0.35rem;">
+                    <div style="font-size: 2.6rem; line-height: 1; margin-top: 0.05rem; color: {dot_color};">&#9679;</div>
                     <div>
-                        <div style="font-size: 1rem; font-weight: 600; color: #94A3B8;">
+                        <div style="font-size: 1.08rem; font-weight: 600; color: #94A3B8; line-height: 1.4;">
                             {pred["label"]}:
                             <span style="color: {dot_color};">{value:.1f}{unit}</span>
                             <span style="font-weight: 400;"> (your median: {median_val:.1f}{unit})</span>
                         </div>
-                        <div style="font-size: 0.85rem; color: #8892a5; margin-top: 0.2rem; line-height: 1.4;">
+                        <div style="font-size: 0.98rem; color: #8892a5; margin-top: 0.28rem; line-height: 1.45;">
                             <em>{verdict}</em>
                         </div>
                     </div>
@@ -1153,7 +1152,10 @@ elif page == "Night Explorer":
                 predictor_html = f"""
                 <div style="background: rgba(184, 154, 222, 0.06); border: 1px solid rgba(184, 154, 222, 0.18);
                             border-radius: 12px; padding: 0.55rem 0.95rem 0.35rem 0.95rem; margin-top: 0.2rem;">
-                    {''.join(predictor_items)}
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                                column-gap: 1rem; row-gap: 0.55rem;">
+                        {''.join(predictor_items)}
+                    </div>
                 </div>"""
                 st.markdown(predictor_html, unsafe_allow_html=True)
 
