@@ -1328,13 +1328,7 @@ elif page == "My Sleep Insights":
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Correlation Explorer</div>', unsafe_allow_html=True)
 
-        st.markdown(f"""
-        <div style="font-size: 0.95rem; color: #94A3B8; background: rgba(107, 140, 174, 0.08);
-                    border: 1px solid rgba(107, 140, 174, 0.15); border-radius: 10px;
-                    padding: 0.8rem 1.2rem; margin-bottom: 1.5rem; line-height: 1.5;">
-            Based on <strong style="color: #CBD5E1;">{n_nights} nights</strong> of data.
-            Patterns may become clearer with more nights.
-        </div>""", unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">Based on <strong style="color: #CBD5E1;">{n_nights} nights</strong> of data. Patterns may become clearer with more nights.</div>', unsafe_allow_html=True)
 
         scatter_vars = [
             ("avg_humidity", "Humidity", "Avg Humidity (%)", "%", "Higher humidity linked to lower sleep scores."),
@@ -1361,7 +1355,7 @@ elif page == "My Sleep Insights":
 
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=x, y=y, mode="markers",
-                marker=dict(size=10, color=dot_colors, opacity=0.85,
+                marker=dict(size=14, color=dot_colors, opacity=0.85,
                             line=dict(width=1, color="rgba(255,255,255,0.2)")),
                 hovertemplate=f"<b>{title}</b>: %{{x:.1f}} {unit}<br>Sleep Score: %{{y}}<extra></extra>",
                 showlegend=False))
@@ -1369,8 +1363,8 @@ elif page == "My Sleep Insights":
                 line=dict(color="#94A3B8", width=2.5, dash="dot"),
                 showlegend=False, hoverinfo="skip"))
 
-            fig.update_layout(**PLOTLY_LAYOUT, height=320)
-            fig.update_layout(margin=dict(l=60, r=20, t=35, b=55))
+            fig.update_layout(**PLOTLY_LAYOUT, height=400)
+            fig.update_layout(margin=dict(l=60, r=20, t=20, b=55))
             fig.update_xaxes(title_text=x_label, title_font=dict(size=14),
                              tickfont=dict(size=12), gridcolor="#1E293B")
             fig.update_yaxes(title_text="Sleep Score", title_font=dict(size=14),
