@@ -433,7 +433,7 @@ st.sidebar.markdown("""
     </div>
     <div style="flex: 1; min-width: 0;">
         <div style="font-size: 2.2rem; font-weight: 600; color: #E2E8F0; margin-bottom: 0.2rem; line-height: 1.3;">Yasmin Akhmedova</div>
-        <div style="font-size: 1.6rem; color: #94A3B8;">9 – 22 February 2026 | London</div>
+        <div style="font-size: 1.6rem; color: #94A3B8;">9 – 22 February 2026</div>
     </div>
 </div>
 <div class="sb-divider"></div>
