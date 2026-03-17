@@ -477,11 +477,11 @@ if page == "Sleep Dashboard":
     st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">Two-Week Overview | 9 – 23 February 2026</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
-        <span style="color: #8892a5; font-size: 1.575rem;">This report summarises your sleep quality and bedroom conditions over the past two weeks.
+        <span style="color: #8892a5; font-size: 1.575rem;">This report summarises your sleep quality and bedroom conditions over a 2-week study period (9–22 February 2026).
         It covers three areas: </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">how well you slept</span><span style="color: #8892a5; font-size: 1.575rem;">,
         </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">what your bedroom environment looked like</span><span style="color: #8892a5; font-size: 1.575rem;"> (temperature, humidity, noise),
         and </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">the outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> around your home.
-        Together, these help you understand what's supporting — or disrupting — your rest.</span>
+        Together, these help you understand what's supporting or disrupting your rest.</span>
     </div>
     """, unsafe_allow_html=True)
 
