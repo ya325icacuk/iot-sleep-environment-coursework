@@ -979,7 +979,8 @@ elif page == "Night Explorer":
     # ============================================================
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #E8937A; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232, 147, 122, 0.20);">Night at a Glance</div>', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 0.95rem; color: #94A3B8; margin-bottom: 1rem;">A quick snapshot of your bedroom conditions for this night. Temperature, humidity, and noise were linked to sleep quality across your 14 nights. Light exposure and air quality are included for general context.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #E8937A; margin-bottom: 0.25rem;">A quick snapshot of your bedroom conditions for this night.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 0.95rem; color: #94A3B8; margin-bottom: 1rem;">Temperature, humidity, and noise were linked to sleep quality across your 14 nights. Light exposure and air quality are included for general context.</div>', unsafe_allow_html=True)
 
         def insight_card(icon, value, description, accent="#CBD5E1"):
             return f"""
