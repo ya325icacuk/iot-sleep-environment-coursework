@@ -706,7 +706,9 @@ if page == "Sleep Dashboard":
 
         st.markdown(f"""
         <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;">
-            <em>Air quality data covers the sleep window (11 pm – 9 am) only.
+            <em>Neither PM2.5 nor NO₂ showed a significant correlation with sleep quality in this dataset.
+            These are included for general health context against WHO guidelines.
+            Air quality data covers the sleep window (11 pm to 9 am) only.
             WHO guidelines for PM2.5 ({WHO_PM25} µg/m³) and NO₂ ({WHO_NO2} µg/m³) are based on 24-hour averages,
             so these comparisons represent partial-day measurements.</em>
         </div>""", unsafe_allow_html=True)
