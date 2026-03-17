@@ -1294,7 +1294,6 @@ elif page == "My Sleep Insights":
 
         best_row = analysis.loc[analysis["Sleep Score"].idxmax()]
         worst_score_row = analysis.loc[analysis["Sleep Score"].idxmin()]
-        worst_dur_row = analysis.loc[analysis["Total Sleep"].idxmin()]
 
         def snapshot_card(row, label, sublabel, card_class, accent_color):
             date_str = row["night"].strftime("%A %-d %b")
@@ -1310,19 +1309,17 @@ elif page == "My Sleep Insights":
                     <div class="snapshot-env-item"><strong>{row["avg_temp"]:.1f}°C</strong> temp</div>
                     <div class="snapshot-env-item"><strong>{row["avg_humidity"]:.0f}%</strong> humidity</div>
                     <div class="snapshot-env-item"><strong>{row["avg_sound"]:.0f}</strong> noise</div>
-                    <div class="snapshot-env-item"><strong>{row["avg_pm25"]:.1f}</strong> PM2.5</div>
-                    <div class="snapshot-env-item"><strong>{row["avg_no2"]:.1f}</strong> NO₂</div>
+                    <div class="snapshot-env-item"><strong>{row["std_sound"]:.1f}</strong> noise variability</div>
+                    <div class="snapshot-env-item"><strong>{row["range_temp"]:.1f}°C</strong> temp range</div>
                 </div>
                 <div style="font-size: 0.75rem; color: #475569; margin-top: 0.5rem;">{sublabel}</div>
             </div>"""
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
         with col1:
             st.markdown(snapshot_card(best_row, "Best Night", "Highest sleep score", "card-amber", "#D4A574"), unsafe_allow_html=True)
         with col2:
-            st.markdown(snapshot_card(worst_score_row, "Worst Night (Score)", "Lowest sleep score", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
-        with col3:
-            st.markdown(snapshot_card(worst_dur_row, "Worst Night (Duration)", "Shortest total sleep", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(worst_score_row, "Worst Night", "Lowest sleep score", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
 
     # ── SECTION 2: CORRELATION EXPLORER ──
     with st.container(border=True):
