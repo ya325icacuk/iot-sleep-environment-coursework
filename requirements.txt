@@ -5,3 +5,6 @@ numpy
 scipy
 pyserial
 requests
+seaborn
+matplotlib
+statsmodels

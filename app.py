@@ -477,11 +477,10 @@ if page == "Sleep Dashboard":
     st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">Two-Week Overview | 9 – 23 February 2026</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
-        <span style="color: #8892a5; font-size: 1.575rem;">This report summarises your sleep quality and bedroom conditions over 14 nights (9–22 February 2026).
-        It covers three areas: </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">how well you slept</span><span style="color: #8892a5; font-size: 1.575rem;">,
-        </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">what your bedroom environment looked like</span><span style="color: #8892a5; font-size: 1.575rem;"> (temperature, humidity, noise),
-        and </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">the outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> around your home.
-        Together, these help you understand what's supporting or disrupting your rest.</span>
+        <span style="color: #8892a5; font-size: 1.575rem;">Here's your overview of 14 nights (9–22 February 2026).
+        It covers your </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">nightly sleep scores, duration, and deep sleep</span><span style="color: #8892a5; font-size: 1.575rem;">,
+        the </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">four bedroom conditions that affected your sleep</span><span style="color: #8892a5; font-size: 1.575rem;"> (noise variability, humidity, noise level, and temperature stability),
+        and </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> around your home.</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -721,11 +720,13 @@ elif page == "Night Explorer":
     st.markdown('<div style="font-size: 5rem; font-weight: 800; color: #E8937A; margin-bottom: 0.5rem; line-height: 1.1;">Night Explorer</div>', unsafe_allow_html=True)
     st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">Dive Into a Single Night</div>', unsafe_allow_html=True)
     st.markdown("""
-    <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 1.5rem; font-weight: 400;">
-        <span style="color: #8892a5; font-size: 1.575rem;">Select a night to explore what happened while you slept.
+    <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
+        <span style="color: #8892a5; font-size: 1.575rem;">Select a night below to explore what happened while you slept.
         This page breaks down your </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">sleep architecture</span><span style="color: #8892a5; font-size: 1.575rem;">,
         shows a minute-by-minute </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">bedroom environment timeline</span><span style="color: #8892a5; font-size: 1.575rem;">,
-        and checks whether </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> met WHO guidelines.</span>
+        checks whether </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> met WHO guidelines,
+        provides a </span><span style="color: #E8937A; font-weight: 600; font-size: 1.575rem;">quick summary</span><span style="color: #8892a5; font-size: 1.575rem;"> of the night,
+        and explains </span><span style="color: #B89ADE; font-weight: 600; font-size: 1.575rem;">why your sleep scored the way it did</span><span style="color: #8892a5; font-size: 1.575rem;">.</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -827,6 +828,7 @@ elif page == "Night Explorer":
         with st.container(border=True):
             st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Bedroom Environment Timeline</div>', unsafe_allow_html=True)
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-bottom: 0.25rem;">Minute-by-minute bedroom conditions from 11 pm to 9 am. Hover for exact values.</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 0.95rem; color: #94A3B8; margin-bottom: 1rem;">These are the four bedroom conditions recorded by your sensors throughout the night. Temperature, humidity, and noise level were all linked to sleep quality across your 14 nights. Light exposure is included for completeness but did not show a significant link to sleep quality.</div>', unsafe_allow_html=True)
 
             time_vals = night_sensors["timestamp"]
             temp_vals = night_sensors["temperature_c"].values

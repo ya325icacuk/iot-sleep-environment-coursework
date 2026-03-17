@@ -70,11 +70,21 @@ streamlit run app.py
 
 ## Notebook
 
-The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in two parts:
+The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in three parts:
 
 **Part 1: Data Collection** - documents the methodology and code for collecting data from all three sources:
 1. **Bedroom environment sensors** - serial logging from the Heltec board, one reading per minute. Each night produces a separate CSV file (14 in total), which are then combined into a single `bedroom_sensors.csv` for analysis
 2. **External air quality** - bulk retrieval from the Breathe London API after the collection period
 3. **Personal sleep metrics** - manual export from the Ultrahuman app
 
-**Part 2: Analysis and Visualisation** - explores the collected data to investigate relationships between environmental conditions and sleep quality
+**Part 2: Data Analysis** - analyses the integrated dataset in five steps:
+1. **Nightly feature aggregation** - converts raw sensor readings into 12 comparable nightly summary features
+2. **Correlation analysis** - Spearman rank correlations between all environment features and sleep metrics
+3. **Multiple regression** - OLS models for sleep score, awake time, and light sleep duration
+4. **Optimal conditions comparison** - median split comparing environment conditions on good vs poor sleep nights
+5. **Intra-night profiles** - minute-by-minute sensor plots for the best and worst sleep nights
+
+**Part 3: Visualisation and Interface** - documents the interactive Streamlit dashboard (`app.py`) deployed at https://sleep-monitor.streamlit.app:
+1. **Sleep Dashboard** - 2-week overview of sleep quality and bedroom conditions
+2. **Night Explorer** - single-night deep dive with minute-level sensor timelines
+3. **My Comfort Zone** - correlation analysis and personalised recommendations
