@@ -404,10 +404,10 @@ nightly = build_nightly_summary()
 # Only factors with p < 0.05 are included.
 # ============================================================
 SLEEP_PREDICTORS = [
-    {"feature": "std_sound",    "label": "Noise variability",  "r": -0.80, "p": 0.001, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Your strongest sleep predictor — variable noise disrupts sleep.",    "verdict_good": "Your strongest sleep predictor — steady noise tonight."},
+    {"feature": "std_sound",    "label": "Noise variability",  "r": -0.80, "p": 0.001, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Your strongest sleep predictor. Variable noise disrupts sleep.",     "verdict_good": "Your strongest sleep predictor. Steady noise tonight."},
     {"feature": "avg_humidity", "label": "Humidity",            "r": -0.70, "p": 0.005, "unit": "%",  "good": "low",  "bad": "high",  "verdict_bad": "Higher humidity linked to lower sleep scores.",                     "verdict_good": "Humidity was in the better range for your sleep."},
-    {"feature": "avg_sound",    "label": "Noise level",         "r": -0.69, "p": 0.006, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Louder nights linked to worse sleep.",                              "verdict_good": "A quieter night — linked to better sleep."},
-    {"feature": "range_temp",   "label": "Temperature stability","r": -0.56, "p": 0.037, "unit": "°C", "good": "low",  "bad": "high",  "verdict_bad": "Wide temperature swings linked to poorer sleep.",                   "verdict_good": "Stable temperature — no concern."},
+    {"feature": "avg_sound",    "label": "Noise level",         "r": -0.69, "p": 0.006, "unit": "",   "good": "low",  "bad": "high",  "verdict_bad": "Louder nights linked to worse sleep.",                              "verdict_good": "A quieter night, linked to better sleep."},
+    {"feature": "range_temp",   "label": "Temperature stability","r": -0.56, "p": 0.037, "unit": "°C", "good": "low",  "bad": "high",  "verdict_bad": "Wide temperature swings linked to poorer sleep.",                   "verdict_good": "Stable temperature, no concern."},
 ]
 NON_SIGNIFICANT = ["Light exposure", "PM2.5", "NO₂"]
 
