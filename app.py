@@ -909,17 +909,17 @@ elif page == "Night Explorer":
 
             if pm25_ok:
                 pm25_icon, pm25_accent = "✓", "#9EDEBE"
-                pm25_msg = f"Overnight PM2.5 averaged {avg_pm25_ne:.1f} µg/m³ — within WHO 24-hour guideline ({WHO_PM25_NE})"
+                pm25_msg = f"Overnight PM2.5 averaged {avg_pm25_ne:.1f} µg/m³, within WHO 24-hour guideline ({WHO_PM25_NE})"
             else:
                 pm25_icon, pm25_accent = "✗", "#E09C9C"
-                pm25_msg = f"Overnight PM2.5 averaged {avg_pm25_ne:.1f} µg/m³ — {avg_pm25_ne / WHO_PM25_NE:.1f}× the WHO 24-hour guideline ({WHO_PM25_NE})"
+                pm25_msg = f"Overnight PM2.5 averaged {avg_pm25_ne:.1f} µg/m³, {avg_pm25_ne / WHO_PM25_NE:.1f}× the WHO 24-hour guideline ({WHO_PM25_NE})"
 
             if no2_ok:
                 no2_icon, no2_accent = "✓", "#9EDEBE"
-                no2_msg = f"Overnight NO₂ averaged {avg_no2_ne:.1f} µg/m³ — within WHO 24-hour guideline ({WHO_NO2_NE})"
+                no2_msg = f"Overnight NO₂ averaged {avg_no2_ne:.1f} µg/m³, within WHO 24-hour guideline ({WHO_NO2_NE})"
             else:
                 no2_icon, no2_accent = "✗", "#E09C9C"
-                no2_msg = f"Overnight NO₂ averaged {avg_no2_ne:.1f} µg/m³ — {avg_no2_ne / WHO_NO2_NE:.1f}× the WHO 24-hour guideline ({WHO_NO2_NE})"
+                no2_msg = f"Overnight NO₂ averaged {avg_no2_ne:.1f} µg/m³, {avg_no2_ne / WHO_NO2_NE:.1f}× the WHO 24-hour guideline ({WHO_NO2_NE})"
 
             col1, col2 = st.columns(2)
             with col1:
@@ -961,11 +961,15 @@ elif page == "Night Explorer":
 
             st.markdown(f'<div style="font-size: 1rem; color: {summary_color}; margin-top: 0.75rem; font-weight: 500;">{summary_msg}</div>', unsafe_allow_html=True)
 
-            # WHO caveat
+            # Non-significance disclaimer + WHO caveat
             st.markdown(f"""
             <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.75rem;">
+                <em>Neither PM2.5 nor NO₂ showed a significant link to sleep quality in this dataset.
+                These are included for general health context against WHO guidelines.</em>
+            </div>
+            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.5rem;">
                 <em>Note: WHO guidelines for PM2.5 ({WHO_PM25_NE} µg/m³) and NO₂ ({WHO_NO2_NE} µg/m³) are based on
-                24-hour averages. This comparison uses overnight data only (approx. 11 pm – 9 am),
+                24-hour averages. This comparison uses overnight data only (approx. 11 pm to 9 am),
                 so values shown represent a partial-day average rather than a full 24-hour measurement.</em>
             </div>""", unsafe_allow_html=True)
         else:
@@ -1007,8 +1011,8 @@ elif page == "Night Explorer":
             hourly_sound = night_sensors.groupby("hour")["sound_avg"].mean()
             quietest_hr = hourly_sound.idxmin()
             noisiest_hr = hourly_sound.idxmax()
-            insight_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)} — avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
-            insight_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)} — avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
+            insight_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)}, avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
+            insight_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)}, avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
 
             light_diff = night_sensors["light_detected"].diff()
             lights_off_times = night_sensors.loc[light_diff == -1, "timestamp"]
@@ -1149,7 +1153,7 @@ elif page == "My Sleep Insights":
         </span><span style="color: #D4A574; font-weight: 600; font-size: 1.575rem;">sleep</span><span style="color: #8892a5; font-size: 1.575rem;">,
         </span><span style="color: #D4A574; font-weight: 600; font-size: 1.575rem;">bedroom environment</span><span style="color: #8892a5; font-size: 1.575rem;">, and
         </span><span style="color: #D4A574; font-weight: 600; font-size: 1.575rem;">air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> data together
-        to find the conditions behind your best — and worst — nights of rest.</span>
+        to find the conditions behind your best and worst nights of rest.</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1221,7 +1225,7 @@ elif page == "My Sleep Insights":
     # ── SECTION 1: BEST vs WORST NIGHT SNAPSHOT ──
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(212, 165, 116, 0.20);">Best vs Worst Nights</div>', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1rem;">Your highest and lowest scoring nights side by side — same bed, different conditions.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1rem;">Your highest and lowest scoring nights side by side. Same bed, different conditions.</div>', unsafe_allow_html=True)
 
         best_row = analysis.loc[analysis["Sleep Score"].idxmax()]
         worst_score_row = analysis.loc[analysis["Sleep Score"].idxmin()]
@@ -1251,9 +1255,9 @@ elif page == "My Sleep Insights":
         with col1:
             st.markdown(snapshot_card(best_row, "Best Night", "Highest sleep score", "card-amber", "#D4A574"), unsafe_allow_html=True)
         with col2:
-            st.markdown(snapshot_card(worst_score_row, "Worst Night — Score", "Lowest sleep score", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(worst_score_row, "Worst Night (Score)", "Lowest sleep score", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
         with col3:
-            st.markdown(snapshot_card(worst_dur_row, "Worst Night — Duration", "Shortest total sleep", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(worst_dur_row, "Worst Night (Duration)", "Shortest total sleep", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
 
     # ── SECTION 2: CORRELATION EXPLORER ──
     with st.container(border=True):
@@ -1370,11 +1374,11 @@ elif page == "My Sleep Insights":
             fig_dumbbell.add_trace(go.Scatter(x=[t_val], y=[label], mode="markers",
                 marker=dict(size=14, color="#D4A574", symbol="circle", line=dict(width=2, color="rgba(212,165,116,0.3)")),
                 name="Good nights" if i == 0 else None, showlegend=(i == 0),
-                hovertemplate=f"<b>{label}</b> — Good<br>{t_val:.1f}<extra></extra>"))
+                hovertemplate=f"<b>{label}</b> (Good)<br>{t_val:.1f}<extra></extra>"))
             fig_dumbbell.add_trace(go.Scatter(x=[b_val], y=[label], mode="markers",
                 marker=dict(size=14, color="#6B8CAE", symbol="circle", line=dict(width=2, color="rgba(107,140,174,0.3)")),
                 name="Poor nights" if i == 0 else None, showlegend=(i == 0),
-                hovertemplate=f"<b>{label}</b> — Poor<br>{b_val:.1f}<extra></extra>"))
+                hovertemplate=f"<b>{label}</b> (Poor)<br>{b_val:.1f}<extra></extra>"))
 
         fig_dumbbell.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0", size=16), height=400,
@@ -1408,7 +1412,7 @@ elif page == "My Sleep Insights":
             <span style="font-size: 0.95rem; color: #94A3B8;">
                 Awake time averaged <strong style="color: #6B8CAE;">{good_awake:.0f} min</strong> on good nights
                 vs <strong style="color: #6B8CAE;">{poor_awake:.0f} min</strong> on poor nights
-                — a difference of <strong style="color: #CBD5E1;">{awake_diff:.0f} minutes</strong>.
+                , a difference of <strong style="color: #CBD5E1;">{awake_diff:.0f} minutes</strong>.
             </span>
         </div>""", unsafe_allow_html=True)
 
@@ -1424,20 +1428,20 @@ elif page == "My Sleep Insights":
 
         advice_map = {
             "avg_temp": {
-                "neg": "Consider keeping your bedroom cooler at night — a fan, cracked window, or lower thermostat could help.",
+                "neg": "Consider keeping your bedroom cooler at night. A fan, cracked window, or lower thermostat could help.",
                 "pos": "Your data suggests warmer rooms helped, but sleep science generally favours 16–19°C. This may shift with more data.",
             },
             "avg_humidity": {
                 "neg": "Lower humidity was associated with better sleep. A dehumidifier or improved ventilation could help.",
-                "pos": "Slightly higher humidity seems to have helped. Dry winter air may be disrupting your sleep — a humidifier could be worth trying.",
+                "pos": "Slightly higher humidity seems to have helped. Dry winter air may be disrupting your sleep, so a humidifier could be worth trying.",
             },
             "avg_sound": {
                 "neg": "Quieter nights correlated with better sleep. Earplugs, a white noise machine, or closing windows may help.",
-                "pos": f"This is unusual — louder nights correlated with better scores. This may be coincidental with only {n_nights} nights of data.",
+                "pos": f"This is unusual: louder nights correlated with better scores. This may be coincidental with only {n_nights} nights of data.",
             },
             "avg_pm25": {
                 "neg": "Lower PM2.5 was associated with better sleep. On high-pollution nights, keeping windows closed and using an air purifier could help.",
-                "pos": "This correlation is likely coincidental — higher pollution doesn't help sleep. More data should clarify.",
+                "pos": "This correlation is likely coincidental. Higher pollution doesn't help sleep. More data should clarify.",
             },
             "avg_no2": {
                 "neg": "Lower NO₂ was associated with better sleep. This is an outdoor pollutant you can't directly control, but closing windows on high-traffic nights may help.",
@@ -1445,7 +1449,7 @@ elif page == "My Sleep Insights":
             },
             "std_sound": {
                 "neg": "Noise variability had the strongest link to your sleep. Consider earplugs or a white noise machine to mask intermittent disruptions like traffic or neighbours.",
-                "pos": f"This is unusual — more variable noise correlating with better sleep may be coincidental with only {n_nights} nights of data.",
+                "pos": f"This is unusual: more variable noise correlating with better sleep may be coincidental with only {n_nights} nights of data.",
             },
         }
 
@@ -1479,7 +1483,7 @@ elif page == "My Sleep Insights":
                 <span style="font-size: 0.95rem; color: #94A3B8;">
                     <strong style="color: #CBD5E1;">Note:</strong> Awake time
                     (r = {correlations["Sleep Awake Time"]["r"]:+.2f}) is actually the strongest overall
-                    predictor of your sleep score — but since it's a sleep metric rather than an environmental
+                    predictor of your sleep score, but since it's a sleep metric rather than an environmental
                     factor, the recommendation above focuses on what you can change about your bedroom.
                 </span>
             </div>""", unsafe_allow_html=True)
