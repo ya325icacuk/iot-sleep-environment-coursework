@@ -433,14 +433,14 @@ st.sidebar.markdown("""
     </div>
     <div style="flex: 1; min-width: 0;">
         <div style="font-size: 2.2rem; font-weight: 600; color: #E2E8F0; margin-bottom: 0.2rem; line-height: 1.3;">Yasmin Akhmedova</div>
-        <div style="font-size: 1.6rem; color: #94A3B8;">Primary Bedroom</div>
+        <div style="font-size: 1.6rem; color: #94A3B8;">9 – 22 February 2026 | London</div>
     </div>
 </div>
 <div class="sb-divider"></div>
 """, unsafe_allow_html=True)
 
 # Page navigation
-PAGES = ["Sleep Dashboard", "Night Explorer", "My Comfort Zone"]
+PAGES = ["Sleep Dashboard", "Night Explorer", "My Sleep Insights"]
 
 if "page" not in st.session_state:
     st.session_state.page = "Sleep Dashboard"
@@ -1105,11 +1105,11 @@ elif page == "Night Explorer":
 # Convergence page — where sleep, environment, and air quality
 # data come together to answer "what helps me sleep best?"
 # ============================================================
-elif page == "My Comfort Zone":
+elif page == "My Sleep Insights":
     import numpy as np
     from scipy import stats as sp_stats
 
-    st.markdown('<div style="font-size: 5rem; font-weight: 800; color: #E8937A; margin-bottom: 0.5rem; line-height: 1.1;">My Comfort Zone</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 5rem; font-weight: 800; color: #E8937A; margin-bottom: 0.5rem; line-height: 1.1;">My Sleep Insights</div>', unsafe_allow_html=True)
     st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">What Helps You Sleep Best?</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
