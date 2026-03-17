@@ -131,10 +131,10 @@ st.markdown("""
         margin-top: 0.25rem;
     }
     .night-glance-item {
-        border-radius: 10px;
+        border-radius: 0;
         padding: 0.85rem 0.9rem;
-        background: rgba(232, 147, 122, 0.05);
-        border: 1px solid rgba(232, 147, 122, 0.12);
+        background: transparent;
+        border: none;
         height: 100%;
     }
 
