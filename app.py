@@ -1302,8 +1302,7 @@ elif page == "My Sleep Insights":
                 <div class="metric-label-top" style="font-size: 0.95rem;">{label}: {date_str}</div>
                 <div style="display: flex; gap: 2rem; align-items: flex-start;">
                     <div style="flex: 1;">
-                        <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem;">Sleep Score</div>
-                        <div class="metric-value" style="font-size: 3.5rem;">{int(row["Sleep Score"])}<span class="metric-unit" style="font-size: 1.3rem;">/ 100</span></div>
+                        <div class="metric-value" style="font-size: 3.5rem;">{int(row["Sleep Score"])}<span class="metric-unit" style="font-size: 1.3rem;">/ 100</span> <span style="font-size: 1rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Sleep Score</span></div>
                         <div style="font-size: 1rem; color: #94A3B8; margin-top: 0.3rem; font-weight: 500;">
                             {fmt_duration(row["Total Sleep"])} sleep<br>{fmt_duration(row["Deep Sleep"])} deep · {int(row["Sleep Awake Time"])}m awake
                         </div>
