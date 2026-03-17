@@ -1355,7 +1355,7 @@ elif page == "My Sleep Insights":
 
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=x, y=y, mode="markers",
-                marker=dict(size=14, color=dot_colors, opacity=0.85,
+                marker=dict(size=20, color=dot_colors, opacity=0.85,
                             line=dict(width=1, color="rgba(255,255,255,0.2)")),
                 hovertemplate=f"<b>{title}</b>: %{{x:.1f}} {unit}<br>Sleep Score: %{{y}}<extra></extra>",
                 showlegend=False))
