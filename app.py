@@ -30,8 +30,8 @@ st.markdown("""
 <style>
     /* ── Sidebar width ── */
     [data-testid="stSidebar"] {
-        min-width: 400px;
-        max-width: 400px;
+        min-width: 440px;
+        max-width: 440px;
     }
 
     /* ── Metric Cards — shared base style ── */
