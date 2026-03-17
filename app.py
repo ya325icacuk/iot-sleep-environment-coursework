@@ -965,10 +965,8 @@ elif page == "Night Explorer":
             st.markdown(f"""
             <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.75rem;">
                 <em>Neither PM2.5 nor NO₂ showed a significant link to sleep quality in this dataset.
-                These are included for general health context against WHO guidelines.</em>
-            </div>
-            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.5rem;">
-                <em>Note: WHO guidelines for PM2.5 ({WHO_PM25_NE} µg/m³) and NO₂ ({WHO_NO2_NE} µg/m³) are based on
+                These are included for general health context against WHO guidelines.
+                WHO guidelines for PM2.5 ({WHO_PM25_NE} µg/m³) and NO₂ ({WHO_NO2_NE} µg/m³) are based on
                 24-hour averages. This comparison uses overnight data only (approx. 11 pm to 9 am),
                 so values shown represent a partial-day average rather than a full 24-hour measurement.</em>
             </div>""", unsafe_allow_html=True)
