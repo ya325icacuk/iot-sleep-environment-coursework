@@ -1295,31 +1295,30 @@ elif page == "My Sleep Insights":
         best_row = analysis.loc[analysis["Sleep Score"].idxmax()]
         worst_score_row = analysis.loc[analysis["Sleep Score"].idxmin()]
 
-        def snapshot_card(row, label, sublabel, card_class, accent_color):
+        def snapshot_card(row, label, card_class, accent_color):
             date_str = row["night"].strftime("%A %-d %b")
             return f"""
-            <div class="metric-card {card_class}" style="min-height: 220px;">
-                <div class="metric-label-top">{label}</div>
-                <div style="font-size: 0.9rem; color: #94A3B8; margin-bottom: 0.5rem;">{date_str}</div>
-                <div class="metric-value">{int(row["Sleep Score"])}<span class="metric-unit">/ 100</span></div>
-                <div style="font-size: 1rem; color: {accent_color}; margin-top: 0.2rem; font-weight: 500;">
+            <div class="metric-card {card_class}" style="min-height: 240px;">
+                <div class="metric-label-top" style="font-size: 0.95rem;">{label}</div>
+                <div style="font-size: 1.05rem; color: #94A3B8; margin-bottom: 0.5rem;">{date_str}</div>
+                <div class="metric-value" style="font-size: 3.5rem;">{int(row["Sleep Score"])}<span class="metric-unit" style="font-size: 1.3rem;">/ 100</span></div>
+                <div style="font-size: 1.1rem; color: {accent_color}; margin-top: 0.3rem; font-weight: 500;">
                     {fmt_duration(row["Total Sleep"])} total · {fmt_duration(row["Deep Sleep"])} deep · {int(row["Sleep Awake Time"])}m awake
                 </div>
-                <div class="snapshot-env">
-                    <div class="snapshot-env-item"><strong>{row["avg_temp"]:.1f}°C</strong> temp</div>
-                    <div class="snapshot-env-item"><strong>{row["avg_humidity"]:.0f}%</strong> humidity</div>
-                    <div class="snapshot-env-item"><strong>{row["avg_sound"]:.0f}</strong> noise</div>
-                    <div class="snapshot-env-item"><strong>{row["std_sound"]:.1f}</strong> noise variability</div>
-                    <div class="snapshot-env-item"><strong>{row["range_temp"]:.1f}°C</strong> temp range</div>
+                <div class="snapshot-env" style="gap: 0.6rem 1.4rem; margin-top: 1rem;">
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["avg_temp"]:.1f}°C</strong> temp</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["avg_humidity"]:.0f}%</strong> humidity</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["avg_sound"]:.0f}</strong> noise</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["std_sound"]:.1f}</strong> noise variability</div>
+                    <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong>{row["range_temp"]:.1f}°C</strong> temp range</div>
                 </div>
-                <div style="font-size: 0.75rem; color: #475569; margin-top: 0.5rem;">{sublabel}</div>
             </div>"""
 
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown(snapshot_card(best_row, "Best Night", "Highest sleep score", "card-amber", "#D4A574"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(best_row, "Best Night", "card-amber", "#D4A574"), unsafe_allow_html=True)
         with col2:
-            st.markdown(snapshot_card(worst_score_row, "Worst Night", "Lowest sleep score", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(worst_score_row, "Worst Night", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
 
     # ── SECTION 2: CORRELATION EXPLORER ──
     with st.container(border=True):
