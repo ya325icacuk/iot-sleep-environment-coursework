@@ -1225,41 +1225,41 @@ elif page == "My Sleep Insights":
     # Page-specific CSS
     st.markdown("""
     <style>
-        .metric-card.card-amber {
-            background: rgba(212, 165, 116, 0.06);
-            border: 1px solid rgba(212, 165, 116, 0.18);
+        .metric-card.card-good {
+            background: rgba(158, 222, 190, 0.06);
+            border: 1px solid rgba(158, 222, 190, 0.18);
         }
-        .metric-card.card-amber:hover {
-            border-color: rgba(212, 165, 116, 0.35);
-            box-shadow: 0 4px 20px rgba(212, 165, 116, 0.10);
+        .metric-card.card-good:hover {
+            border-color: rgba(158, 222, 190, 0.35);
+            box-shadow: 0 4px 20px rgba(158, 222, 190, 0.10);
         }
-        .metric-card.card-amber::before {
+        .metric-card.card-good::before {
             content: '';
             position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #D4A574, rgba(212, 165, 116, 0.15));
+            background: linear-gradient(90deg, #9EDEBE, rgba(158, 222, 190, 0.15));
             border-radius: 14px 14px 0 0;
         }
-        .metric-card.card-amber .metric-label-top { color: rgba(212, 165, 116, 0.75); }
-        .metric-card.card-amber .metric-value { color: #D4A574; }
-        .metric-card.card-amber .metric-unit { color: rgba(212, 165, 116, 0.50); }
+        .metric-card.card-good .metric-label-top { color: rgba(158, 222, 190, 0.85); }
+        .metric-card.card-good .metric-value { color: #9EDEBE; }
+        .metric-card.card-good .metric-unit { color: rgba(158, 222, 190, 0.50); }
 
-        .metric-card.card-steel {
-            background: rgba(107, 140, 174, 0.06);
-            border: 1px solid rgba(107, 140, 174, 0.18);
+        .metric-card.card-poor {
+            background: rgba(224, 156, 156, 0.06);
+            border: 1px solid rgba(224, 156, 156, 0.18);
         }
-        .metric-card.card-steel:hover {
-            border-color: rgba(107, 140, 174, 0.35);
-            box-shadow: 0 4px 20px rgba(107, 140, 174, 0.10);
+        .metric-card.card-poor:hover {
+            border-color: rgba(224, 156, 156, 0.35);
+            box-shadow: 0 4px 20px rgba(224, 156, 156, 0.10);
         }
-        .metric-card.card-steel::before {
+        .metric-card.card-poor::before {
             content: '';
             position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #6B8CAE, rgba(107, 140, 174, 0.15));
+            background: linear-gradient(90deg, #E09C9C, rgba(224, 156, 156, 0.15));
             border-radius: 14px 14px 0 0;
         }
-        .metric-card.card-steel .metric-label-top { color: rgba(107, 140, 174, 0.75); }
-        .metric-card.card-steel .metric-value { color: #6B8CAE; }
-        .metric-card.card-steel .metric-unit { color: rgba(107, 140, 174, 0.50); }
+        .metric-card.card-poor .metric-label-top { color: rgba(224, 156, 156, 0.85); }
+        .metric-card.card-poor .metric-value { color: #E09C9C; }
+        .metric-card.card-poor .metric-unit { color: rgba(224, 156, 156, 0.50); }
 
         .snapshot-env {
             display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem;
@@ -1320,9 +1320,9 @@ elif page == "My Sleep Insights":
 
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown(snapshot_card(best_row, "Best Night", "card-amber", "#D4A574"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(best_row, "Best Night", "card-good", "#9EDEBE"), unsafe_allow_html=True)
         with col2:
-            st.markdown(snapshot_card(worst_score_row, "Worst Night", "card-steel", "#6B8CAE"), unsafe_allow_html=True)
+            st.markdown(snapshot_card(worst_score_row, "Worst Night", "card-poor", "#E09C9C"), unsafe_allow_html=True)
 
     # ── SECTION 2: CORRELATION EXPLORER ──
     with st.container(border=True):
