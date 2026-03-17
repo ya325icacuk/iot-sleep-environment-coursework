@@ -374,6 +374,7 @@ def build_nightly_summary():
         avg_temp=("temperature_c", "mean"),
         avg_humidity=("humidity_pct", "mean"),
         avg_sound=("sound_avg", "mean"),
+        std_sound=("sound_avg", "std"),
     ).round(1)
 
     air_nightly = air.groupby("night").agg(
@@ -1136,6 +1137,7 @@ elif page == "My Comfort Zone":
             ("avg_temp", "Temperature", "Avg Temperature (°C)", "°C"),
             ("avg_humidity", "Humidity", "Avg Humidity (%)", "%"),
             ("avg_sound", "Noise Level", "Avg Noise (sensor)", ""),
+            ("std_sound", "Noise Variability", "Noise Std Dev (sensor)", ""),
             ("avg_pm25", "PM2.5", "Avg PM2.5 (µg/m³)", "µg/m³"),
             ("avg_no2", "NO₂", "Avg NO₂ (µg/m³)", "µg/m³"),
             ("Sleep Awake Time", "Awake Time", "Awake Time (min)", "min"),
@@ -1186,8 +1188,8 @@ elif page == "My Comfort Zone":
             return fig, r, p
 
         correlations = {}
-        row1 = st.columns(3)
-        row2 = st.columns(3)
+        row1 = st.columns(4)
+        row2 = st.columns(4)
         grid_positions = list(row1) + list(row2)
 
         for i, (col_name, title, x_label, unit) in enumerate(scatter_vars):
@@ -1209,6 +1211,7 @@ elif page == "My Comfort Zone":
             ("avg_temp", "Temperature", "°C", "cooler", "warmer"),
             ("avg_humidity", "Humidity", "%", "drier", "more humid"),
             ("avg_sound", "Noise Level", "", "quieter", "louder"),
+            ("std_sound", "Noise Variability", "", "steadier", "more variable"),
             ("avg_pm25", "PM2.5", "µg/m³", "cleaner", "more polluted"),
             ("avg_no2", "NO₂", "µg/m³", "cleaner", "more polluted"),
         ]
@@ -1240,7 +1243,7 @@ elif page == "My Comfort Zone":
                 hovertemplate=f"<b>{label}</b> — Worst 3<br>{b_val:.1f}<extra></extra>"))
 
         fig_dumbbell.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#E2E8F0", size=16), height=350,
+            font=dict(color="#E2E8F0", size=16), height=400,
             margin=dict(l=120, r=40, t=20, b=40),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0.5, xanchor="center",
                         font=dict(size=16, color="#94A3B8"), bgcolor="rgba(0,0,0,0)"),
@@ -1305,6 +1308,10 @@ elif page == "My Comfort Zone":
             "avg_no2": {
                 "neg": "Lower NO₂ was associated with better sleep. This is an outdoor pollutant you can't directly control, but closing windows on high-traffic nights may help.",
                 "pos": "This correlation is likely coincidental and should resolve with more data.",
+            },
+            "std_sound": {
+                "neg": "Noise variability had the strongest link to your sleep. Consider earplugs or a white noise machine to mask intermittent disruptions like traffic or neighbours.",
+                "pos": f"This is unusual — more variable noise correlating with better sleep may be coincidental with only {n_nights} nights of data.",
             },
         }
 
