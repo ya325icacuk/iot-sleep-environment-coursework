@@ -959,7 +959,7 @@ elif page == "Night Explorer":
                 summary_msg = f"NO₂ was elevated (peak {night_air['no2'].max():.1f} µg/m³) while PM2.5 stayed within limits."
                 summary_color = "#E8C88A"
 
-            st.markdown(f'<div style="font-size: 1rem; color: {summary_color}; margin-top: 0.75rem; font-weight: 500;">{summary_msg}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size: 1.3rem; font-weight: 600; color: #D47A98; margin-top: 0.75rem;">{summary_msg}</div>', unsafe_allow_html=True)
 
             # Non-significance disclaimer + WHO caveat
             st.markdown(f"""
