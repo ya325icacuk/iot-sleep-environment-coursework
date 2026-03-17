@@ -633,6 +633,7 @@ if page == "Sleep Dashboard":
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Humidity</div>', unsafe_allow_html=True)
             st.plotly_chart(env_bar_chart(nightly["avg_humidity"], "Humidity (%)",
                 "<b>%{x}</b><br>%{y:.0f}%<extra></extra>"), use_container_width=True)
+            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Average relative humidity in the bedroom per night. The recommended range for sleep is typically 30-50%.</em></div>', unsafe_allow_html=True)
 
         with tab_noise:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Level</div>', unsafe_allow_html=True)
