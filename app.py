@@ -1214,11 +1214,11 @@ elif page == "My Sleep Insights":
     st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">What Helps You Sleep Best?</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
-        <span style="color: #8892a5; font-size: 1.575rem;">This page brings your
-        </span><span style="color: #D4A574; font-weight: 600; font-size: 1.575rem;">sleep</span><span style="color: #8892a5; font-size: 1.575rem;">,
-        </span><span style="color: #D4A574; font-weight: 600; font-size: 1.575rem;">bedroom environment</span><span style="color: #8892a5; font-size: 1.575rem;">, and
-        </span><span style="color: #D4A574; font-weight: 600; font-size: 1.575rem;">air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> data together
-        to find the conditions behind your best and worst nights of rest.</span>
+        <span style="color: #8892a5; font-size: 1.575rem;">Compare your
+        </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">best and worst nights</span><span style="color: #8892a5; font-size: 1.575rem;">,
+        explore how </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">bedroom conditions correlated with sleep</span><span style="color: #8892a5; font-size: 1.575rem;">,
+        see your </span><span style="color: #E8937A; font-weight: 600; font-size: 1.575rem;">optimal ranges</span><span style="color: #8892a5; font-size: 1.575rem;"> on good vs poor nights,
+        and get an </span><span style="color: #B89ADE; font-weight: 600; font-size: 1.575rem;">actionable takeaway</span><span style="color: #8892a5; font-size: 1.575rem;">.</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1289,7 +1289,7 @@ elif page == "My Sleep Insights":
 
     # ── SECTION 1: BEST vs WORST NIGHT SNAPSHOT ──
     with st.container(border=True):
-        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(212, 165, 116, 0.20);">Best vs Worst Nights</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #C4A44E; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(196, 164, 78, 0.20);">Best vs Worst Nights</div>', unsafe_allow_html=True)
         st.markdown('<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1rem;">Your highest and lowest scoring nights side by side. Same bed, different conditions.</div>', unsafe_allow_html=True)
 
         best_row = analysis.loc[analysis["Sleep Score"].idxmax()]
@@ -1326,7 +1326,7 @@ elif page == "My Sleep Insights":
 
     # ── SECTION 2: CORRELATION EXPLORER ──
     with st.container(border=True):
-        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(212, 165, 116, 0.20);">Correlation Explorer</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Correlation Explorer</div>', unsafe_allow_html=True)
 
         st.markdown(f"""
         <div style="font-size: 0.95rem; color: #94A3B8; background: rgba(107, 140, 174, 0.08);
@@ -1404,7 +1404,7 @@ elif page == "My Sleep Insights":
 
     # ── SECTION 3: YOUR OPTIMAL RANGES ──
     with st.container(border=True):
-        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(212, 165, 116, 0.20);">Your Optimal Ranges</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #E8937A; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232, 147, 122, 0.20);">Your Optimal Ranges</div>', unsafe_allow_html=True)
         median_score = analysis["Sleep Score"].median()
         good = analysis[analysis["Sleep Score"] >= median_score]
         poor = analysis[analysis["Sleep Score"] < median_score]
@@ -1483,7 +1483,7 @@ elif page == "My Sleep Insights":
 
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
-        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(212, 165, 116, 0.20);">Actionable Takeaway</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Actionable Takeaway</div>', unsafe_allow_html=True)
 
         env_correlations = {k: v for k, v in correlations.items() if k != "Sleep Awake Time"}
         strongest_col = max(env_correlations, key=lambda k: abs(env_correlations[k]["r"]))
