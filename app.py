@@ -1414,38 +1414,26 @@ elif page == "My Sleep Insights":
 
         predictor_r = {"std_sound": -0.80, "avg_humidity": -0.70, "avg_sound": -0.69, "range_temp": -0.56}
 
-        table_rows = ""
+        # Header row
+        h1, h2, h3, h4 = st.columns([2, 1.5, 1.5, 2])
+        h1.markdown('<div style="font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232,147,122,0.20);">Condition</div>', unsafe_allow_html=True)
+        h2.markdown('<div style="font-size: 0.85rem; color: #9EDEBE; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232,147,122,0.20);">Good nights avg</div>', unsafe_allow_html=True)
+        h3.markdown('<div style="font-size: 0.85rem; color: #E09C9C; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232,147,122,0.20);">Poor nights avg</div>', unsafe_allow_html=True)
+        h4.markdown('<div style="font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232,147,122,0.20);">Difference</div>', unsafe_allow_html=True)
+
         for col_name, label, unit, less_word, more_word in range_vars:
             g_mean = good[col_name].mean()
             p_mean = poor[col_name].mean()
             diff = g_mean - p_mean
             direction = less_word if diff < 0 else more_word
-            abs_r = abs(predictor_r.get(col_name, 0))
             is_strongest = (col_name == "std_sound")
             badge = ' <span style="font-size: 0.75rem; background: rgba(232,147,122,0.15); color: #E8937A; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 600;">STRONGEST</span>' if is_strongest else ""
-            row_bg = "background: rgba(232, 147, 122, 0.06);" if is_strongest else ""
-            table_rows += f"""
-            <tr style="{row_bg}">
-                <td style="padding: 0.8rem 1rem; font-weight: 600; color: #CBD5E1; font-size: 1.05rem;">{label}{badge}</td>
-                <td style="padding: 0.8rem 1rem; color: #9EDEBE; font-size: 1.05rem; text-align: center; font-weight: 600;">{g_mean:.1f}{unit}</td>
-                <td style="padding: 0.8rem 1rem; color: #E09C9C; font-size: 1.05rem; text-align: center; font-weight: 600;">{p_mean:.1f}{unit}</td>
-                <td style="padding: 0.8rem 1rem; color: #94A3B8; font-size: 1.05rem; text-align: center;">{abs(diff):.1f}{unit} {direction}</td>
-            </tr>"""
 
-        st.markdown(f"""
-        <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
-            <thead>
-                <tr style="border-bottom: 2px solid rgba(232, 147, 122, 0.20);">
-                    <th style="padding: 0.6rem 1rem; text-align: left; font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em;">Condition</th>
-                    <th style="padding: 0.6rem 1rem; text-align: center; font-size: 0.85rem; color: #9EDEBE; text-transform: uppercase; letter-spacing: 0.05em;">Good nights avg</th>
-                    <th style="padding: 0.6rem 1rem; text-align: center; font-size: 0.85rem; color: #E09C9C; text-transform: uppercase; letter-spacing: 0.05em;">Poor nights avg</th>
-                    <th style="padding: 0.6rem 1rem; text-align: center; font-size: 0.85rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em;">Difference</th>
-                </tr>
-            </thead>
-            <tbody>
-                {table_rows}
-            </tbody>
-        </table>""", unsafe_allow_html=True)
+            c1, c2, c3, c4 = st.columns([2, 1.5, 1.5, 2])
+            c1.markdown(f'<div style="font-weight: 600; color: #CBD5E1; font-size: 1.1rem; padding: 0.6rem 0;">{label}{badge}</div>', unsafe_allow_html=True)
+            c2.markdown(f'<div style="color: #9EDEBE; font-size: 1.1rem; text-align: center; font-weight: 600; padding: 0.6rem 0;">{g_mean:.1f}{unit}</div>', unsafe_allow_html=True)
+            c3.markdown(f'<div style="color: #E09C9C; font-size: 1.1rem; text-align: center; font-weight: 600; padding: 0.6rem 0;">{p_mean:.1f}{unit}</div>', unsafe_allow_html=True)
+            c4.markdown(f'<div style="color: #94A3B8; font-size: 1.1rem; text-align: center; padding: 0.6rem 0;">{abs(diff):.1f}{unit} {direction}</div>', unsafe_allow_html=True)
 
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
