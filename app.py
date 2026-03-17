@@ -1337,50 +1337,37 @@ elif page == "My Sleep Insights":
         </div>""", unsafe_allow_html=True)
 
         scatter_vars = [
-            ("avg_temp", "Temperature", "Avg Temperature (°C)", "°C"),
-            ("avg_humidity", "Humidity", "Avg Humidity (%)", "%"),
-            ("avg_sound", "Noise Level", "Avg Noise (sensor)", ""),
-            ("std_sound", "Noise Variability", "Noise Std Dev (sensor)", ""),
-            ("avg_pm25", "PM2.5", "Avg PM2.5 (µg/m³)", "µg/m³"),
-            ("avg_no2", "NO₂", "Avg NO₂ (µg/m³)", "µg/m³"),
-            ("Sleep Awake Time", "Awake Time", "Awake Time (min)", "min"),
+            ("avg_humidity", "Humidity", "Avg Humidity (%)", "%", "Higher humidity linked to lower sleep scores."),
+            ("avg_sound", "Noise Level", "Avg Noise (sensor units)", "", "Noisier nights meant worse sleep."),
+            ("std_sound", "Noise Variability", "Noise Std Dev (sensor units)", "", "Inconsistent noise was the strongest predictor of poor sleep."),
+            ("Sleep Awake Time", "Awake Time", "Awake Time (min)", "min", "More time awake during the night correlated with lower scores."),
         ]
 
-        def strength_label(r):
-            ar = abs(r)
-            if ar >= 0.5: return "Moderate–Strong"
-            elif ar >= 0.3: return "Weak–Moderate"
-            else: return "Weak"
+        def score_color(s):
+            if s >= 80: return "#9EDEBE"
+            elif s >= 70: return "#E8C88A"
+            else: return "#E09C9C"
 
-        def make_scatter(col_name, title, x_label, unit):
+        def make_scatter(col_name, title, x_label, unit, explanation):
             x = analysis[col_name].values
             y = analysis["Sleep Score"].values
             r, p = sp_stats.spearmanr(x, y)
-            strength = strength_label(r)
+            dot_colors = [score_color(s) for s in y]
 
             z = np.polyfit(x, y, 1)
             poly = np.poly1d(z)
             x_trend = np.linspace(x.min(), x.max(), 50)
             y_trend = poly(x_trend)
-            trend_color = "#D4A574" if r > 0 else "#6B8CAE"
 
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=x, y=y, mode="markers",
-                marker=dict(size=10, color="#CBD5E1", opacity=0.85,
+                marker=dict(size=10, color=dot_colors, opacity=0.85,
                             line=dict(width=1, color="rgba(255,255,255,0.2)")),
                 hovertemplate=f"<b>{title}</b>: %{{x:.1f}} {unit}<br>Sleep Score: %{{y}}<extra></extra>",
                 showlegend=False))
             fig.add_trace(go.Scatter(x=x_trend, y=y_trend, mode="lines",
-                line=dict(color=trend_color, width=2.5, dash="dot"),
+                line=dict(color="#94A3B8", width=2.5, dash="dot"),
                 showlegend=False, hoverinfo="skip"))
-
-            p_str = f"p = {p:.3f}" if p >= 0.001 else "p < 0.001"
-            fig.add_annotation(x=0.98, y=0.98, xref="paper", yref="paper",
-                xanchor="right", yanchor="top",
-                text=f"r = {r:+.2f} ({strength})<br><span style='font-size:11px;color:#64748B'>{p_str}</span>",
-                showarrow=False, font=dict(size=14, color=trend_color),
-                bgcolor="rgba(15, 23, 42, 0.7)", bordercolor="rgba(255,255,255,0.08)",
-                borderwidth=1, borderpad=8)
 
             fig.update_layout(**PLOTLY_LAYOUT, height=320)
             fig.update_layout(margin=dict(l=60, r=20, t=35, b=55))
@@ -1391,16 +1378,20 @@ elif page == "My Sleep Insights":
             return fig, r, p
 
         correlations = {}
-        row1 = st.columns(4)
-        row2 = st.columns(4)
+        row1 = st.columns(2)
+        row2 = st.columns(2)
         grid_positions = list(row1) + list(row2)
 
-        for i, (col_name, title, x_label, unit) in enumerate(scatter_vars):
-            fig, r, p = make_scatter(col_name, title, x_label, unit)
+        for i, (col_name, title, x_label, unit, explanation) in enumerate(scatter_vars):
+            fig, r, p = make_scatter(col_name, title, x_label, unit, explanation)
             correlations[col_name] = {"r": r, "p": p, "title": title, "unit": unit}
             with grid_positions[i]:
-                st.markdown(f'<div style="font-size: 1rem; font-weight: 600; color: #94A3B8; margin-bottom: 0.25rem; text-align: center;">{title}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size: 1.1rem; font-weight: 600; color: #CBD5E1; margin-bottom: 0.1rem; text-align: center;">{title}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size: 0.85rem; color: #64748B; margin-bottom: 0.25rem; text-align: center;">Spearman r = {r:+.2f}</div>', unsafe_allow_html=True)
                 st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+                st.markdown(f'<div style="font-size: 0.9rem; color: #94A3B8; text-align: center; margin-top: -0.5rem; margin-bottom: 1rem;">{explanation}</div>', unsafe_allow_html=True)
+
+        st.markdown('<div style="font-size: 0.9rem; color: #64748B; font-style: italic; margin-top: 0.5rem;">Temperature, PM2.5, and NO₂ were also tested but showed no significant correlation with sleep quality.</div>', unsafe_allow_html=True)
 
     # ── SECTION 3: YOUR OPTIMAL RANGES ──
     with st.container(border=True):
