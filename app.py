@@ -1076,16 +1076,8 @@ elif page == "Night Explorer":
                     f'<div style="font-size: 0.95rem; font-weight: 600; color: #E8937A; margin-bottom: 0.45rem;">{title}</div>',
                     unsafe_allow_html=True,
                 )
-                n_cols = 2
-                rows_needed = (len(cards) + n_cols - 1) // n_cols
-                card_idx = 0
-                for _ in range(rows_needed):
-                    cols = st.columns(n_cols)
-                    for col_i in range(n_cols):
-                        if card_idx < len(cards):
-                            with cols[col_i]:
-                                st.markdown(cards[card_idx], unsafe_allow_html=True)
-                            card_idx += 1
+                for card in cards:
+                    st.markdown(card, unsafe_allow_html=True)
 
         render_group_box("Night Extremes", extreme_cards, "night-glance-group-extremes")
         render_group_box("Night Averages & Context", context_cards, "night-glance-group-context")
