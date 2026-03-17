@@ -1328,7 +1328,13 @@ elif page == "My Sleep Insights":
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Correlation Explorer</div>', unsafe_allow_html=True)
 
-        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">How each bedroom condition correlated with your sleep score across {n_nights} nights.</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 0.75rem;">How each bedroom condition correlated with your sleep score across {n_nights} nights.</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; font-size: 0.95rem; color: #94A3B8;">
+            <span><span style="color: #9EDEBE;">&#9679;</span> Good sleep (score ≥ 80)</span>
+            <span><span style="color: #E8C88A;">&#9679;</span> Fair sleep (70–79)</span>
+            <span><span style="color: #E09C9C;">&#9679;</span> Poor sleep (score &lt; 70)</span>
+        </div>""", unsafe_allow_html=True)
 
         scatter_vars = [
             ("avg_humidity", "Humidity", "Avg Humidity (%)", "%", "Higher humidity linked to lower sleep scores."),
