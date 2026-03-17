@@ -492,6 +492,14 @@ if page == "Sleep Dashboard":
     avg_sleep_hrs = sleep["Total Sleep"].mean() / 60
     avg_deep_sleep = sleep["Deep Sleep"].mean() / 60
 
+    st.markdown("""
+    <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.95rem; color: #94A3B8;">
+        <span>Colour key across all charts:</span>
+        <span><span style="color: #9EDEBE;">&#9679;</span> Good sleep (score ≥ 80)</span>
+        <span><span style="color: #E8C88A;">&#9679;</span> Fair sleep (70–79)</span>
+        <span><span style="color: #E09C9C;">&#9679;</span> Poor sleep (score &lt; 70)</span>
+    </div>""", unsafe_allow_html=True)
+
     # ── SECTION 1: SLEEP OVERVIEW ──
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #C4A44E; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(196, 164, 78, 0.20);">Sleep Overview</div>', unsafe_allow_html=True)
@@ -543,8 +551,7 @@ if page == "Sleep Dashboard":
 
         fig_score.update_layout(**PLOTLY_LAYOUT, height=420, yaxis_title="Sleep Score",
             yaxis_range=[50, 100], bargap=0.25, barmode="overlay",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0.5, xanchor="center",
-                        font=dict(size=22, color="#94A3B8"), bgcolor="rgba(0,0,0,0)"))
+            showlegend=False)
         fig_score.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
         st.plotly_chart(fig_score, use_container_width=True)
 
@@ -595,13 +602,6 @@ if page == "Sleep Dashboard":
                 score_colors.append("#E09C9C")
 
         tab_temp, tab_humid, tab_noise = st.tabs(["Temperature", "Humidity", "Noise Level"])
-
-        st.markdown("""
-        <div style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem; margin-bottom: 0.25rem;">
-            Bar colours reflect sleep quality: <span style="color: #9EDEBE;">&#9679;</span> Good (≥80)
-            <span style="color: #E8C88A;">&#9679;</span> Fair (70–79)
-            <span style="color: #E09C9C;">&#9679;</span> Poor (&lt;70)
-        </div>""", unsafe_allow_html=True)
 
         with tab_temp:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Bedroom Temperature</div>', unsafe_allow_html=True)
