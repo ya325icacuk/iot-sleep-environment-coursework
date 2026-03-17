@@ -1062,9 +1062,9 @@ elif page == "Night Explorer":
 
             st.markdown("""
             <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; color: #64748B;">
-                <span>🟢 Better than usual</span>
-                <span>🟡 Close to usual</span>
-                <span>🔴 Worse than usual</span>
+                <span><span style="color: #9EDEBE;">&#9679;</span> Better than usual</span>
+                <span><span style="color: #C4A44E;">&#9679;</span> Close to usual</span>
+                <span><span style="color: #E09C9C;">&#9679;</span> Worse than usual</span>
             </div>""", unsafe_allow_html=True)
 
             predictor_html = ""
@@ -1088,13 +1088,10 @@ elif page == "Night Explorer":
                 abs_diff_pct = abs(diff_from_median) / median_val * 100 if median_val != 0 else 0
                 if abs_diff_pct < 10:
                     dot_color = "#C4A44E"  # yellow — close to median
-                    dot_icon = "🟡"
                 elif is_bad:
                     dot_color = "#E09C9C"  # red — bad direction
-                    dot_icon = "🔴"
                 else:
                     dot_color = "#9EDEBE"  # green — good direction
-                    dot_icon = "🟢"
 
                 if abs_diff_pct < 10:
                     verdict = pred["verdict_neutral"]
@@ -1109,14 +1106,14 @@ elif page == "Night Explorer":
                 <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem;
                             padding: 0.7rem 1rem; background: rgba(184, 154, 222, 0.04);
                             border: 1px solid rgba(184, 154, 222, 0.10); border-radius: 10px;">
-                    <div style="font-size: 1.3rem; line-height: 1; margin-top: 0.1rem;">{dot_icon}</div>
+                    <div style="font-size: 1.1rem; line-height: 1; margin-top: 0.2rem; color: {dot_color};">&#9679;</div>
                     <div>
-                        <div style="font-size: 1rem; font-weight: 600; color: #E2E8F0;">
+                        <div style="font-size: 1rem; font-weight: 600; color: #94A3B8;">
                             {pred["label"]}:
                             <span style="color: {dot_color};">{value:.1f}{unit}</span>
-                            <span style="color: #64748B; font-weight: 400;"> (your median: {median_val:.1f}{unit})</span>
+                            <span style="font-weight: 400;"> (your median: {median_val:.1f}{unit})</span>
                         </div>
-                        <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem; line-height: 1.4;">
+                        <div style="font-size: 0.85rem; color: #8892a5; margin-top: 0.2rem; line-height: 1.4;">
                             <em>{verdict}</em>
                         </div>
                     </div>
