@@ -986,7 +986,7 @@ elif page == "Night Explorer":
             return f"""
             <div style="border-radius: 12px; padding: 0.9rem 1rem; background: rgba(255,255,255,0.02);
                         border: 1px solid rgba(255,255,255,0.06); height: 100%;">
-                <div style="font-size: 1.5rem; margin-bottom: 0.3rem;">{icon}</div>
+                <div style="font-size: 2.2rem; margin-bottom: 0.3rem;">{icon}</div>
                 <div style="font-size: 1.15rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.2rem;">{value}</div>
                 <div style="font-size: 0.8rem; color: #64748B; line-height: 1.4;">{description}</div>
             </div>"""
