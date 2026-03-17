@@ -1296,7 +1296,7 @@ elif page == "My Sleep Insights":
         worst_score_row = analysis.loc[analysis["Sleep Score"].idxmin()]
 
         def snapshot_card(row, label, card_class, accent_color):
-            date_str = row["night"].strftime("%A %-d %b")
+            date_str = row["night"].strftime("%A, %-d %B")
             return f"""
             <div class="metric-card {card_class}" style="min-height: 200px;">
                 <div class="metric-label-top" style="font-size: 0.95rem;">{label}</div>
