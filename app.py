@@ -1453,25 +1453,25 @@ elif page == "My Sleep Insights":
         poor_val = poor[strongest_col].mean()
         score_diff = good["Sleep Score"].mean() - poor["Sleep Score"].mean()
 
-        st.markdown(f"""<div style="font-size: 1.6rem; font-weight: 700; color: #B89ADE; margin-bottom: 1rem;">
-            💡 Your #1 sleep predictor: {s_title}
-        </div>""", unsafe_allow_html=True)
-
-        st.markdown(f"""<ul style="font-size: 1.15rem; color: #94A3B8; line-height: 2.2; margin-bottom: 1.5rem; padding-left: 1.5rem;">
-            <li>Strongest correlation with sleep quality: <strong style="color: #CBD5E1;">r = {s_r:+.2f}</strong></li>
-            <li>Good nights (avg score {good["Sleep Score"].mean():.0f}): averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong></li>
-            <li>Poor nights (avg score {poor["Sleep Score"].mean():.0f}): averaged <strong style="color: #E09C9C;">{poor_val:.1f}</strong></li>
-            <li>Sleep score difference: <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong></li>
-        </ul>""", unsafe_allow_html=True)
-
-        st.markdown("""<div style="font-size: 1.2rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.5rem;">
-            What you can try
-        </div>""", unsafe_allow_html=True)
-
-        st.markdown("""<ul style="font-size: 1.15rem; color: #94A3B8; line-height: 2.2; margin-bottom: 1rem; padding-left: 1.5rem;">
-            <li>Try earplugs or a white noise machine to mask intermittent disruptions</li>
-            <li>Inconsistent noise from traffic or neighbours was the biggest factor</li>
-            <li>A steady background sound is better than silence interrupted by spikes</li>
-        </ul>""", unsafe_allow_html=True)
+        col_left, col_right = st.columns(2)
+        with col_left:
+            st.markdown(f"""<div style="font-size: 1.4rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.75rem;">
+                💡 Your #1 sleep predictor: {s_title}
+            </div>""", unsafe_allow_html=True)
+            st.markdown(f"""<ul style="font-size: 1.1rem; color: #94A3B8; line-height: 2.2; padding-left: 1.5rem;">
+                <li>Strongest correlation: <strong style="color: #CBD5E1;">r = {s_r:+.2f}</strong></li>
+                <li>Good nights (avg score {good["Sleep Score"].mean():.0f}): averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong></li>
+                <li>Poor nights (avg score {poor["Sleep Score"].mean():.0f}): averaged <strong style="color: #E09C9C;">{poor_val:.1f}</strong></li>
+                <li>Sleep score difference: <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong></li>
+            </ul>""", unsafe_allow_html=True)
+        with col_right:
+            st.markdown("""<div style="font-size: 1.4rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.75rem;">
+                What you can try
+            </div>""", unsafe_allow_html=True)
+            st.markdown("""<ul style="font-size: 1.1rem; color: #94A3B8; line-height: 2.2; padding-left: 1.5rem;">
+                <li>Try earplugs or a white noise machine to mask intermittent disruptions</li>
+                <li>Inconsistent noise from traffic or neighbours was the biggest factor</li>
+                <li>A steady background sound is better than silence interrupted by spikes</li>
+            </ul>""", unsafe_allow_html=True)
 
         st.markdown(f'<div style="font-size: 0.95rem; color: #64748B; font-style: italic;">These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</div>', unsafe_allow_html=True)
