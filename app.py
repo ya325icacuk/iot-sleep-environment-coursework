@@ -583,13 +583,31 @@ if page == "Sleep Dashboard":
         sound_min, sound_max = nightly["avg_sound"].min(), nightly["avg_sound"].max()
         sound_pad = max((sound_max - sound_min) * 0.3, 5)
 
+        score_colors = []
+        for s in nightly["Sleep Score"]:
+            if pd.isna(s):
+                score_colors.append("#475569")
+            elif s >= 80:
+                score_colors.append("#9EDEBE")
+            elif s >= 70:
+                score_colors.append("#E8C88A")
+            else:
+                score_colors.append("#E09C9C")
+
         tab_temp, tab_humid, tab_noise = st.tabs(["Temperature", "Humidity", "Noise Level"])
+
+        st.markdown("""
+        <div style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem; margin-bottom: 0.25rem;">
+            Bar colours reflect sleep quality: <span style="color: #9EDEBE;">&#9679;</span> Good (≥80)
+            <span style="color: #E8C88A;">&#9679;</span> Fair (70–79)
+            <span style="color: #E09C9C;">&#9679;</span> Poor (&lt;70)
+        </div>""", unsafe_allow_html=True)
 
         with tab_temp:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Bedroom Temperature</div>', unsafe_allow_html=True)
             fig_temp = go.Figure()
             fig_temp.add_trace(go.Bar(x=env_night_labels, y=nightly["avg_temp"],
-                name="Temperature (°C)", marker_color="#6BCB77", marker_line=dict(width=0),
+                name="Temperature (°C)", marker_color=score_colors, marker_line=dict(width=0),
                 opacity=0.85, hovertemplate="<b>%{x}</b><br>%{y:.1f}°C<extra></extra>"))
             fig_temp.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title="Temperature (°C)",
                 yaxis_range=[temp_min - temp_pad, temp_max + temp_pad], showlegend=False)
@@ -600,7 +618,7 @@ if page == "Sleep Dashboard":
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Humidity</div>', unsafe_allow_html=True)
             fig_humid = go.Figure()
             fig_humid.add_trace(go.Bar(x=env_night_labels, y=nightly["avg_humidity"],
-                name="Humidity (%)", marker_color="#4ECDC4", marker_line=dict(width=0),
+                name="Humidity (%)", marker_color=score_colors, marker_line=dict(width=0),
                 opacity=0.85, hovertemplate="<b>%{x}</b><br>%{y:.0f}%<extra></extra>"))
             fig_humid.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title="Humidity (%)",
                 yaxis_range=[humid_min - humid_pad, humid_max + humid_pad], showlegend=False)
@@ -611,7 +629,7 @@ if page == "Sleep Dashboard":
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Level</div>', unsafe_allow_html=True)
             fig_sound = go.Figure()
             fig_sound.add_trace(go.Bar(x=env_night_labels, y=nightly["avg_sound"],
-                name="Average Noise", marker_color="#5B8FB9", marker_line=dict(width=0),
+                name="Average Noise", marker_color=score_colors, marker_line=dict(width=0),
                 opacity=0.85, hovertemplate="<b>%{x}</b><br>Avg Noise: %{y:.0f}<extra></extra>"))
             fig_sound.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title="Noise Level (sensor units)",
                 yaxis_range=[sound_min - sound_pad, sound_max + sound_pad], showlegend=False)
