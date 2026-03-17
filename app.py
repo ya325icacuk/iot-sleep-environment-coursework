@@ -110,10 +110,10 @@ st.markdown("""
     .metric-card.card-rose .metric-value { color: #D47A98; }
     .metric-card.card-rose .metric-unit { color: rgba(212, 122, 152, 0.50); }
 
-    /* ── Night Explorer graph cards (gold boxes) ── */
+    /* ── Night Explorer graph cards (green boxes) ── */
     [class*="st-key-env-card-"] {
-        background: rgba(196, 164, 78, 0.06);
-        border: 1px solid rgba(196, 164, 78, 0.18);
+        background: rgba(92, 184, 178, 0.06);
+        border: 1px solid rgba(92, 184, 178, 0.15);
         border-radius: 14px;
         padding: 0.45rem 0.95rem 0.35rem 0.95rem;
         margin: 0.25rem 0 0.65rem 0;
@@ -975,12 +975,10 @@ elif page == "Night Explorer":
                 summary_msg = f"NO₂ was elevated (peak {night_air['no2'].max():.1f} µg/m³) while PM2.5 stayed within limits."
                 summary_color = "#E8C88A"
 
-            st.markdown(f'<div style="font-size: 1.3rem; font-weight: 600; color: #D47A98; margin-top: 0.75rem;">{summary_msg}</div>', unsafe_allow_html=True)
-
-            # Non-significance disclaimer + WHO caveat
             st.markdown(f"""
-            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.75rem;">
-                <em>Neither PM2.5 nor NO₂ showed a significant link to sleep quality in this dataset.
+            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.6; margin-top: 0.75rem;">
+                <em><span style="color: #D47A98; font-weight: 600; font-size: 0.95rem;">{summary_msg}</span><br>
+                Neither PM2.5 nor NO₂ showed a significant link to sleep quality in this dataset.
                 These are included for general health context against WHO guidelines.
                 WHO guidelines for PM2.5 ({WHO_PM25_NE} µg/m³) and NO₂ ({WHO_NO2_NE} µg/m³) are based on
                 24-hour averages. This comparison uses overnight data only (approx. 11 pm to 9 am),
@@ -1000,9 +998,9 @@ elif page == "Night Explorer":
 
         def insight_card(icon, value, description, accent="#CBD5E1"):
             return f"""
-            <div style="border-radius: 12px; padding: 0.9rem 1rem; background: rgba(255,255,255,0.02);
-                        border: 1px solid rgba(255,255,255,0.06); height: 100%;">
-                <div style="font-size: 2.2rem; margin-bottom: 0.3rem;">{icon}</div>
+            <div style="border-radius: 12px; padding: 0.9rem 1rem; background: rgba(232, 147, 122, 0.06);
+                        border: 1px solid rgba(232, 147, 122, 0.15); height: 100%;">
+                <div style="font-size: 2.8rem; margin-bottom: 0.3rem;">{icon}</div>
                 <div style="font-size: 1.15rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.2rem;">{value}</div>
                 <div style="font-size: 0.8rem; color: #64748B; line-height: 1.4;">{description}</div>
             </div>"""
@@ -1065,7 +1063,7 @@ elif page == "Night Explorer":
                     card_idx += 1
 
     # ============================================================
-    # SECTION 5: WHY THIS NIGHT?
+    # SECTION 5: WHAT WAS DIFFERENT?
     # Contextualises this night's environment against the 14-night
     # study using hardcoded Spearman correlation findings from the
     # notebook (Part 2, Subpart 2).
@@ -1074,14 +1072,14 @@ elif page == "Night Explorer":
     if not night_row.empty and len(night_sensors) > 0:
         night_row = night_row.iloc[0]
         with st.container(border=True):
-            st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Why This Night?</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">What Was Different?</div>', unsafe_allow_html=True)
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your usual, based on what affected your sleep.</div>', unsafe_allow_html=True)
 
             st.markdown("""
             <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; color: #64748B;">
-                <span><span style="color: #9EDEBE;">&#9679;</span> Better than usual</span>
-                <span><span style="color: #C4A44E;">&#9679;</span> Close to usual</span>
-                <span><span style="color: #E09C9C;">&#9679;</span> Worse than usual</span>
+                <span><span style="font-size: 1.2rem; color: #9EDEBE;">&#9679;</span> Better than usual</span>
+                <span><span style="font-size: 1.2rem; color: #C4A44E;">&#9679;</span> Close to usual</span>
+                <span><span style="font-size: 1.2rem; color: #E09C9C;">&#9679;</span> Worse than usual</span>
             </div>""", unsafe_allow_html=True)
 
             predictor_html = ""
@@ -1123,7 +1121,7 @@ elif page == "Night Explorer":
                 <div style="display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 0.8rem;
                             padding: 0.7rem 1rem; background: rgba(184, 154, 222, 0.04);
                             border: 1px solid rgba(184, 154, 222, 0.10); border-radius: 10px;">
-                    <div style="font-size: 1.8rem; line-height: 1; margin-top: 0.1rem; color: {dot_color};">&#9679;</div>
+                    <div style="font-size: 2.4rem; line-height: 1; margin-top: 0.1rem; color: {dot_color};">&#9679;</div>
                     <div>
                         <div style="font-size: 1rem; font-weight: 600; color: #94A3B8;">
                             {pred["label"]}:
