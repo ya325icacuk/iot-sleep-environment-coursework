@@ -1012,16 +1012,13 @@ elif page == "Night Explorer":
             insight_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)}, avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
             insight_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)}, avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
 
-            light_diff = night_sensors["light_detected"].diff()
-            lights_off_times = night_sensors.loc[light_diff == -1, "timestamp"]
-            lights_on_times = night_sensors.loc[light_diff == 1, "timestamp"]
+            night_avg_humidity = night_sensors["humidity_pct"].mean()
+            overall_avg_humidity = nightly["avg_humidity"].mean()
+            insight_cards.append(insight_card("💧", f"{night_avg_humidity:.1f}%", f"Avg humidity (14-night avg: {overall_avg_humidity:.1f}%)", "#5CB8B2"))
 
-            if len(lights_off_times) > 0:
-                first_off = lights_off_times.iloc[0]
-                insight_cards.append(insight_card("🌙", first_off.strftime("%-I:%M %p"), "Lights off", "#C4A44E"))
-            if len(lights_on_times) > 0:
-                last_on = lights_on_times.iloc[-1]
-                insight_cards.append(insight_card("☀️", last_on.strftime("%-I:%M %p"), "Lights on", "#C4A44E"))
+            night_avg_sound = night_sensors["sound_avg"].mean()
+            overall_avg_sound = nightly["avg_sound"].mean()
+            insight_cards.append(insight_card("🔉", f"{night_avg_sound:.0f}", f"Avg noise level (14-night avg: {overall_avg_sound:.0f})", "#D4A574"))
 
             light_on_minutes = int(night_sensors["light_detected"].sum())
             total_minutes = len(night_sensors)
