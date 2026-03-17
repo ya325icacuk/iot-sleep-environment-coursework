@@ -1303,7 +1303,7 @@ elif page == "My Sleep Insights":
                 <div style="display: flex; gap: 2rem; align-items: flex-start;">
                     <div style="flex: 1;">
                         <div class="metric-value" style="font-size: 3.5rem;">{int(row["Sleep Score"])}<span class="metric-unit" style="font-size: 1.3rem;">/ 100</span> <span style="font-size: 1rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Sleep Score</span></div>
-                        <div style="font-size: 1rem; color: #94A3B8; margin-top: 0.3rem; font-weight: 500;">
+                        <div style="font-size: 1.2rem; color: #94A3B8; margin-top: 0.3rem; font-weight: 500;">
                             {fmt_duration(row["Total Sleep"])} sleep · {int(row["Deep Sleep"] / row["Total Sleep"] * 100)}% deep · {int(row["REM Sleep"] / row["Total Sleep"] * 100)}% REM · {int(row["Light Sleep"] / row["Total Sleep"] * 100)}% light · {int(row["Sleep Awake Time"] / row["Total Sleep"] * 100)}% awake
                         </div>
                     </div>
