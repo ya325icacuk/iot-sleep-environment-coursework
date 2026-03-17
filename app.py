@@ -1152,7 +1152,7 @@ elif page == "My Comfort Zone":
         def make_scatter(col_name, title, x_label, unit):
             x = analysis[col_name].values
             y = analysis["Sleep Score"].values
-            r, p = sp_stats.pearsonr(x, y)
+            r, p = sp_stats.spearmanr(x, y)
             strength = strength_label(r)
 
             z = np.polyfit(x, y, 1)
@@ -1202,10 +1202,10 @@ elif page == "My Comfort Zone":
     # ── SECTION 3: YOUR OPTIMAL RANGES ──
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(212, 165, 116, 0.20);">Your Optimal Ranges</div>', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">Comparing conditions on your <strong style="color: #D4A574;">3 best</strong> vs <strong style="color: #6B8CAE;">3 worst</strong> scoring nights.</div>', unsafe_allow_html=True)
-
-        top3 = analysis.nlargest(3, "Sleep Score")
-        bot3 = analysis.nsmallest(3, "Sleep Score")
+        median_score = analysis["Sleep Score"].median()
+        good = analysis[analysis["Sleep Score"] >= median_score]
+        poor = analysis[analysis["Sleep Score"] < median_score]
+        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">Median-split comparison: <strong style="color: #D4A574;">{len(good)} good</strong> nights (score ≥ {median_score:.0f}) vs <strong style="color: #6B8CAE;">{len(poor)} poor</strong> nights (score < {median_score:.0f}).</div>', unsafe_allow_html=True)
 
         range_vars = [
             ("avg_temp", "Temperature", "°C", "cooler", "warmer"),
@@ -1216,31 +1216,31 @@ elif page == "My Comfort Zone":
             ("avg_no2", "NO₂", "µg/m³", "cleaner", "more polluted"),
         ]
 
-        dumbbell_labels, top3_means, bot3_means, finding_texts = [], [], [], []
+        dumbbell_labels, good_means, poor_means, finding_texts = [], [], [], []
 
         for col_name, label, unit, less_word, more_word in range_vars:
-            t_mean = top3[col_name].mean()
-            b_mean = bot3[col_name].mean()
+            t_mean = good[col_name].mean()
+            b_mean = poor[col_name].mean()
             diff = t_mean - b_mean
             dumbbell_labels.append(label)
-            top3_means.append(t_mean)
-            bot3_means.append(b_mean)
+            good_means.append(t_mean)
+            poor_means.append(b_mean)
             direction = less_word if diff < 0 else more_word
-            finding_texts.append(f"<strong>{abs(diff):.1f}{unit}</strong> {direction} on best nights")
+            finding_texts.append(f"<strong>{abs(diff):.1f}{unit}</strong> {direction} on good nights")
 
         fig_dumbbell = go.Figure()
         for i, label in enumerate(dumbbell_labels):
-            t_val, b_val = top3_means[i], bot3_means[i]
+            t_val, b_val = good_means[i], poor_means[i]
             fig_dumbbell.add_trace(go.Scatter(x=[t_val, b_val], y=[label, label],
                 mode="lines", line=dict(color="#475569", width=3), showlegend=False, hoverinfo="skip"))
             fig_dumbbell.add_trace(go.Scatter(x=[t_val], y=[label], mode="markers",
                 marker=dict(size=14, color="#D4A574", symbol="circle", line=dict(width=2, color="rgba(212,165,116,0.3)")),
-                name="Best 3" if i == 0 else None, showlegend=(i == 0),
-                hovertemplate=f"<b>{label}</b> — Best 3<br>{t_val:.1f}<extra></extra>"))
+                name="Good nights" if i == 0 else None, showlegend=(i == 0),
+                hovertemplate=f"<b>{label}</b> — Good<br>{t_val:.1f}<extra></extra>"))
             fig_dumbbell.add_trace(go.Scatter(x=[b_val], y=[label], mode="markers",
                 marker=dict(size=14, color="#6B8CAE", symbol="circle", line=dict(width=2, color="rgba(107,140,174,0.3)")),
-                name="Worst 3" if i == 0 else None, showlegend=(i == 0),
-                hovertemplate=f"<b>{label}</b> — Worst 3<br>{b_val:.1f}<extra></extra>"))
+                name="Poor nights" if i == 0 else None, showlegend=(i == 0),
+                hovertemplate=f"<b>{label}</b> — Poor<br>{b_val:.1f}<extra></extra>"))
 
         fig_dumbbell.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0", size=16), height=400,
@@ -1265,15 +1265,15 @@ elif page == "My Comfort Zone":
             findings_html += f'<div style="{highlight} margin-bottom: 0.6rem; font-size: 1rem; color: #CBD5E1; line-height: 1.5;">{text}{badge}</div>'
         st.markdown(findings_html, unsafe_allow_html=True)
 
-        top3_awake = top3["Sleep Awake Time"].mean()
-        bot3_awake = bot3["Sleep Awake Time"].mean()
-        awake_diff = bot3_awake - top3_awake
+        good_awake = good["Sleep Awake Time"].mean()
+        poor_awake = poor["Sleep Awake Time"].mean()
+        awake_diff = poor_awake - good_awake
         st.markdown(f"""
         <div style="margin-top: 1rem; padding: 0.8rem 1.2rem; background: rgba(107, 140, 174, 0.06);
                     border: 1px solid rgba(107, 140, 174, 0.12); border-radius: 10px;">
             <span style="font-size: 0.95rem; color: #94A3B8;">
-                Awake time averaged <strong style="color: #6B8CAE;">{top3_awake:.0f} min</strong> on best nights
-                vs <strong style="color: #6B8CAE;">{bot3_awake:.0f} min</strong> on worst nights
+                Awake time averaged <strong style="color: #6B8CAE;">{good_awake:.0f} min</strong> on good nights
+                vs <strong style="color: #6B8CAE;">{poor_awake:.0f} min</strong> on poor nights
                 — a difference of <strong style="color: #CBD5E1;">{awake_diff:.0f} minutes</strong>.
             </span>
         </div>""", unsafe_allow_html=True)
@@ -1318,20 +1318,20 @@ elif page == "My Comfort Zone":
         direction = "neg" if s_r < 0 else "pos"
         advice = advice_map.get(strongest_col, {}).get(direction, "More data will help clarify this pattern.")
 
-        top3_val = top3[strongest_col].mean()
-        bot3_val = bot3[strongest_col].mean()
-        score_diff_tb = top3["Sleep Score"].mean() - bot3["Sleep Score"].mean()
+        good_val = good[strongest_col].mean()
+        poor_val = poor[strongest_col].mean()
+        score_diff = good["Sleep Score"].mean() - poor["Sleep Score"].mean()
 
         st.markdown(f"""
         <div class="takeaway-box">
             <div class="takeaway-title">💡 Your strongest environmental sleep predictor is {s_title.lower()}</div>
             <div class="takeaway-text">
                 With a correlation of <strong>r = {s_r:+.2f}</strong>, {s_title.lower()} showed the strongest
-                link to your sleep score across {n_nights} nights. Your 3 best nights (avg score
-                {top3["Sleep Score"].mean():.0f}) had an average {s_title.lower()} of
-                <strong>{top3_val:.1f}</strong>, compared to <strong>{bot3_val:.1f}</strong>
-                on your 3 worst nights (avg score {bot3["Sleep Score"].mean():.0f}) — a
-                <strong>{score_diff_tb:.0f}-point</strong> sleep score difference.
+                link to your sleep score across {n_nights} nights. Your good nights (avg score
+                {good["Sleep Score"].mean():.0f}) had an average {s_title.lower()} of
+                <strong>{good_val:.1f}</strong>, compared to <strong>{poor_val:.1f}</strong>
+                on your poor nights (avg score {poor["Sleep Score"].mean():.0f}), a
+                <strong>{score_diff:.0f}-point</strong> sleep score difference.
                 <br><br>
                 {advice}
             </div>
