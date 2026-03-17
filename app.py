@@ -1441,6 +1441,7 @@ elif page == "My Sleep Insights":
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Actionable Takeaway</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">What you can do to improve your sleep, based on {n_nights} nights of data.</div>', unsafe_allow_html=True)
 
         env_correlations = {k: v for k, v in correlations.items() if k != "Sleep Awake Time"}
         strongest_col = max(env_correlations, key=lambda k: abs(env_correlations[k]["r"]))
@@ -1448,66 +1449,30 @@ elif page == "My Sleep Insights":
         s_r = strongest["r"]
         s_title = strongest["title"]
 
-        advice_map = {
-            "avg_temp": {
-                "neg": "Consider keeping your bedroom cooler at night. A fan, cracked window, or lower thermostat could help.",
-                "pos": "Your data suggests warmer rooms helped, but sleep science generally favours 16–19°C. This may shift with more data.",
-            },
-            "avg_humidity": {
-                "neg": "Lower humidity was associated with better sleep. A dehumidifier or improved ventilation could help.",
-                "pos": "Slightly higher humidity seems to have helped. Dry winter air may be disrupting your sleep, so a humidifier could be worth trying.",
-            },
-            "avg_sound": {
-                "neg": "Quieter nights correlated with better sleep. Earplugs, a white noise machine, or closing windows may help.",
-                "pos": f"This is unusual: louder nights correlated with better scores. This may be coincidental with only {n_nights} nights of data.",
-            },
-            "avg_pm25": {
-                "neg": "Lower PM2.5 was associated with better sleep. On high-pollution nights, keeping windows closed and using an air purifier could help.",
-                "pos": "This correlation is likely coincidental. Higher pollution doesn't help sleep. More data should clarify.",
-            },
-            "avg_no2": {
-                "neg": "Lower NO₂ was associated with better sleep. This is an outdoor pollutant you can't directly control, but closing windows on high-traffic nights may help.",
-                "pos": "This correlation is likely coincidental and should resolve with more data.",
-            },
-            "std_sound": {
-                "neg": "Noise variability had the strongest link to your sleep. Consider earplugs or a white noise machine to mask intermittent disruptions like traffic or neighbours.",
-                "pos": f"This is unusual: more variable noise correlating with better sleep may be coincidental with only {n_nights} nights of data.",
-            },
-        }
-
-        direction = "neg" if s_r < 0 else "pos"
-        advice = advice_map.get(strongest_col, {}).get(direction, "More data will help clarify this pattern.")
-
         good_val = good[strongest_col].mean()
         poor_val = poor[strongest_col].mean()
         score_diff = good["Sleep Score"].mean() - poor["Sleep Score"].mean()
 
-        st.markdown(f"""
-        <div class="takeaway-box">
-            <div class="takeaway-title">💡 Your strongest environmental sleep predictor is {s_title.lower()}</div>
-            <div class="takeaway-text">
-                With a correlation of <strong>r = {s_r:+.2f}</strong>, {s_title.lower()} showed the strongest
-                link to your sleep score across {n_nights} nights. Your good nights (avg score
-                {good["Sleep Score"].mean():.0f}) had an average {s_title.lower()} of
-                <strong>{good_val:.1f}</strong>, compared to <strong>{poor_val:.1f}</strong>
-                on your poor nights (avg score {poor["Sleep Score"].mean():.0f}), a
-                <strong>{score_diff:.0f}-point</strong> sleep score difference.
-                <br><br>
-                {advice}
-            </div>
+        st.markdown(f"""<div style="font-size: 1.6rem; font-weight: 700; color: #B89ADE; margin-bottom: 1rem;">
+            💡 Your #1 sleep predictor: {s_title}
         </div>""", unsafe_allow_html=True)
 
-        awake_r = abs(correlations.get("Sleep Awake Time", {}).get("r", 0))
-        if awake_r > abs(s_r):
-            st.markdown(f"""
-            <div style="margin-top: 1rem; padding: 0.8rem 1.2rem; background: rgba(107, 140, 174, 0.06);
-                        border: 1px solid rgba(107, 140, 174, 0.12); border-radius: 10px;">
-                <span style="font-size: 0.95rem; color: #94A3B8;">
-                    <strong style="color: #CBD5E1;">Note:</strong> Awake time
-                    (r = {correlations["Sleep Awake Time"]["r"]:+.2f}) is actually the strongest overall
-                    predictor of your sleep score, but since it's a sleep metric rather than an environmental
-                    factor, the recommendation above focuses on what you can change about your bedroom.
-                </span>
-            </div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div style="font-size: 1.15rem; color: #94A3B8; line-height: 1.8; margin-bottom: 1.5rem;">
+            Across your {n_nights} nights, <strong style="color: #CBD5E1;">{s_title.lower()}</strong> had the
+            strongest correlation with sleep quality (<strong style="color: #CBD5E1;">r = {s_r:+.2f}</strong>).
+            On good nights (avg score {good["Sleep Score"].mean():.0f}), it averaged
+            <strong style="color: #9EDEBE;">{good_val:.1f}</strong>. On poor nights (avg score
+            {poor["Sleep Score"].mean():.0f}), it was <strong style="color: #E09C9C;">{poor_val:.1f}</strong>,
+            a <strong style="color: #CBD5E1;">{score_diff:.0f}-point</strong> sleep score difference.
+        </div>""", unsafe_allow_html=True)
 
-        st.markdown(f'<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 1rem;"><em>These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</em></div>', unsafe_allow_html=True)
+        st.markdown(f"""<div style="font-size: 1.2rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.5rem;">
+            What you can try
+        </div>""", unsafe_allow_html=True)
+
+        st.markdown("""<div style="font-size: 1.15rem; color: #94A3B8; line-height: 1.8; margin-bottom: 1rem;">
+            Noise variability had the strongest link to your sleep. Consider earplugs or a white noise machine
+            to mask intermittent disruptions like traffic or neighbours.
+        </div>""", unsafe_allow_html=True)
+
+        st.markdown(f'<div style="font-size: 0.95rem; color: #64748B; font-style: italic;">These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</div>', unsafe_allow_html=True)
