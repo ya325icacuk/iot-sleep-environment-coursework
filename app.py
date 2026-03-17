@@ -489,6 +489,8 @@ if page == "Sleep Dashboard":
     avg_temp = nightly["avg_temp"].mean()
     avg_humidity = nightly["avg_humidity"].mean()
     avg_sound = nightly["avg_sound"].mean()
+    avg_std_sound = nightly["std_sound"].mean()
+    avg_range_temp = nightly["range_temp"].mean()
     avg_sleep_hrs = sleep["Total Sleep"].mean() / 60
     avg_deep_sleep = sleep["Deep Sleep"].mean() / 60
 
@@ -561,34 +563,39 @@ if page == "Sleep Dashboard":
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Bedroom Environment</div>', unsafe_allow_html=True)
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Average Temperature</div>
-                <div class="metric-value">{avg_temp:.1f}<span class="metric-unit">°C</span></div>
+                <div class="metric-label-top">Avg Noise Variability</div>
+                <div class="metric-value">{avg_std_sound:.1f}</div>
             </div>""", unsafe_allow_html=True)
         with col2:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Average Humidity</div>
+                <div class="metric-label-top">Avg Humidity</div>
                 <div class="metric-value">{avg_humidity:.0f}<span class="metric-unit">%</span></div>
             </div>""", unsafe_allow_html=True)
         with col3:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Average Noise Level</div>
-                <div class="metric-value">{avg_sound:.0f}<span class="metric-unit">/ 4095</span></div>
+                <div class="metric-label-top">Avg Noise Level</div>
+                <div class="metric-value">{avg_sound:.0f}</div>
+            </div>""", unsafe_allow_html=True)
+        with col4:
+            st.markdown(f"""
+            <div class="metric-card card-turquoise">
+                <div class="metric-label-top">Avg Temp Range</div>
+                <div class="metric-value">{avg_range_temp:.1f}<span class="metric-unit">°C</span></div>
             </div>""", unsafe_allow_html=True)
 
-        env_night_labels = [d.strftime("%a %-d") for d in nightly["night"]]
+        st.markdown("""
+        <div style="font-size: 0.95rem; color: #94A3B8; margin-top: 0.75rem; margin-bottom: 0.75rem; line-height: 1.5;">
+            These are the four bedroom conditions that showed a statistically significant correlation
+            with sleep quality across your 14 nights, ordered by strength of association.
+        </div>""", unsafe_allow_html=True)
 
-        temp_min, temp_max = nightly["avg_temp"].min(), nightly["avg_temp"].max()
-        temp_pad = max((temp_max - temp_min) * 0.3, 0.5)
-        humid_min, humid_max = nightly["avg_humidity"].min(), nightly["avg_humidity"].max()
-        humid_pad = max((humid_max - humid_min) * 0.3, 2)
-        sound_min, sound_max = nightly["avg_sound"].min(), nightly["avg_sound"].max()
-        sound_pad = max((sound_max - sound_min) * 0.3, 5)
+        env_night_labels = [d.strftime("%a %-d") for d in nightly["night"]]
 
         score_colors = []
         for s in nightly["Sleep Score"]:
@@ -601,42 +608,43 @@ if page == "Sleep Dashboard":
             else:
                 score_colors.append("#E09C9C")
 
-        tab_temp, tab_humid, tab_noise = st.tabs(["Temperature", "Humidity", "Noise Level"])
+        def env_bar_chart(y_data, y_title, hover_template):
+            y_min, y_max = y_data.min(), y_data.max()
+            y_pad = max((y_max - y_min) * 0.3, 0.5)
+            fig = go.Figure()
+            fig.add_trace(go.Bar(x=env_night_labels, y=y_data,
+                marker_color=score_colors, marker_line=dict(width=0),
+                opacity=0.85, hovertemplate=hover_template, showlegend=False))
+            fig.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title=y_title,
+                yaxis_range=[y_min - y_pad, y_max + y_pad], showlegend=False)
+            fig.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
+            return fig
 
-        with tab_temp:
-            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Bedroom Temperature</div>', unsafe_allow_html=True)
-            fig_temp = go.Figure()
-            fig_temp.add_trace(go.Bar(x=env_night_labels, y=nightly["avg_temp"],
-                name="Temperature (°C)", marker_color=score_colors, marker_line=dict(width=0),
-                opacity=0.85, hovertemplate="<b>%{x}</b><br>%{y:.1f}°C<extra></extra>"))
-            fig_temp.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title="Temperature (°C)",
-                yaxis_range=[temp_min - temp_pad, temp_max + temp_pad], showlegend=False)
-            fig_temp.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
-            st.plotly_chart(fig_temp, use_container_width=True)
+        tab_std_sound, tab_humid, tab_noise, tab_temp_range = st.tabs(
+            ["Noise Variability", "Humidity", "Noise Level", "Temperature Stability"])
+
+        with tab_std_sound:
+            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Variability</div>', unsafe_allow_html=True)
+            st.plotly_chart(env_bar_chart(nightly["std_sound"], "Noise Std Dev (sensor units)",
+                "<b>%{x}</b><br>Noise variability: %{y:.1f}<extra></extra>"), use_container_width=True)
+            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Standard deviation of noise readings per night. Higher values mean more fluctuation in noise levels (e.g. intermittent traffic, doors closing).</em></div>', unsafe_allow_html=True)
 
         with tab_humid:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Humidity</div>', unsafe_allow_html=True)
-            fig_humid = go.Figure()
-            fig_humid.add_trace(go.Bar(x=env_night_labels, y=nightly["avg_humidity"],
-                name="Humidity (%)", marker_color=score_colors, marker_line=dict(width=0),
-                opacity=0.85, hovertemplate="<b>%{x}</b><br>%{y:.0f}%<extra></extra>"))
-            fig_humid.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title="Humidity (%)",
-                yaxis_range=[humid_min - humid_pad, humid_max + humid_pad], showlegend=False)
-            fig_humid.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
-            st.plotly_chart(fig_humid, use_container_width=True)
+            st.plotly_chart(env_bar_chart(nightly["avg_humidity"], "Humidity (%)",
+                "<b>%{x}</b><br>%{y:.0f}%<extra></extra>"), use_container_width=True)
 
         with tab_noise:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Level</div>', unsafe_allow_html=True)
-            fig_sound = go.Figure()
-            fig_sound.add_trace(go.Bar(x=env_night_labels, y=nightly["avg_sound"],
-                name="Average Noise", marker_color=score_colors, marker_line=dict(width=0),
-                opacity=0.85, hovertemplate="<b>%{x}</b><br>Avg Noise: %{y:.0f}<extra></extra>"))
-            fig_sound.update_layout(**PLOTLY_LAYOUT, height=500, yaxis_title="Noise Level (sensor units)",
-                yaxis_range=[sound_min - sound_pad, sound_max + sound_pad], showlegend=False)
-            fig_sound.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
-            st.plotly_chart(fig_sound, use_container_width=True)
+            st.plotly_chart(env_bar_chart(nightly["avg_sound"], "Noise Level (sensor units)",
+                "<b>%{x}</b><br>Avg Noise: %{y:.0f}<extra></extra>"), use_container_width=True)
+            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Average noise level per night on a relative sensor scale. Higher values correspond to louder environments.</em></div>', unsafe_allow_html=True)
 
-            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Noise measured on a relative scale (0–4095) from bedroom sensor. Higher values correspond to louder environments.</em></div>', unsafe_allow_html=True)
+        with tab_temp_range:
+            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Temperature Stability</div>', unsafe_allow_html=True)
+            st.plotly_chart(env_bar_chart(nightly["range_temp"], "Temperature Range (°C)",
+                "<b>%{x}</b><br>Temp range: %{y:.1f}°C<extra></extra>"), use_container_width=True)
+            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Difference between the highest and lowest temperature recorded during the night. Smaller values indicate a more stable sleeping temperature.</em></div>', unsafe_allow_html=True)
 
     # ── SECTION 3: EXTERNAL AIR QUALITY ──
     with st.container(border=True):
