@@ -213,9 +213,9 @@ Sleep metrics & Daily & 1 & 14 \\
 \textbf{Limitations.} The DHT11 has low precision ($\pm2$\,\textdegree C, $\pm5$\%\,RH) and a slow response time. The photoresistor is uncalibrated with a non-linear response, producing binary output only. The KY-038 provides no decibel reference, so sound values are relative analog readings (0--4095) rather than absolute acoustic measurements. The sensor system is fixed at a single bedside location and does not capture spatial variation within the room. The sleep window is fixed at 11\,pm to 9\,am regardless of actual bedtimes. With a single participant and 14 nights, the study has limited statistical power and no generalisability.
 
 % ══════════════════════════════════════════════════════════════════════
-\section*{Part 2: Internet of Things}
-\setcounter{section}{2}
-\setcounter{subsection}{0}
+\vspace{0.5em}\noindent\rule{\textwidth}{0.4pt}\vspace{0.3em}
+\begingroup\Large\bfseries Part 2: Internet of Things\endgroup
+\addtocounter{section}{1}\setcounter{subsection}{0}\vspace{0.8em}
 % ══════════════════════════════════════════════════════════════════════
 
 \subsection{Data Interaction/Visualisation/Actuation Platform}
@@ -284,19 +284,20 @@ All three models are statistically significant ($p < 0.05$). Sleep Score has the
 \centering
 \caption{Analytical and Statistical Trade-offs}
 \label{tab:tradeoffs-stats}
-\footnotesize
-\begin{tabularx}{\textwidth}{@{} l l l l X @{}}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} p{2.4cm} p{3cm} p{3cm} p{1.4cm} p{6.5cm} @{}}
 \toprule
 \textbf{Decision} & \textbf{Option A} & \textbf{Option B} & \textbf{Chosen} & \textbf{Rationale} \\
 \midrule
-Temp/humidity sensor & DHT11 ($\pm2$\,\textdegree C, \pounds1) & BME280 ($\pm0.5$\,\textdegree C, \pounds8) & DHT11 & Sufficient for gross changes; cost prioritised \\[4pt]
+Temp/humidity sensor & DHT11 ($\pm2$\,\textdegree C, \pounds1) & BME280 ($\pm0.5$\,\textdegree C, \pounds8) & DHT11 & Sufficient for detecting gross changes; cost prioritised \\[4pt]
 Sampling rate & 1/min & 5/min & 1/min & Captures noise events without excess data \\[4pt]
 Sleep window & Fixed 11\,pm--9\,am & Actual bedtimes & Fixed & Ultrahuman doesn't export timestamps \\[4pt]
 Correlation & Spearman & Pearson & Spearman & $n{=}14$ too small to verify normality \\[4pt]
 Regression predictors & 2 per model & 3+ per model & 2 & 7--10 obs per predictor rule~\cite{field2018} \\[4pt]
-Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group: very low power \\
+Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group: very low test power \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table}
 
 \textbf{Limitations.} This study has several important limitations. It involves a single participant, so findings are personalised and not generalisable. Fourteen nights provides limited statistical power; correlations may not replicate over longer periods. Data was collected in winter only, introducing seasonal bias (no summer heat, open windows, or different noise patterns). The observational design permits no causal claims; environment--sleep associations could be confounded by unmeasured factors such as stress, diet, or exercise. The light sensor is binary (no lux) and the sound sensor is uncalibrated (no dB reference), limiting comparability with published thresholds. The fixed sleep window does not account for actual bedtimes varying from 11\,pm to 9\,am. The air quality sensor is outdoors and may not reflect indoor exposure. Finally, the Ultrahuman sleep score is a proprietary composite metric whose exact algorithm is not published, so findings are dependent on Ultrahuman's internal calibration and may not correspond directly to clinically validated sleep quality measures.
@@ -409,19 +410,20 @@ Jarque, C.M. and Bera, A.K. (1987) A test for normality of observations and regr
 \centering
 \caption{Hardware and System Trade-offs}
 \label{tab:tradeoffs-hw}
-\footnotesize
-\begin{tabularx}{\textwidth}{@{} l l l X X @{}}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} p{2cm} p{2.8cm} p{1.6cm} p{5.2cm} p{4.8cm} @{}}
 \toprule
 \textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
 \midrule
 Processing & Local / Cloud & Local & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
 Communication & USB serial / WiFi & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be adjacent, no remote monitoring \\[4pt]
 Power & Continuous USB / Battery & USB & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
-Sensors & Elegoo kit (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Elegoo kit & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm0.5$\,\textdegree C \\[4pt]
+Sensors & Elegoo (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Elegoo kit & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm0.5$\,\textdegree C \\[4pt]
 Analysis & Spearman/OLS / ML & Spearman/OLS & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
 Data privacy & All local / Cloud & All local & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table}
 
 \subsection*{Appendix G: Dashboard Screenshot --- Sleep Dashboard Page}
