@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 
 % ── Packages ──────────────────────────────────────────────────────────
 \usepackage[utf8]{inputenc}
@@ -20,6 +20,7 @@
 \usepackage{setspace}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
+\usepackage{pdflscape}
 
 % ── Colours ───────────────────────────────────────────────────────────
 \definecolor{imperialblue}{RGB}{0,62,116}
@@ -99,6 +100,8 @@ Reducing noise variability, through interventions such as earplugs, white noise 
 
 % ══════════════════════════════════════════════════════════════════════
 \section*{Part 1: Sensing}
+\setcounter{section}{1}
+\setcounter{subsection}{0}
 % ══════════════════════════════════════════════════════════════════════
 
 \subsection{Introduction and Objectives}
@@ -210,10 +213,12 @@ Sleep metrics & Daily & 1 & 14 \\
 
 \textbf{Limitations.} The DHT11 has low precision ($\pm2$\,\textdegree C, $\pm5$\%\,RH) and a slow response time. The photoresistor is uncalibrated with a non-linear response, producing binary output only. The KY-038 provides no decibel reference, so sound values are relative analog readings (0--4095) rather than absolute acoustic measurements. The sensor system is fixed at a single bedside location and does not capture spatial variation within the room. The sleep window is fixed at 11\,pm to 9\,am regardless of actual bedtimes. With a single participant and 14 nights, the study has limited statistical power and no generalisability.
 
-\newpage
+\vspace{1.5em}
 
 % ══════════════════════════════════════════════════════════════════════
 \section*{Part 2: Internet of Things}
+\setcounter{section}{2}
+\setcounter{subsection}{0}
 % ══════════════════════════════════════════════════════════════════════
 
 \subsection{Data Interaction/Visualisation/Actuation Platform}
@@ -278,12 +283,13 @@ All three models are statistically significant ($p < 0.05$). Sleep Score has the
 
 \textbf{Trade-off analyses.} Table~\ref{tab:tradeoffs-hw} summarises the hardware and system-level trade-offs, and Table~\ref{tab:tradeoffs-stats} covers the analytical and statistical decisions.
 
+\begin{landscape}
 \begin{table}[H]
 \centering
 \caption{Hardware and System Trade-offs}
 \label{tab:tradeoffs-hw}
 \small
-\begin{tabularx}{\textwidth}{l l l l X X}
+\begin{tabularx}{\linewidth}{l l l l X X}
 \toprule
 \textbf{Trade-off} & \textbf{Option A} & \textbf{Option B} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
 \midrule
@@ -302,7 +308,7 @@ Data privacy & All local & Cloud with encryption & All local & Zero exposure of 
 \caption{Analytical and Statistical Trade-offs}
 \label{tab:tradeoffs-stats}
 \small
-\begin{tabularx}{\textwidth}{l l l l X}
+\begin{tabularx}{\linewidth}{l l l l X}
 \toprule
 \textbf{Decision} & \textbf{Option A} & \textbf{Option B} & \textbf{Chosen} & \textbf{Rationale} \\
 \midrule
@@ -315,6 +321,7 @@ Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group
 \bottomrule
 \end{tabularx}
 \end{table}
+\end{landscape}
 
 \textbf{Limitations.} This study has several important limitations. It involves a single participant, so findings are personalised and not generalisable. Fourteen nights provides limited statistical power; correlations may not replicate over longer periods. Data was collected in winter only, introducing seasonal bias (no summer heat, open windows, or different noise patterns). The observational design permits no causal claims; environment--sleep associations could be confounded by unmeasured factors such as stress, diet, or exercise. The light sensor is binary (no lux) and the sound sensor is uncalibrated (no dB reference), limiting comparability with published thresholds. The fixed sleep window does not account for actual bedtimes varying from 11\,pm to 9\,am. The air quality sensor is outdoors and may not reflect indoor exposure. Finally, the Ultrahuman sleep score is a proprietary composite metric whose exact algorithm is not published, so findings are dependent on Ultrahuman's internal calibration and may not correspond directly to clinically validated sleep quality measures.
 
