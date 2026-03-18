@@ -1,4 +1,4 @@
-\documentclass[9pt,a4paper]{extarticle}
+\documentclass[8pt,a4paper]{extarticle}
 
 % ── Packages ──────────────────────────────────────────────────────────
 \usepackage[utf8]{inputenc}
@@ -95,8 +95,6 @@ The study was conducted over 14 consecutive nights (9--22 February 2026) in a be
 \textbf{Noise variability} (standard deviation of sound readings) emerged as the single strongest predictor of sleep quality (Spearman $r = -0.80$, $p < 0.01$), consistent across all four analyses. Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration. It is the pattern of repeated noise spikes (such as intermittent traffic), not sustained loudness, that most distinguishes good from poor sleep nights. \textbf{Mean humidity} ($r = -0.70$), \textbf{mean noise level} ($r = -0.69$), and \textbf{temperature range} ($r = -0.56$) were also significantly correlated with sleep score. Humidity additionally showed effects on sleep stage composition: more humid nights were associated with less light sleep ($r = -0.71$) but more REM sleep ($r = 0.58$). Regression models explained up to 64.3\% of variance in sleep score (Adj~$R^2 = 0.643$), with noise variability as the only predictor retaining significance across all models. Light exposure, PM2.5, and NO\textsubscript{2} showed no significant association; air quality remained within WHO guidelines throughout the study, limiting the ability to detect an effect. Good sleep nights (scores 86--96) were characterised by lower noise (mean 70.7 vs 86.0), lower humidity (48.1\% vs 53.4\%), and more stable conditions than poor nights (scores 66--82).
 
 Reducing noise variability, through interventions such as earplugs, white noise machines, or improved window insulation, is the single most impactful change indicated by this dataset. The project demonstrates that affordable DIY sensor systems can produce meaningful, personalised sleep environment insights that complement clinical research. Findings are limited to one participant over 14 winter nights and should be treated as indicative rather than generalisable; a longer, multi-participant study is recommended.
-
-\vspace{1.5em}
 
 % ══════════════════════════════════════════════════════════════════════
 \section*{Part 1: Sensing}
@@ -213,8 +211,6 @@ Sleep metrics & Daily & 1 & 14 \\
 
 \textbf{Limitations.} The DHT11 has low precision ($\pm2$\,\textdegree C, $\pm5$\%\,RH) and a slow response time. The photoresistor is uncalibrated with a non-linear response, producing binary output only. The KY-038 provides no decibel reference, so sound values are relative analog readings (0--4095) rather than absolute acoustic measurements. The sensor system is fixed at a single bedside location and does not capture spatial variation within the room. The sleep window is fixed at 11\,pm to 9\,am regardless of actual bedtimes. With a single participant and 14 nights, the study has limited statistical power and no generalisability.
 
-\vspace{1.5em}
-
 % ══════════════════════════════════════════════════════════════════════
 \section*{Part 2: Internet of Things}
 \setcounter{section}{2}
@@ -281,26 +277,7 @@ All three models are statistically significant ($p < 0.05$). Sleep Score has the
 
 \textbf{Air quality interpretation.} NO\textsubscript{2} and PM2.5 stayed well within WHO guidelines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}) throughout the study. The inability to detect an effect may reflect genuinely clean overnight air during this winter period rather than an absence of any relationship between air quality and sleep. WHO guidelines are based on 24-hour averages; this study uses overnight-only data, so comparisons are indicative rather than direct.
 
-\textbf{Trade-off analyses.} Table~\ref{tab:tradeoffs-hw} summarises the hardware and system-level trade-offs, and Table~\ref{tab:tradeoffs-stats} covers the analytical and statistical decisions.
-
-\begin{table}[H]
-\centering
-\caption{Hardware and System Trade-offs}
-\label{tab:tradeoffs-hw}
-\footnotesize
-\begin{tabular}{@{} p{2.2cm} p{2.8cm} p{2.2cm} p{5.5cm} p{4.5cm} @{}}
-\toprule
-\textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
-\midrule
-Processing & Local laptop / Cloud pipeline & Local & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
-Communication & USB serial / WiFi (built into Heltec) & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be adjacent, no remote monitoring \\[4pt]
-Power & Continuous USB / Battery & USB & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
-Sensors & Elegoo kit (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Elegoo kit & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm0.5$\,\textdegree C (75\% error reduction for 8$\times$ cost) \\[4pt]
-Analysis & Spearman/OLS / ML (random forest) & Spearman/OLS & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
-Data privacy & All local / Cloud with encryption & All local & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
-\bottomrule
-\end{tabular}
-\end{table}
+\textbf{Trade-off analyses.} The full hardware and system-level trade-off table is provided in Appendix~J (Table~\ref{tab:tradeoffs-hw}). Table~\ref{tab:tradeoffs-stats} below summarises the analytical and statistical decisions.
 
 \begin{table}[H]
 \centering
@@ -341,8 +318,6 @@ Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group
 \textbf{Machine learning prediction.} With sufficient data, a sleep quality classifier (e.g.\ random forest, gradient boosting) could be trained on environment features to predict tonight's expected sleep quality from current bedroom conditions.
 
 \textbf{Broader impact.} Affordable personal sleep environment monitoring could complement clinical sleep studies, particularly in urban settings where traffic noise and air quality are persistent concerns. Open-source hardware and code could enable community-scale studies.
-
-\vspace{1.5em}
 
 % ── Conclusion ────────────────────────────────────────────────────────
 \section*{Conclusion}
@@ -426,6 +401,27 @@ Jarque, C.M. and Bera, A.K. (1987) A test for normality of observations and regr
 
 % \includegraphics[width=\textwidth]{figures/intra-night-profiles.png}
 \begin{center}\textit{[ Insert Figure 3: Intra-Night Environment Profiles here ]}\end{center}
+
+\subsection*{Appendix J: Hardware and System Trade-offs}
+
+\begin{table}[H]
+\centering
+\caption{Hardware and System Trade-offs}
+\label{tab:tradeoffs-hw}
+\footnotesize
+\begin{tabular}{@{} p{2.2cm} p{2.8cm} p{2.2cm} p{5.5cm} p{4.5cm} @{}}
+\toprule
+\textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
+\midrule
+Processing & Local laptop / Cloud pipeline & Local & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
+Communication & USB serial / WiFi (built into Heltec) & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be adjacent, no remote monitoring \\[4pt]
+Power & Continuous USB / Battery & USB & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
+Sensors & Elegoo kit (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Elegoo kit & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm0.5$\,\textdegree C (75\% error reduction for 8$\times$ cost) \\[4pt]
+Analysis & Spearman/OLS / ML (random forest) & Spearman/OLS & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
+Data privacy & All local / Cloud with encryption & All local & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection*{Appendix G: Dashboard Screenshot --- Sleep Dashboard Page}
 \textit{Annotated screenshot of Page~1 (Sleep Dashboard) showing sleep score bar chart, bedroom environment tabs, and air quality trends. Referenced in Section~2.1.}
