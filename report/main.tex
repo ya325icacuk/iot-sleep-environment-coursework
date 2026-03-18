@@ -1,0 +1,447 @@
+\documentclass[8pt,a4paper]{extarticle}
+
+% ── Packages ──────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{pdflscape}
+
+% ── Colours ───────────────────────────────────────────────────────────
+\definecolor{imperialblue}{RGB}{0,62,116}
+
+% ── Hyperlinks ────────────────────────────────────────────────────────
+\hypersetup{
+    colorlinks=true,
+    linkcolor=imperialblue,
+    urlcolor=imperialblue,
+    citecolor=imperialblue
+}
+
+% ── Spacing ───────────────────────────────────────────────────────────
+\setstretch{1.15}
+
+% ── Section formatting ────────────────────────────────────────────────
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.5em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.6em}
+
+% ── Header / Footer ──────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small ELEC70126 --- Internet of Things and Applications}
+\fancyhead[R]{\small CID: 06053600}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════
+\raggedbottom
+\begin{document}
+
+% ── Title Page ────────────────────────────────────────────────────────
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2cm}
+
+{\LARGE\bfseries IX \textbar{} ELEC70126 --- Internet of Things and Applications}
+
+\vspace{0.5cm}
+{\Large Module Exam}
+
+\vspace{2cm}
+
+\begin{tabular}{@{} >{\bfseries}l l @{}}
+\toprule
+Module Code \& Name & \textit{ELEC70126 --- Internet of Things and Applications} \\
+\midrule
+Student CID & \textit{06053600} \\
+Student Name & \textit{Yasmin Akhmedova} \\
+Assessment Due & \textit{2pm 25/03/2026} \\
+Study Topic & \textit{Exploration of Sleeping Environment Conditions} \\
+            & \textit{for Improved Sleep Quality} \\
+Code \& Data Link & \textit{GitHub: \href{https://github.com/ya325icacuk/iot-sleep-environment-coursework}{ya325icacuk/iot-sleep-environment-coursework}} \\
+                  & \textit{Dashboard: \href{https://sleep-monitor.streamlit.app}{sleep-monitor.streamlit.app}} \\
+\bottomrule
+\end{tabular}
+
+\vspace{\fill}
+\end{center}
+\newpage
+
+% ── Executive Summary ─────────────────────────────────────────────────
+\section*{Executive Summary}
+
+Sleep quality has known effects on cognitive performance, physical health, and daily productivity, yet the environmental conditions that shape it overnight remain underexplored outside clinical laboratories. Most existing research examines single factors in isolation and under controlled lab conditions, often using expensive polysomnography equipment. This leaves a gap in understanding how multiple, interacting environmental conditions collectively influence sleep in real home environments, particularly in urban environments where noise, air quality, and climate vary meaningfully from night to night.
+
+This report investigates which bedroom environment conditions most strongly predict sleep quality, using affordable Internet of Things (IoT) hardware in a real London bedroom. It demonstrates that low-cost sensors, public APIs, and wearable data can be combined into a meaningful personal sleep monitoring system. The work fulfils the Part~1 (Sensing) and Part~2 (IoT) requirements of the IoT and Applications coursework.
+
+The study was conducted over 14 consecutive nights (9--22 February 2026) in a bedroom on Horse Ferry Road, Westminster. Three data sources were integrated: (i)~a custom-built sensor system using a Heltec WiFi LoRa 32 V3 microcontroller with temperature, humidity, light, and sound sensors, logging every minute; (ii)~hourly NO\textsubscript{2} and PM2.5 concentrations from the Breathe London API (Horseferry Road sensor BL0046); and (iii)~daily sleep metrics from an Ultrahuman Ring wearable. All data was filtered to a consistent 11\,pm to 9\,am sleep window. The analysis pipeline comprised nightly feature aggregation, Spearman rank correlation, OLS multiple regression, median-split group comparison, and intra-night profiling. An interactive Streamlit dashboard (RestNet) was built to visualise the findings.
+
+\textbf{Noise variability} (standard deviation of sound readings) emerged as the single strongest predictor of sleep quality (Spearman $r = -0.80$, $p < 0.01$), consistent across all four analyses. Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration. It is the pattern of repeated noise spikes (such as intermittent traffic), not sustained loudness, that most distinguishes good from poor sleep nights. \textbf{Mean humidity} ($r = -0.70$), \textbf{mean noise level} ($r = -0.69$), and \textbf{temperature range} ($r = -0.56$) were also significantly correlated with sleep score. Humidity additionally showed effects on sleep stage composition: more humid nights were associated with less light sleep ($r = -0.71$) but more REM sleep ($r = 0.58$). Regression models explained up to 64.3\% of variance in sleep score (Adj~$R^2 = 0.643$), with noise variability as the only predictor retaining significance across all models. Light exposure, PM2.5, and NO\textsubscript{2} showed no significant association; air quality remained within WHO guidelines throughout the study, limiting the ability to detect an effect. Good sleep nights (scores 86--96) were characterised by lower noise (mean 70.7 vs 86.0), lower humidity (48.1\% vs 53.4\%), and more stable conditions than poor nights (scores 66--82).
+
+Reducing noise variability, through interventions such as earplugs, white noise machines, or improved window insulation, is the single most impactful change indicated by this dataset. The project demonstrates that affordable DIY sensor systems can produce meaningful, personalised sleep environment insights that complement clinical research. Findings are limited to one participant over 14 winter nights and should be treated as indicative rather than generalisable; a longer, multi-participant study is recommended.
+
+% ══════════════════════════════════════════════════════════════════════
+\section*{Part 1: Sensing}
+\setcounter{section}{1}
+\setcounter{subsection}{0}
+% ══════════════════════════════════════════════════════════════════════
+
+\subsection{Introduction and Objectives}
+
+Sleep quality affects cognitive performance, physical health, and productivity, yet the bedroom environment factors that influence it are typically studied in isolation rather than in combination~\cite{muzet2007}. Most research uses controlled laboratory settings or expensive polysomnography equipment that is very different from a typical home bedroom. This leaves a gap in understanding how multiple, interacting environmental conditions collectively influence sleep in real home environments.
+
+This project investigates the relationship between bedroom environment conditions and sleep quality over a 14-night study period (9--22 February 2026) in a real London bedroom. The central research question is: \textit{which environmental conditions most strongly predict sleep quality, and how do they interact?}
+
+The study is motivated by two factors. First, the growing accessibility of low-cost IoT hardware makes personal environment monitoring feasible without specialist equipment. A microcontroller board and a handful of sensors costing under \pounds30 can continuously log temperature, humidity, light, and noise (parameters that the sleep science literature identifies as relevant to sleep disruption). Second, the study location, a bedroom on Horse Ferry Road in Westminster, faces a busy road, providing a naturalistic setting where noise, air quality, and other conditions vary meaningfully from night to night.
+
+Three time-series data sources are integrated: (1)~custom-built bedroom sensors logging every minute, (2)~hourly air quality data from the Breathe London network~\cite{breathelondon}, and (3)~daily sleep metrics from an Ultrahuman Ring~\cite{ultrahuman} wearable. All data was collected or filtered to a consistent sleep window of 11\,pm to 9\,am. The analysis combines Spearman correlation, multiple regression, group comparison, and intra-night profiling to identify which conditions matter most. An interactive Streamlit dashboard translates the findings into an accessible interface. Together, these components demonstrate how affordable DIY hardware and publicly available APIs can produce meaningful, personalised insights into sleep quality.
+
+% ──────────────────────────────────────────────────────────────────────
+\subsection{Data Sources and Sensing Set-up}
+
+Three data sources were used to investigate the relationship between bedroom environment conditions and sleep quality. Table~\ref{tab:sources} summarises each source, its collection method, and measured parameters.
+
+\begin{table}[H]
+\centering
+\caption{Data Sources Summary}
+\label{tab:sources}
+\small
+\begin{tabularx}{\textwidth}{c l X X c}
+\toprule
+\textbf{\#} & \textbf{Data Source} & \textbf{Collection Method} & \textbf{Parameters} & \textbf{Frequency} \\
+\midrule
+1 & Bedroom sensors & Heltec WiFi LoRa 32 V3 with DHT11, photoresistor, KY-038 mic; USB serial & Temperature, humidity, light, sound avg, sound peak & Every minute \\
+2 & Air quality & Breathe London API, Horseferry Rd sensor (BL0046) & NO\textsubscript{2} (\textmu g/m\textsuperscript{3}), PM2.5 (\textmu g/m\textsuperscript{3}) & Hourly \\
+3 & Sleep metrics & Ultrahuman Ring Air wearable, manual export & Sleep score, total sleep, awake time, deep/REM/light sleep & Daily \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Source 1: Bedroom environment sensors.} The Heltec WiFi LoRa 32 V3 development board (ESP32-S3 microcontroller) was chosen as it provides analog-to-digital conversion pins required by the KY-038 sound sensor, as well as digital GPIO for the other sensors. Three sensors from an Elegoo kit were connected, all powered at 3.3\,V to remain within the safe operating range of the ESP32-S3:
+
+\begin{itemize}[nosep]
+    \item \textbf{KY-015 / DHT11} (GPIO~7): temperature and humidity sensor. Accuracy: $\pm2$\,\textdegree C, $\pm5$\%\,RH. Reads once per minute via single-wire digital protocol.
+    \item \textbf{ELB0604 photoresistor} (GPIO~1): light detection. Non-linear analog response converted to binary output (light on/off) via the onboard potentiometer, which acts as an adjustable threshold comparator.
+    \item \textbf{KY-038 microphone} (GPIO~2): sound level. Analog envelope output with no frequency or decibel calibration. Sound values are raw analog readings (0--4095 scale) treated as relative indicators within this study.
+\end{itemize}
+
+\textbf{Signal conditioning pipeline.} Each sensor involves a distinct signal processing chain before data reaches the CSV file. The sound sensor undergoes the most significant processing: raw analog readings are sampled every 5\,ms ($\sim$12,000 samples per minute), then statistically aggregated into two derived features per minute, producing sound average and sound peak. This compresses $\sim$12,000 raw readings into two summary statistics, preserving both the sustained noise level and transient events while reducing data volume by approximately 6,000$\times$. The photoresistor undergoes hardware-level signal conditioning: the onboard potentiometer converts a continuous non-linear analog voltage into a clean binary classification, performing analog-to-digital thresholding in hardware rather than software. The DHT11 performs its own internal signal conditioning (ADC and calibration within the chip) and outputs a digital readout directly. A second stage of signal processing occurs during analysis (Section~2.2, Step~1), where $\sim$600 minute-level readings per night are transformed into 12 nightly summary features through statistical aggregation (mean, standard deviation, range, percentage).
+
+Both sound average and sound peak are logged each minute, but only sound average is used in the analysis. Sound average represents the sustained noise level during each one-minute interval, which is more relevant to sleep disruption than the momentary spikes captured by sound peak. This design decision is revisited in Section~2.2.
+
+\textbf{Source 2: External air quality.} Hourly air quality data was sourced from the Breathe London network~\cite{breathelondon}, which operates low-cost sensors across London. The Horseferry Road sensor (site code BL0046~\cite{bl0046}) was selected due to its proximity to the study location. This sensor provides hourly measurements of nitrogen dioxide (NO\textsubscript{2}) and fine particulate matter (PM2.5), both of which have been linked to respiratory disruption and reduced sleep quality in existing literature~\cite{halperin2014}. Data was bulk-downloaded after the study period in two weekly chunks to avoid API timeouts on large date ranges.
+
+\textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm; the exact formula is not published. This project treats it as the primary dependent variable but acknowledges it is a ``black box'' measure whose validity depends on Ultrahuman's internal calibration. The quality tiers used in the dashboard (green $\geq$80, gold 70--79, red $<$70) are defined by this project, not by Ultrahuman.
+
+\textbf{Sensor limitations and upgrade path.} Table~\ref{tab:upgrades} summarises the limitations of each current sensor and the recommended upgrade for future work.
+
+\begin{table}[H]
+\centering
+\caption{Sensor Limitations and Upgrade Path}
+\label{tab:upgrades}
+\small
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+\textbf{Current Sensor} & \textbf{Limitation} & \textbf{Recommended Upgrade} \\
+\midrule
+DHT11 & $\pm2$\,\textdegree C / $\pm5$\%\,RH, slow response & BME280 ($\pm0.5$\,\textdegree C, $\pm3$\%\,RH, + pressure) \\
+ELB0604 photoresistor & Non-linear, uncalibrated, binary only & BH1750 (calibrated lux output) \\
+KY-038 microphone & Analog envelope, no dB / frequency & INMP441 I2S digital mic (dB, frequency spectrum) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. This fixed single-point installation means all readings represent conditions at the bedside location only; spatial variation across the room is not captured.
+
+% ──────────────────────────────────────────────────────────────────────
+\subsection{Data Collection and Storage/Communications Process}
+
+\textbf{Arduino sketch workflow.} The Arduino sketch running on the Heltec board reads all sensors every minute. Sound is sampled continuously at 5\,ms intervals ($\sim$12,000 samples per minute); the average and peak values are computed from these samples over each one-minute window. Temperature, humidity, and light are read once per minute. Each minute, the sketch outputs a single CSV-formatted line over USB serial.
+
+\textbf{Serial logging.} A Python script running in a Jupyter notebook on the laptop captures the serial output. Timestamps are generated on the laptop rather than the microcontroller, avoiding the complexity of WiFi/NTP synchronisation, which was unnecessary given that the Ultrahuman Ring provides daily (not timestamped) sleep metrics. Each row in the CSV contains six fields: \texttt{timestamp}, \texttt{temperature\_c}, \texttt{humidity\_pct}, \texttt{light\_detected}, \texttt{sound\_avg}, and \texttt{sound\_peak}. Each night's data is saved as a date-stamped CSV file (e.g.\ \texttt{2026-02-09\_sleep\_data.csv}) in the data folder. Over the 14-night study, this produced 14 files of approximately 600 rows each. After the collection period, all files were combined into a single \texttt{bedroom\_sensors.csv} for analysis.
+
+\textbf{Night-assignment logic.} Because the sleep window spans midnight, each reading must be assigned to a ``night'' for cross-source merging. The rule applied is: if a reading's hour is $\geq$12 (evening), it belongs to that date's night; if $<$12 (morning), it belongs to the previous date's night. For example, a reading at 2026-02-10 01:30 belongs to the night of 9~February. This same logic is applied to the air quality data and serves as the join key when merging all three sources into the nightly summary dataset.
+
+\textbf{Air quality collection.} Air quality data was retrieved in bulk from the Breathe London API after the two-week collection period completed, rather than in real-time during each night, to avoid the risk of missed API calls during overnight sessions. The API was found to timeout (HTTP 504) when requesting large date ranges in a single call, so the data was fetched in two weekly chunks with a 15-second pause between requests. The API returns data in long format (one row per measurement per species), which was transformed to wide format (one row per hour) with columns for the hour, PM2.5, and NO\textsubscript{2}. Only readings within the sleep window were retained, and the result was saved as \texttt{breathe\_london\_air\_quality.csv}.
+
+\textbf{Sleep data collection.} The Ultrahuman data was downloaded manually from the app at the end of the collection period and saved as \texttt{ultrahuman\_sleep\_data.csv}. Each row corresponds to one night, with the date used as the key to join with the nightly sensor and air quality summaries.
+
+% ──────────────────────────────────────────────────────────────────────
+\subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
+
+\textbf{Sampling rates and data volume.} Table~\ref{tab:sampling} summarises the sampling characteristics of each data source.
+
+\begin{table}[H]
+\centering
+\caption{Sampling Rates and Data Volume}
+\label{tab:sampling}
+\small
+\begin{tabular}{l l r r}
+\toprule
+\textbf{Source} & \textbf{Sampling Rate} & \textbf{Readings/Night} & \textbf{Total (14 nights)} \\
+\midrule
+Bedroom sensors & 1/min (sound: 1/5\,ms internally) & $\sim$600 & $\sim$8,400 \\
+Air quality & Hourly & $\sim$10 & $\sim$140 \\
+Sleep metrics & Daily & 1 & 14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Sampling rate justification.} The one-minute logging interval balances temporal granularity with storage efficiency. Bedroom temperature and humidity change slowly, making sub-minute resolution unnecessary. The 5\,ms internal sound sampling captures transient noise events (traffic, sirens, door slams) that would be missed at one-minute polling; these are then aggregated to minute-level summaries for logging. Air quality data is hourly, which is the maximum resolution available from the Breathe London API. Sleep metrics are single daily values, reflecting the output granularity of the Ultrahuman Ring.
+
+\textbf{Reliability and anomalies.} The primary reliability challenge was macOS power management: the laptop entered sleep mode during the first test night, cutting off serial capture after approximately two hours. This was resolved by installing the Amphetamine application to prevent sleep while the notebook kernel was active, and was tested over two full nights before the study began. The Breathe London API timeout issue (HTTP 504 on large date ranges) was resolved by splitting requests into weekly chunks as described in Section~1.3. No serial disconnections or significant data gaps were observed during the 14-night study period.
+
+\textbf{Latency.} Sensor capture is near real-time via USB serial. Air quality data was retrieved retrospectively after the study. Sleep data was exported the morning after each night.
+
+\textbf{Limitations.} The DHT11 has low precision ($\pm2$\,\textdegree C, $\pm5$\%\,RH) and a slow response time. The photoresistor is uncalibrated with a non-linear response, producing binary output only. The KY-038 provides no decibel reference, so sound values are relative analog readings (0--4095) rather than absolute acoustic measurements. The sensor system is fixed at a single bedside location and does not capture spatial variation within the room. The sleep window is fixed at 11\,pm to 9\,am regardless of actual bedtimes. With a single participant and 14 nights, the study has limited statistical power and no generalisability.
+
+% ══════════════════════════════════════════════════════════════════════
+\vspace{0.5em}\noindent\rule{\textwidth}{0.4pt}\vspace{0.3em}
+\begingroup\Large\bfseries Part 2: Internet of Things\endgroup
+\addtocounter{section}{1}\setcounter{subsection}{0}\vspace{0.8em}
+% ══════════════════════════════════════════════════════════════════════
+
+\subsection{Data Interaction/Visualisation/Actuation Platform}
+
+The dashboard design was directly shaped by the analysis results presented in Section~2.2. To make this section self-contained, the key findings are previewed here: the analysis identified four environment features with statistically significant correlations to sleep score, specifically noise variability ($r = -0.80$), humidity ($r = -0.70$), noise level ($r = -0.69$), and temperature range ($r = -0.56$). Three other factors (light, PM2.5, NO\textsubscript{2}) showed no significant association. These findings determined which variables are featured prominently in the dashboard and which appear only in contextual views.
+
+\textbf{Platform and deployment.} The dashboard, named RestNet, was built using Streamlit with Plotly for interactive charting, and is deployed at \url{https://sleep-monitor.streamlit.app}. The application and data files are hosted in a public GitHub repository and deployed automatically via Streamlit Community Cloud. The dashboard reads the same CSV files produced in Part~1 directly from the repository.
+
+\textbf{UX rationale.} Key design decisions and their reasoning are as follows. A \textbf{dark theme} was chosen because the primary user context is reviewing sleep data, often in the evening or at night; a dark interface reduces eye strain and feels contextually appropriate, with a warm coral accent (\texttt{\#E8937A}) providing contrast without harsh brightness. \textbf{Section-specific colour coding} (gold for sleep overview, turquoise for bedroom environment, rose for air quality, purple for insights) allows the user to instantly identify which data domain they are viewing, reducing cognitive load when scrolling between sections. A \textbf{three-page structure} was adopted rather than a single scrolling page because 14 nights of data across multiple sensor types and sources would overwhelm the user. Page~1 (Sleep Dashboard) answers ``how did I sleep this fortnight?'', Page~2 (Night Explorer) answers ``what happened on a specific night?'', and Page~3 (My Sleep Insights) answers ``what should I change?'', forming a progressive disclosure hierarchy matching distinct user intents. A \textbf{consistent sleep-score colour mapping} (green $\geq$80, gold 70--79, red $<$70) is applied to bars, dots, and cards across all charts, so the user can visually scan any chart and immediately see whether good or poor sleep nights cluster at certain values. \textbf{Full-word labelling} replaced abbreviations throughout (e.g.\ ``Average'' not ``Avg'', ``Noise Variability'' not ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. These quality tiers are defined by this dashboard and are not official Ultrahuman classifications.
+
+\textbf{Page 1: Sleep Dashboard} provides a two-week overview with three sections. The Sleep Overview section displays metric cards for average sleep score, average duration, and average deep sleep, followed by a nightly sleep score bar chart colour-coded by quality tier. The Bedroom Environment section shows metric cards for the four significant predictors (noise variability, humidity, noise level, temperature range) with tabbed nightly bar charts for each, colour-coded by that night's sleep score. The External Air Quality section presents PM2.5 and NO\textsubscript{2} line charts with WHO guideline reference lines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}), with a caveat that these guidelines are based on 24-hour averages while this data covers only the sleep window.
+
+\textbf{Page 2: Night Explorer} allows the user to select any of the 14 nights and view five sections. Sleep Architecture shows the night's score, comparison to the two-week average, and a stacked bar of sleep stages. The Bedroom Environment Timeline presents minute-by-minute line charts for temperature, humidity, and noise, plus a binary heatmap strip for light. The Air Quality Verdict displays pass/fail cards against WHO guidelines. Night at a Glance provides auto-generated insight cards for bedroom extremes (coolest/warmest hour, quietest/noisiest hour) and averages (humidity, noise, light exposure, air quality). What Was Different? compares this night's four significant predictors to personal medians using traffic-light colour coding (green = better than usual, gold = close to usual, red = worse than usual).
+
+\textbf{Page 3: My Sleep Insights} brings all three data sources together. Best vs Worst Night shows side-by-side snapshot cards with sleep scores and bedroom conditions. The Correlation Explorer displays Spearman scatter plots for three environment predictors (noise variability, humidity, noise level) plus awake time (a sleep metric included because it strongly correlates with sleep score); temperature range, the fourth significant predictor, is not plotted here but is covered in the optimal ranges table. Your Optimal Ranges presents a median-split table comparing good vs poor nights across all four significant predictors. The Actionable Takeaway section highlights the strongest predictor and provides practical recommendations.
+
+% ──────────────────────────────────────────────────────────────────────
+\subsection{Data Analytics, Inferences and Insights}
+
+The environment variables and sleep metrics operate at different timescales. Bedroom sensors log every minute ($\sim$600 readings per night), air quality data is hourly ($\sim$10 readings per night), and sleep metrics are single daily values. These cannot be compared directly in their raw form. The analysis proceeds in five steps.
+
+\textbf{Step 1: Nightly feature aggregation.} Raw sensor readings ($\sim$600 per night) are converted into 12 comparable nightly summary features: mean, standard deviation, and range for temperature, humidity, and noise (9 features), light exposure as a percentage of readings with light detected (1 feature), and mean PM2.5 and NO\textsubscript{2} (2 features). These are merged with the six sleep metrics from the Ultrahuman Ring into a unified dataset of 14 rows $\times$ 18 columns. Sound average is used rather than sound peak, as it represents the sustained noise level during each interval, which is more relevant to sleep disruption than momentary spikes.
+
+\textbf{Step 2: Spearman correlation analysis.} Spearman rank correlations are computed between all 12 environment features and all 6 sleep metrics. Spearman was chosen over Pearson because normality cannot be verified with $n = 14$, and Pearson assumes normally distributed data to produce valid $p$-values~\cite{field2018}. Four environment features showed statistically significant correlations with sleep score ($p < 0.05$): noise variability ($r = -0.80$, $p < 0.01$), mean humidity ($r = -0.70$, $p < 0.01$), mean noise level ($r = -0.69$, $p < 0.01$), and temperature range ($r = -0.56$, $p = 0.037$). Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration, making noise the most consistent predictor across all sleep metrics. Humidity showed additional effects on sleep stage composition: higher humidity was associated with less light sleep ($r = -0.71$, $p < 0.01$) but more REM sleep ($r = 0.58$, $p < 0.05$), suggesting it may affect sleep architecture, not just overall quality. Light exposure, PM2.5, and NO\textsubscript{2} showed no statistically significant correlations with any sleep metric.
+
+\textbf{Step 3: Multiple regression (OLS).} For each of three target metrics, the two environment features with the highest absolute Spearman correlation were selected as predictors (limited to two by the rule of thumb requiring 7--10 observations per predictor~\cite{field2018}). Multicollinearity was checked against the $|r| > 0.7$ threshold~\cite{dormann2013}; all predictor pairs passed (Std Noise and Mean Humidity: $r = 0.60$; Std Noise and Mean Noise: $r = 0.57$). Table~\ref{tab:regression} summarises the results.
+
+\begin{table}[H]
+\centering
+\caption{Multiple Regression Results Summary}
+\label{tab:regression}
+\small
+\begin{tabular}{l c c c}
+\toprule
+ & \textbf{Sleep Score} & \textbf{Awake Time} & \textbf{Light Sleep} \\
+\midrule
+Predictors & Std Noise + Mean Humidity & Std Noise + Mean Noise & Std Noise + Mean Humidity \\
+$F$-statistic ($p$) & 12.70 ($p < 0.01$) & 5.84 ($p = 0.019$) & 10.69 ($p = 0.003$) \\
+Adj $R^2$ & 0.643 & 0.427 & 0.598 \\
+Std Noise coef ($p$) & $-4.77$ (0.021) & $+9.17$ (0.050) & $-30.37$ (0.013) \\
+2nd predictor coef ($p$) & $-0.45$ (0.244) & $+0.63$ (0.283) & $-1.10$ (0.610) \\
+Durbin--Watson & 2.07 & 1.18 & 1.52 \\
+Jarque--Bera $p$ & 0.59 & 0.58 & 0.40 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All three models are statistically significant ($p < 0.05$). Sleep Score has the strongest fit (Adj~$R^2 = 0.643$). Noise variability is significant or borderline significant in every model, while the second predictor (mean humidity or mean noise) does not reach significance in any model once noise variability is accounted for. Residual diagnostics include Durbin--Watson (near 2.0 indicates no autocorrelation), Jarque--Bera (does not reject normality), Breusch--Pagan (tests for heteroscedasticity), and Shapiro--Wilk (tests residual normality). With only 14 observations, all diagnostic tests have limited power.
+
+\textbf{Step 4: Optimal conditions comparison (median split).} The 14 nights are split at the median sleep score into the top 7 (``good sleep'', scores 86--96) and bottom 7 (``poor sleep'', scores 66--82). A descriptive comparison was chosen over formal hypothesis testing because with only 7 observations per group, statistical tests have very low power and would likely return non-significant results even if real differences exist. Mean noise was 15.2 points higher on poor sleep nights (86.0 vs 70.7). Noise variability was also greater on poor nights (22.2 vs 20.3). Humidity was 5.3 percentage points higher (53.4\% vs 48.1\%). Temperature was only marginally higher on poor nights (20.6\,\textdegree C vs 20.0\,\textdegree C), a difference of 0.6\,\textdegree C that is small compared to within-group variation. Light, PM2.5, and NO\textsubscript{2} showed negligible differences between the two groups (all $<$1 unit).
+
+\textbf{Step 5: Intra-night profiles.} The minute-by-minute sensor data for the single best and worst sleep nights (by sleep score) was plotted side by side. The worst night was warmer (mean 20.5\,\textdegree C vs 18.6\,\textdegree C), substantially more humid ($\sim$58\% vs $\sim$44\%), and characterised by more frequent high-amplitude noise spikes, particularly around 11\,pm--1\,am and again after 5\,am. The best night also had early noise spikes but settled into a quieter, more stable pattern for the rest of the night. This illustrates why noise variability (not just average level) emerged as the dominant predictor.
+
+\textbf{Note on temporal versus aggregate cross-correlation.} Steps 2--4 use nightly aggregates (one value per night per feature), not true time-series cross-correlations. This is a necessary consequence of the data design: the sleep score is a single daily value from the Ultrahuman Ring with no minute-level breakdown, so it cannot be correlated with sensor readings at finer temporal resolution. Step~5 is the closest this study comes to temporal analysis, comparing minute-by-minute patterns on different nights and revealing that the timing and pattern of noise spikes matters. A true time-series cross-correlation (e.g.\ ``does a noise spike at 2\,am predict more awake time in the following hour?'') would require minute-level sleep stage data, which the Ultrahuman export does not provide. This is acknowledged as a limitation and identified as an avenue for future work.
+
+% ──────────────────────────────────────────────────────────────────────
+\subsection{Discussions on the Important Aspects of the Project}
+
+\textbf{Key finding.} Noise variability is the single strongest predictor of sleep quality, consistent across all four analyses: correlation, regression, group comparison, and intra-night profiling. It is the pattern of repeated disruptions (intermittent traffic spikes, door closings, sirens) rather than sustained loudness that most impacts sleep. Research suggests that noise variability disrupts sleep architecture more than constant background noise.
+
+\textbf{Air quality interpretation.} NO\textsubscript{2} and PM2.5 stayed well within WHO guidelines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}) throughout the study. The inability to detect an effect may reflect genuinely clean overnight air during this winter period rather than an absence of any relationship between air quality and sleep. WHO guidelines are based on 24-hour averages; this study uses overnight-only data, so comparisons are indicative rather than direct.
+
+\textbf{Trade-off analyses.} The full hardware and system-level trade-off table is provided in Appendix~J (Table~\ref{tab:tradeoffs-hw}). Table~\ref{tab:tradeoffs-stats} below summarises the analytical and statistical decisions.
+
+\begin{table}[H]
+\centering
+\caption{Analytical and Statistical Trade-offs}
+\label{tab:tradeoffs-stats}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} p{2.4cm} p{3cm} p{3cm} p{1.4cm} p{6.5cm} @{}}
+\toprule
+\textbf{Decision} & \textbf{Option A} & \textbf{Option B} & \textbf{Chosen} & \textbf{Rationale} \\
+\midrule
+Temp/humidity sensor & DHT11 ($\pm2$\,\textdegree C, \pounds1) & BME280 ($\pm0.5$\,\textdegree C, \pounds8) & DHT11 & Sufficient for detecting gross changes; cost prioritised \\[4pt]
+Sampling rate & 1/min & 5/min & 1/min & Captures noise events without excess data \\[4pt]
+Sleep window & Fixed 11\,pm--9\,am & Actual bedtimes & Fixed & Ultrahuman doesn't export timestamps \\[4pt]
+Correlation & Spearman & Pearson & Spearman & $n{=}14$ too small to verify normality \\[4pt]
+Regression predictors & 2 per model & 3+ per model & 2 & 7--10 obs per predictor rule~\cite{field2018} \\[4pt]
+Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group: very low test power \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Limitations.} This study has several important limitations. It involves a single participant, so findings are personalised and not generalisable. Fourteen nights provides limited statistical power; correlations may not replicate over longer periods. Data was collected in winter only, introducing seasonal bias (no summer heat, open windows, or different noise patterns). The observational design permits no causal claims; environment--sleep associations could be confounded by unmeasured factors such as stress, diet, or exercise. The light sensor is binary (no lux) and the sound sensor is uncalibrated (no dB reference), limiting comparability with published thresholds. The fixed sleep window does not account for actual bedtimes varying from 11\,pm to 9\,am. The air quality sensor is outdoors and may not reflect indoor exposure. Finally, the Ultrahuman sleep score is a proprietary composite metric whose exact algorithm is not published, so findings are dependent on Ultrahuman's internal calibration and may not correspond directly to clinically validated sleep quality measures.
+
+\textbf{Notebook versus dashboard.} The notebook and dashboard serve complementary roles. The notebook provides statistical rigour (regression diagnostics, $p$-values, residual tests) for academic assessment. The dashboard provides accessibility and interactivity for user-facing exploration. Both use the same underlying data.
+
+\textbf{Integration pipeline.} The current system follows a linear pipeline: hardware sensors $\rightarrow$ serial capture $\rightarrow$ CSV files $\rightarrow$ analysis (notebook) $\rightarrow$ visualisation (dashboard). There is no feedback loop: the system senses and reports but does not actuate or intervene. This was a deliberate design choice for an observational study; the goal was to understand which conditions affect sleep, not to change them mid-study (which would confound the analysis). The Heltec board's WiFi and LoRa radios were not used because USB serial was simpler and more reliable for a bedside setup with the laptop physically adjacent. Section~2.4 proposes how future iterations could close the loop with real-time alerts and smart home integration.
+
+\textbf{Project planning and development.} The project followed eight phases: (1)~hardware assembly and sensor testing in late January 2026; (2)~Arduino sketch development in late January to early February; (3)~serial logging setup and Mac power management resolution in early February; (4)~data collection over 14 nights from 9--22 February; (5)~air quality data retrieval in late February; (6)~data analysis in late February to early March; (7)~Streamlit dashboard development in March; and (8)~report writing in March. Key challenges included the Mac sleep issue (resolved with Amphetamine), API timeouts (resolved by splitting into weekly chunks), and the sound sampling iteration (initially 1/min, revised to 5\,ms high-frequency sampling after early tests missed transient noise events). Each sensor was tested individually before integration on the shared breadboard, which identified GPIO pin requirements and ADC-capable pin assignments.
+
+% ──────────────────────────────────────────────────────────────────────
+\subsection{Avenues for Future Work and Potential Impact}
+
+\textbf{Better sensors.} A BME280 would provide $\pm0.5$\,\textdegree C temperature accuracy, $\pm3$\%\,RH humidity, and barometric pressure. A BH1750 would provide calibrated lux readings, enabling comparison with published light thresholds. An INMP441 I2S digital microphone would enable frequency-domain analysis and dB calibration. A CO\textsubscript{2} sensor (e.g.\ SCD40) would serve as a ventilation proxy, since CO\textsubscript{2} buildup in closed bedrooms is a known sleep disruptor.
+
+\textbf{Longer study and multiple participants.} A study of three or more months would capture seasonal variation, increase statistical power, and enable stronger regression models with additional predictors. Including multiple participants would enable generalisable conclusions and reveal individual differences in environmental sensitivity.
+
+\textbf{Real-time alerts and smart home integration.} The Heltec board's WiFi or LoRa radio could be used to push notifications when conditions deteriorate (e.g.\ humidity spike, sustained noise event), triggering within-night interventions rather than next-morning retrospective analysis. This could extend to smart home integration: triggering fans, dehumidifiers, or white noise machines based on sensor thresholds derived from the optimal ranges analysis, creating a closed-loop actuation system (sense $\rightarrow$ predict $\rightarrow$ intervene $\rightarrow$ measure outcome).
+
+\textbf{Machine learning prediction.} With sufficient data, a sleep quality classifier (e.g.\ random forest, gradient boosting) could be trained on environment features to predict tonight's expected sleep quality from current bedroom conditions.
+
+\textbf{Broader impact.} Affordable personal sleep environment monitoring could complement clinical sleep studies, particularly in urban settings where traffic noise and air quality are persistent concerns. Open-source hardware and code could enable community-scale studies.
+
+% ── Conclusion ────────────────────────────────────────────────────────
+\section*{Conclusion}
+
+The research question posed in Section~1.1 was: \textit{which environmental conditions most strongly predict sleep quality, and how do they interact?}
+
+The answer, consistent across all four analyses, is \textbf{noise variability}. It is the pattern of repeated noise spikes throughout the night, not the average noise level, that most distinguishes good from poor sleep. This was the only predictor that remained significant across correlation ($r = -0.80$), regression (significant in all three models), group comparison (largest difference between good and poor nights), and intra-night profiling (most visually striking contrast). Humidity, noise level, and temperature range also showed significant individual correlations, but none retained significance once noise variability was accounted for in regression, suggesting they are partially confounded with noise patterns rather than independent sleep disruptors.
+
+Light, PM2.5, and NO\textsubscript{2} showed no effect, though the study conditions (winter, closed windows, clean air) may not have provided enough variation to test these adequately. The ``how do they interact'' part of the research question is only partially answered: the regression models suggest noise variability dominates, but with $n = 14$ the study lacks power to disentangle more subtle interactions. A longer study would enable this.
+
+The project demonstrates that affordable IoT hardware (under \pounds30) combined with public APIs and a wearable device can produce actionable, personalised sleep environment insights, closing the gap between clinical sleep research and home monitoring described in Section~1.1. Reducing noise variability, through earplugs, white noise machines, or improved window insulation, is the single most impactful change indicated by this dataset.
+
+% ── References ────────────────────────────────────────────────────────
+\newpage
+\begin{thebibliography}{8}
+
+\bibitem{muzet2007}
+Muzet, A. (2007) Environmental noise, sleep and health. \textit{Sleep Medicine Reviews}, 11(2), pp.135--142. doi:10.1016/j.smrv.2006.09.001
+
+\bibitem{breathelondon}
+Breathe London (2026) Air Quality Monitoring Network. Available at: \url{https://www.breathelondon.org/} (Accessed: March 2026)
+
+\bibitem{ultrahuman}
+Ultrahuman (2026) Ultrahuman Ring Air. Available at: \url{https://www.ultrahuman.com/ring/} (Accessed: March 2026)
+
+\bibitem{bl0046}
+Breathe London (2026) Horseferry Road Sensor, Site BL0046. Available at: \url{https://www.breathelondon.org/} (Accessed: March 2026)
+
+\bibitem{halperin2014}
+Halperin, D. (2014) Environmental noise and sleep disturbances: A threat to health? \textit{Sleep Science}, 7(4), pp.209--212. doi:10.1016/j.slsci.2014.11.003
+
+\bibitem{field2018}
+Field, A. (2018) \textit{Discovering Statistics Using IBM SPSS Statistics}. 5th edn. London: SAGE Publications.
+
+\bibitem{dormann2013}
+Dormann, C.F. et al. (2013) Collinearity: a review of methods to deal with it and a simulation study evaluating their performance. \textit{Ecography}, 36(1), pp.27--46. doi:10.1111/j.1600-0587.2012.07348.x
+
+\bibitem{jarque1987}
+Jarque, C.M. and Bera, A.K. (1987) A test for normality of observations and regression residuals. \textit{International Statistical Review}, 55(2), pp.163--172. doi:10.2307/1403192
+
+\end{thebibliography}
+
+% ── Appendix ──────────────────────────────────────────────────────────
+\newpage
+\section*{Appendix: Figures and Illustrations}
+
+\textit{This appendix contains all figures, diagrams, and screenshots referenced in the report.}
+
+\subsection*{Appendix A: Fritzing Wiring Diagram}
+\textit{Circuit diagram showing the Heltec WiFi LoRa 32 V3 board connected to the DHT11 (GPIO~7), ELB0604 photoresistor (GPIO~1), and KY-038 microphone (GPIO~2), all powered at 3.3\,V. Referenced in Section~1.2.}
+
+% \includegraphics[width=\textwidth]{figures/fritzing-wiring.png}
+\begin{center}\textit{[ Insert Fritzing Wiring Diagram here ]}\end{center}
+
+\subsection*{Appendix B: Physical Sensor Setup}
+\textit{Annotated photograph of the bedside sensor installation, showing the breadboard position relative to the bed ($\sim$0.5\,m from pillow), window ($\sim$2\,m), and laptop. Microphone oriented towards the window (noise source). Referenced in Section~1.2.}
+
+% \includegraphics[width=\textwidth]{figures/sensor-setup.jpg}
+\begin{center}\textit{[ Insert Physical Sensor Setup here ]}\end{center}
+
+\subsection*{Appendix C: Data Flow Diagram}
+\textit{Diagram showing the end-to-end data pipeline: three sources (Heltec board via USB serial, Breathe London API, Ultrahuman app) producing raw CSV files, combined into a unified dataset, feeding into the Jupyter notebook analysis and Streamlit dashboard. Referenced in Section~1.3.}
+
+% \includegraphics[width=\textwidth]{figures/data-flow.png}
+\begin{center}\textit{[ Insert Data Flow Diagram here ]}\end{center}
+
+\subsection*{Appendix D: Figure 1 --- Spearman Correlation Heatmap}
+\textit{Annotated heatmap showing Spearman rank correlations between all 12 environment features and 6 sleep metrics, with significance stars ($^*\,p < 0.05$, $^{**}\,p < 0.01$). From notebook Subpart~2. Referenced in Section~2.2, Step~2.}
+
+% \includegraphics[width=\textwidth]{figures/correlation-heatmap.png}
+\begin{center}\textit{[ Insert Figure 1: Spearman Correlation Heatmap here ]}\end{center}
+
+\subsection*{Appendix E: Figure 2 --- Good vs Poor Sleep Nights}
+\textit{Bar charts comparing environment conditions (mean and standard deviation) on the top~7 vs bottom~7 nights by sleep score. From notebook Subpart~4. Referenced in Section~2.2, Step~4.}
+
+% \includegraphics[width=\textwidth]{figures/good-vs-poor.png}
+\begin{center}\textit{[ Insert Figure 2: Good vs Poor Sleep Nights here ]}\end{center}
+
+\subsection*{Appendix F: Figure 3 --- Intra-Night Environment Profiles}
+\textit{Side-by-side minute-by-minute plots of temperature, humidity, and noise for the best and worst sleep nights. From notebook Subpart~5. Referenced in Section~2.2, Step~5.}
+
+% \includegraphics[width=\textwidth]{figures/intra-night-profiles.png}
+\begin{center}\textit{[ Insert Figure 3: Intra-Night Environment Profiles here ]}\end{center}
+
+\subsection*{Appendix J: Hardware and System Trade-offs}
+
+\begin{table}[H]
+\centering
+\caption{Hardware and System Trade-offs}
+\label{tab:tradeoffs-hw}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} p{2cm} p{2.8cm} p{1.6cm} p{5.2cm} p{4.8cm} @{}}
+\toprule
+\textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
+\midrule
+Processing & Local / Cloud & Local & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
+Communication & USB serial / WiFi & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be adjacent, no remote monitoring \\[4pt]
+Power & Continuous USB / Battery & USB & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
+Sensors & Elegoo (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Elegoo kit & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm0.5$\,\textdegree C \\[4pt]
+Analysis & Spearman/OLS / ML & Spearman/OLS & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
+Data privacy & All local / Cloud & All local & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Appendix G: Dashboard Screenshot --- Sleep Dashboard Page}
+\textit{Annotated screenshot of Page~1 (Sleep Dashboard) showing sleep score bar chart, bedroom environment tabs, and air quality trends. Referenced in Section~2.1.}
+
+% \includegraphics[width=\textwidth]{figures/dashboard-sleep.png}
+\begin{center}\textit{[ Insert Dashboard Screenshot: Sleep Dashboard Page here ]}\end{center}
+
+\subsection*{Appendix H: Dashboard Screenshot --- Night Explorer Page}
+\textit{Annotated screenshot of Page~2 (Night Explorer) showing sleep architecture, minute-level sensor timelines, air quality verdict, and predictor comparison cards. Referenced in Section~2.1.}
+
+% \includegraphics[width=\textwidth]{figures/dashboard-explorer.png}
+\begin{center}\textit{[ Insert Dashboard Screenshot: Night Explorer Page here ]}\end{center}
+
+\subsection*{Appendix I: Dashboard Screenshot --- My Sleep Insights Page}
+\textit{Annotated screenshot of Page~3 (My Sleep Insights) showing scatter plots, optimal ranges table, and actionable takeaway. Referenced in Section~2.1.}
+
+% \includegraphics[width=\textwidth]{figures/dashboard-insights.png}
+\begin{center}\textit{[ Insert Dashboard Screenshot: My Sleep Insights Page here ]}\end{center}
+
+\end{document}
