@@ -127,7 +127,7 @@ st.markdown("""
         background: rgba(232, 147, 122, 0.06);
         border: 1px solid rgba(232, 147, 122, 0.18);
         border-radius: 14px;
-        padding: 0.65rem 0.75rem 0.4rem 0.75rem;
+        padding: 1rem 1.25rem 0.75rem 1.25rem;
         margin-top: 0.25rem;
     }
     .night-glance-item {
@@ -143,12 +143,13 @@ st.markdown("""
         background: rgba(184, 154, 222, 0.06);
         border: 1px solid rgba(184, 154, 222, 0.18);
         border-radius: 12px;
-        padding: 0.55rem 0.8rem 0.35rem 0.8rem;
+        padding: 1rem 1.25rem 0.75rem 1.25rem;
         margin-top: 0.2rem;
+        min-height: 160px;
     }
 
     .metric-label-top {
-        font-size: 0.7rem;
+        font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 1.5px;
         font-weight: 600;
@@ -161,7 +162,7 @@ st.markdown("""
         letter-spacing: -0.5px;
     }
     .metric-unit {
-        font-size: 1.1rem;
+        font-size: 1.4rem;
         font-weight: 400;
         margin-left: 2px;
     }
@@ -456,7 +457,7 @@ NON_SIGNIFICANT = ["Light exposure", "PM2.5", "NO₂"]
 st.sidebar.markdown("""
 <div style="padding: 0 1.5rem; margin-bottom: 0;">
     <div style="font-size: 3.5rem; font-weight: 900; color: #E8937A; letter-spacing: 1px; line-height: 1;">RestNet</div>
-    <div style="font-size: 1.2rem; color: #94A3B8; margin-top: 0.75rem; font-weight: 300; letter-spacing: 1.2px; text-transform: uppercase;">Understand Your Sleep</div>
+    <div style="font-size: 1.35rem; color: #94A3B8; margin-top: 0.75rem; font-weight: 300; letter-spacing: 1.2px; text-transform: uppercase;">Understand Your Sleep</div>
 </div>
 <div class="sb-divider-logo"></div>
 """, unsafe_allow_html=True)
@@ -511,7 +512,7 @@ st.sidebar.markdown("""
 if page == "Sleep Dashboard":
 
     st.markdown('<div style="font-size: 5rem; font-weight: 800; color: #E8937A; margin-bottom: 0.5rem; line-height: 1.1;">Sleep Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">Two-Week Overview | 9 – 23 February 2026</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: 600;">Two-Week Overview | 9 – 22 February 2026</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
         <span style="color: #8892a5; font-size: 1.575rem;">Here's your overview of 14 nights (9–22 February 2026).
@@ -531,7 +532,7 @@ if page == "Sleep Dashboard":
     avg_deep_sleep = sleep["Deep Sleep"].mean() / 60
 
     st.markdown("""
-    <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.95rem; color: #94A3B8;">
+    <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 1.4rem; color: #94A3B8;">
         <span>Colour key across all charts:</span>
         <span><span style="color: #9EDEBE;">&#9679;</span> Good sleep (score ≥ 80)</span>
         <span><span style="color: #E8C88A;">&#9679;</span> Fair sleep (70–79)</span>
@@ -593,7 +594,7 @@ if page == "Sleep Dashboard":
         fig_score.update_xaxes(type="category", tickangle=-45, title_text="February 2026")
         st.plotly_chart(fig_score, use_container_width=True)
 
-        st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Sleep scores are provided by the Ultrahuman Ring. Score categories (Excellent, Good, Fair, Poor) are defined by this dashboard and are not official Ultrahuman classifications.</em></div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;"><em>Sleep scores are provided by the Ultrahuman Ring. Score categories (Excellent, Good, Fair, Poor) are defined by this dashboard and are not official Ultrahuman classifications.</em></div>', unsafe_allow_html=True)
 
     # ── SECTION 2: BEDROOM ENVIRONMENT ──
     with st.container(border=True):
@@ -626,7 +627,7 @@ if page == "Sleep Dashboard":
             </div>""", unsafe_allow_html=True)
 
         st.markdown("""
-        <div style="font-size: 0.95rem; color: #94A3B8; margin-top: 0.75rem; margin-bottom: 0.75rem; line-height: 1.5;">
+        <div style="font-size: 1.4rem; color: #94A3B8; margin-top: 0.75rem; margin-bottom: 0.75rem; line-height: 1.5;">
             These are the four bedroom conditions that showed a statistically significant correlation
             with your sleep score across 14 nights, ordered by strength of association.
             Select each tab below to see how it varied night to night.
@@ -664,25 +665,25 @@ if page == "Sleep Dashboard":
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Variability</div>', unsafe_allow_html=True)
             st.plotly_chart(env_bar_chart(nightly["std_sound"], "Noise Std Dev (sensor units)",
                 "<b>%{x}</b><br>Noise variability: %{y:.1f}<extra></extra>"), use_container_width=True)
-            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Standard deviation of noise readings per night. Higher values mean more fluctuation in noise levels (e.g. intermittent traffic, doors closing).</em></div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;"><em>Standard deviation of noise readings per night. Higher values mean more fluctuation in noise levels (e.g. intermittent traffic, doors closing).</em></div>', unsafe_allow_html=True)
 
         with tab_humid:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Humidity</div>', unsafe_allow_html=True)
             st.plotly_chart(env_bar_chart(nightly["avg_humidity"], "Humidity (%)",
                 "<b>%{x}</b><br>%{y:.0f}%<extra></extra>"), use_container_width=True)
-            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Average relative humidity in the bedroom per night. Both very dry and very humid air can disrupt sleep.</em></div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;"><em>Average relative humidity in the bedroom per night. Both very dry and very humid air can disrupt sleep.</em></div>', unsafe_allow_html=True)
 
         with tab_noise:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Level</div>', unsafe_allow_html=True)
             st.plotly_chart(env_bar_chart(nightly["avg_sound"], "Noise Level (sensor units)",
                 "<b>%{x}</b><br>Avg Noise: %{y:.0f}<extra></extra>"), use_container_width=True)
-            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Average noise level per night on a relative sensor scale. Higher values correspond to louder environments.</em></div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;"><em>Average noise level per night on a relative sensor scale. Higher values correspond to louder environments.</em></div>', unsafe_allow_html=True)
 
         with tab_temp_range:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Temperature Stability</div>', unsafe_allow_html=True)
             st.plotly_chart(env_bar_chart(nightly["range_temp"], "Temperature Range (°C)",
                 "<b>%{x}</b><br>Temp range: %{y:.1f}°C<extra></extra>"), use_container_width=True)
-            st.markdown('<div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;"><em>Difference between the highest and lowest temperature recorded during the night. Smaller values indicate a more stable sleeping temperature.</em></div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;"><em>Difference between the highest and lowest temperature recorded during the night. Smaller values indicate a more stable sleeping temperature.</em></div>', unsafe_allow_html=True)
 
     # ── SECTION 3: EXTERNAL AIR QUALITY ──
     with st.container(border=True):
@@ -741,7 +742,7 @@ if page == "Sleep Dashboard":
         st.plotly_chart(fig_air, use_container_width=True)
 
         st.markdown(f"""
-        <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5;">
+        <div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;">
             <em>Neither PM2.5 nor NO₂ showed a significant correlation with sleep quality in this dataset.
             These are included for general health context against WHO guidelines.
             Air quality data covers the sleep window (11 pm to 9 am) only.
@@ -855,7 +856,7 @@ elif page == "Night Explorer":
         st.plotly_chart(fig_arch, use_container_width=True, config={"displayModeBar": False})
 
         if awake > 50:
-            st.markdown('<div style="font-size: 0.85rem; color: #E09C9C; line-height: 1.5; margin-top: 0.75rem;"><em>High awake time (>50 min) is the strongest predictor of a low sleep score in your data.</em></div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; color: #E09C9C; line-height: 1.5; margin-top: 0.75rem;"><em>High awake time (>50 min) is the strongest predictor of a low sleep score in your data.</em></div>', unsafe_allow_html=True)
 
     # ============================================================
     # SECTION 2: BEDROOM ENVIRONMENT TIMELINE
@@ -865,7 +866,7 @@ elif page == "Night Explorer":
         with st.container(border=True):
             st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Bedroom Environment Timeline</div>', unsafe_allow_html=True)
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-bottom: 0.25rem;">Minute-by-minute bedroom conditions from 11 pm to 9 am. Hover for exact values.</div>', unsafe_allow_html=True)
-            st.markdown('<div style="font-size: 0.95rem; color: #94A3B8; margin-bottom: 1rem;">These are the four bedroom conditions recorded by your sensors throughout the night. Temperature, humidity, and noise level were all linked to sleep quality across your 14 nights. Light exposure is included for completeness but did not show a significant link to sleep quality.</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.4rem; color: #94A3B8; margin-bottom: 1rem;">These are the four bedroom conditions recorded by your sensors throughout the night. Temperature, humidity, and noise level were all linked to sleep quality across your 14 nights. Light exposure is included for completeness but did not show a significant link to sleep quality.</div>', unsafe_allow_html=True)
 
             time_vals = night_sensors["timestamp"]
             temp_vals = night_sensors["temperature_c"].values
@@ -970,8 +971,8 @@ elif page == "Night Explorer":
                     <div style="font-size: 2rem; line-height: 1; color: {pm25_accent};">{pm25_icon}</div>
                     <div>
                         <div style="font-size: 1.8rem; font-weight: 700; color: {pm25_accent};">
-                            {avg_pm25_ne:.1f} <span style="font-size: 0.9rem; font-weight: 400;">µg/m³</span></div>
-                        <div style="font-size: 0.95rem; color: #CBD5E1; line-height: 1.4;">{pm25_msg}</div>
+                            {avg_pm25_ne:.1f} <span style="font-size: 1.3rem; font-weight: 400;">µg/m³</span></div>
+                        <div style="font-size: 1.4rem; color: #CBD5E1; line-height: 1.4;">{pm25_msg}</div>
                     </div>
                 </div>""", unsafe_allow_html=True)
             with col2:
@@ -981,8 +982,8 @@ elif page == "Night Explorer":
                     <div style="font-size: 2rem; line-height: 1; color: {no2_accent};">{no2_icon}</div>
                     <div>
                         <div style="font-size: 1.8rem; font-weight: 700; color: {no2_accent};">
-                            {avg_no2_ne:.1f} <span style="font-size: 0.9rem; font-weight: 400;">µg/m³</span></div>
-                        <div style="font-size: 0.95rem; color: #CBD5E1; line-height: 1.4;">{no2_msg}</div>
+                            {avg_no2_ne:.1f} <span style="font-size: 1.3rem; font-weight: 400;">µg/m³</span></div>
+                        <div style="font-size: 1.4rem; color: #CBD5E1; line-height: 1.4;">{no2_msg}</div>
                     </div>
                 </div>""", unsafe_allow_html=True)
 
@@ -1001,8 +1002,8 @@ elif page == "Night Explorer":
                 summary_color = "#E8C88A"
 
             st.markdown(f"""
-            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.6; margin-top: 0.75rem;">
-                <em><span style="color: #D47A98; font-weight: 600; font-size: 0.95rem;">{summary_msg}</span><br>
+            <div style="font-size: 1.3rem; color: #64748B; line-height: 1.6; margin-top: 0.75rem;">
+                <em><span style="color: #D47A98; font-weight: 600; font-size: 1.4rem;">{summary_msg}</span><br>
                 Neither PM2.5 nor NO₂ showed a significant link to sleep quality in this dataset.
                 These are included for general health context against WHO guidelines.
                 WHO guidelines for PM2.5 ({WHO_PM25_NE} µg/m³) and NO₂ ({WHO_NO2_NE} µg/m³) are based on
@@ -1010,7 +1011,7 @@ elif page == "Night Explorer":
                 so values shown represent a partial-day average rather than a full 24-hour measurement.</em>
             </div>""", unsafe_allow_html=True)
         else:
-            st.markdown('<div style="font-size: 1.1rem; color: #64748B;">Air quality data unavailable for this night.</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.4rem; color: #64748B;">Air quality data unavailable for this night.</div>', unsafe_allow_html=True)
 
     # ============================================================
     # SECTION 4: NIGHT AT A GLANCE
@@ -1019,14 +1020,14 @@ elif page == "Night Explorer":
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #E8937A; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232, 147, 122, 0.20);">Night at a Glance</div>', unsafe_allow_html=True)
         st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #E8937A; margin-bottom: 0.25rem;">A quick snapshot of your bedroom conditions for this night.</div>', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 0.95rem; color: #94A3B8; margin-bottom: 1rem;">Temperature, humidity, and noise were linked to sleep quality across your 14 nights. Light exposure and air quality are included for general context.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.4rem; color: #94A3B8; margin-bottom: 1rem;">Temperature, humidity, and noise were linked to sleep quality across your 14 nights. Light exposure and air quality are included for general context.</div>', unsafe_allow_html=True)
 
         def insight_card(icon, value, description, accent="#CBD5E1"):
             return f"""
             <div class="night-glance-item">
-                <div style="font-size: 2.8rem; margin-bottom: 0.3rem;">{icon}</div>
-                <div style="font-size: 1.15rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.2rem;">{value}</div>
-                <div style="font-size: 0.8rem; color: #64748B; line-height: 1.4;">{description}</div>
+                <div style="font-size: 3.2rem; margin-bottom: 0.4rem;">{icon}</div>
+                <div style="font-size: 1.35rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.25rem;">{value}</div>
+                <div style="font-size: 1.3rem; color: #64748B; line-height: 1.4;">{description}</div>
             </div>"""
 
         extreme_cards = []
@@ -1082,7 +1083,7 @@ elif page == "Night Explorer":
                 return
             with st.container(key=key):
                 st.markdown(
-                    f'<div style="font-size: 0.95rem; font-weight: 600; color: #E8937A; margin-bottom: 0.45rem;">{title}</div>',
+                    f'<div style="font-size: 1.4rem; font-weight: 600; color: #E8937A; margin-bottom: 0.45rem;">{title}</div>',
                     unsafe_allow_html=True,
                 )
                 n_cols = 2
@@ -1116,10 +1117,10 @@ elif page == "Night Explorer":
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your usual, based on what affected your sleep.</div>', unsafe_allow_html=True)
 
             st.markdown("""
-            <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; color: #64748B;">
-                <span><span style="font-size: 1.2rem; color: #9EDEBE;">&#9679;</span> Better than usual</span>
-                <span><span style="font-size: 1.2rem; color: #C4A44E;">&#9679;</span> Close to usual</span>
-                <span><span style="font-size: 1.2rem; color: #E09C9C;">&#9679;</span> Worse than usual</span>
+            <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 1.3rem; color: #64748B;">
+                <span><span style="font-size: 1.35rem; color: #9EDEBE;">&#9679;</span> Better than usual</span>
+                <span><span style="font-size: 1.35rem; color: #C4A44E;">&#9679;</span> Close to usual</span>
+                <span><span style="font-size: 1.35rem; color: #E09C9C;">&#9679;</span> Worse than usual</span>
             </div>""", unsafe_allow_html=True)
 
             predictor_cards = {}
@@ -1157,15 +1158,15 @@ elif page == "Night Explorer":
                 unit = pred["unit"]
 
                 predictor_cards[col] = f"""
-                <div style="display: flex; align-items: flex-start; gap: 0.85rem; padding: 0.45rem 0.35rem;">
-                    <div style="font-size: 2.6rem; line-height: 1; margin-top: 0.05rem; color: {dot_color};">&#9679;</div>
+                <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 0.5rem 0.4rem;">
+                    <div style="font-size: 3rem; line-height: 1; margin-top: 0.05rem; color: {dot_color};">&#9679;</div>
                     <div>
-                        <div style="font-size: 1.08rem; font-weight: 600; color: #94A3B8; line-height: 1.4;">
+                        <div style="font-size: 1.4rem; font-weight: 600; color: #94A3B8; line-height: 1.5;">
                             {pred["label"]}:
                             <span style="color: {dot_color};">{value:.1f}{unit}</span>
                             <span style="font-weight: 400;"> (your median: {median_val:.1f}{unit})</span>
                         </div>
-                        <div style="font-size: 0.98rem; color: #8892a5; margin-top: 0.28rem; line-height: 1.45;">
+                        <div style="font-size: 1.3rem; color: #8892a5; margin-top: 0.35rem; line-height: 1.5;">
                             <em>{verdict}</em>
                         </div>
                     </div>
@@ -1184,7 +1185,7 @@ elif page == "Night Explorer":
                     with group_cols[i]:
                         with st.container(key=key):
                             st.markdown(
-                                f'<div style="font-size: 0.9rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.3rem;">{title}</div>',
+                                f'<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.4rem;">{title}</div>',
                                 unsafe_allow_html=True,
                             )
                             inner_cols = st.columns(2)
@@ -1196,7 +1197,7 @@ elif page == "Night Explorer":
             # Non-significant factors note
             non_sig_str = ", ".join(NON_SIGNIFICANT)
             st.markdown(f"""
-            <div style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-top: 0.5rem;">
+            <div style="font-size: 1.3rem; color: #64748B; line-height: 1.5; margin-top: 0.5rem;">
                 <em>{non_sig_str} showed no statistically significant correlation with sleep quality
                 across your 14 nights of data.</em>
             </div>""", unsafe_allow_html=True)
@@ -1266,7 +1267,7 @@ elif page == "My Sleep Insights":
             margin-top: 0.75rem; padding-top: 0.6rem;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
-        .snapshot-env-item { font-size: 0.85rem; color: #94A3B8; line-height: 1.4; }
+        .snapshot-env-item { font-size: 1.3rem; color: #94A3B8; line-height: 1.4; }
         .snapshot-env-item strong { color: #CBD5E1; font-weight: 600; }
 
         .takeaway-box {
@@ -1274,8 +1275,8 @@ elif page == "My Sleep Insights":
             background: linear-gradient(135deg, rgba(212, 165, 116, 0.08), rgba(196, 149, 106, 0.04));
             border: 1px solid rgba(212, 165, 116, 0.20); margin-top: 0.5rem;
         }
-        .takeaway-box .takeaway-title { font-size: 1.1rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; }
-        .takeaway-box .takeaway-text { font-size: 1.05rem; color: #CBD5E1; line-height: 1.7; }
+        .takeaway-box .takeaway-title { font-size: 1.4rem; font-weight: 700; color: #D4A574; margin-bottom: 0.5rem; }
+        .takeaway-box .takeaway-text { font-size: 1.3rem; color: #CBD5E1; line-height: 1.7; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -1298,21 +1299,21 @@ elif page == "My Sleep Insights":
         def snapshot_card(row, label, card_class, accent_color):
             date_str = row["night"].strftime("%A, %-d %B")
             return f"""
-            <div class="metric-card {card_class}" style="min-height: 200px;">
-                <div class="metric-label-top" style="font-size: 0.95rem;">{label}: {date_str}</div>
+            <div class="metric-card {card_class}" style="min-height: 200px; margin-bottom: 1rem;">
+                <div class="metric-label-top" style="font-size: 1.4rem;">{label}: {date_str}</div>
                 <div style="display: flex; gap: 2rem; align-items: flex-start;">
                     <div style="flex: 1;">
                         <div class="metric-value" style="font-size: 3.5rem;">{int(row["Sleep Score"])}<span class="metric-unit" style="font-size: 1.3rem;">/ 100</span> <span style="font-size: 1rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Sleep Score</span></div>
-                        <div style="font-size: 1.2rem; color: #94A3B8; margin-top: 0.3rem; font-weight: 500;">
+                        <div style="font-size: 1.35rem; color: #94A3B8; margin-top: 0.3rem; font-weight: 500;">
                             {fmt_duration(row["Total Sleep"])} sleep · {int(row["Deep Sleep"] / row["Total Sleep"] * 100)}% deep · {int(row["REM Sleep"] / row["Total Sleep"] * 100)}% REM · {int(row["Light Sleep"] / row["Total Sleep"] * 100)}% light · {int(row["Sleep Awake Time"] / row["Total Sleep"] * 100)}% awake
                         </div>
                     </div>
                     <div style="flex: 1; border-left: 1px solid rgba(148, 163, 184, 0.15); padding-left: 1.5rem;">
-                        <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Bedroom Conditions</div>
+                        <div style="font-size: 1.3rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Bedroom Conditions</div>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">Avg temp:</strong> {row["avg_temp"]:.1f}°C <span style="color: #64748B;">(range: {row["range_temp"]:.1f}°C)</span></div>
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">Avg humidity:</strong> {row["avg_humidity"]:.0f}%</div>
-                            <div class="snapshot-env-item" style="font-size: 0.95rem;"><strong style="color: {accent_color};">Avg noise:</strong> {row["avg_sound"]:.0f} <span style="color: #64748B;">(variability: {row["std_sound"]:.1f})</span></div>
+                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Avg temp:</strong> {row["avg_temp"]:.1f}°C <span style="color: #64748B;">(range: {row["range_temp"]:.1f}°C)</span></div>
+                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Avg humidity:</strong> {row["avg_humidity"]:.0f}%</div>
+                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Avg noise:</strong> {row["avg_sound"]:.0f} <span style="color: #64748B;">(variability: {row["std_sound"]:.1f})</span></div>
                         </div>
                     </div>
                 </div>
@@ -1330,7 +1331,7 @@ elif page == "My Sleep Insights":
 
         st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 0.75rem;">How each bedroom condition correlated with your sleep score across {n_nights} nights.</div>', unsafe_allow_html=True)
         st.markdown("""
-        <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; font-size: 0.95rem; color: #94A3B8;">
+        <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; font-size: 1.4rem; color: #94A3B8;">
             <span><span style="color: #9EDEBE;">&#9679;</span> Good sleep (score ≥ 80)</span>
             <span><span style="color: #E8C88A;">&#9679;</span> Fair sleep (70–79)</span>
             <span><span style="color: #E09C9C;">&#9679;</span> Poor sleep (score &lt; 70)</span>
@@ -1390,12 +1391,12 @@ elif page == "My Sleep Insights":
                 st.markdown(f"""<div style="background: rgba(92, 184, 178, 0.08); border: 1px solid rgba(92, 184, 178, 0.18);
                     border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; text-align: center;">
                     <div style="font-size: 1.5rem; font-weight: 600; color: #5CB8B2;">{title}</div>
-                    <div style="font-size: 1.1rem; color: #64748B;">Spearman r = {r:+.2f}</div>
-                    <div style="font-size: 0.95rem; color: #94A3B8; margin-top: 0.3rem;">{explanation}</div>
+                    <div style="font-size: 1.4rem; color: #64748B;">Spearman r = {r:+.2f}</div>
+                    <div style="font-size: 1.4rem; color: #94A3B8; margin-top: 0.3rem;">{explanation}</div>
                 </div>""", unsafe_allow_html=True)
                 st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
-        st.markdown('<div style="font-size: 0.9rem; color: #64748B; font-style: italic; margin-top: 0.5rem;">Temperature, PM2.5, and NO₂ were also tested but showed no significant correlation with sleep quality.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.3rem; color: #64748B; font-style: italic; margin-top: 0.5rem;">Temperature, PM2.5, and NO₂ were also tested but showed no significant correlation with sleep quality.</div>', unsafe_allow_html=True)
 
     # ── SECTION 3: YOUR OPTIMAL RANGES ──
     with st.container(border=True):
@@ -1429,19 +1430,31 @@ elif page == "My Sleep Insights":
                 "Difference": f"{abs(diff):.1f}{unit} {direction}",
             })
 
-        import pandas as pd
-        df_ranges = pd.DataFrame(rows_data)
-        st.markdown("""<style>
-        [data-testid="stDataFrame"] table { font-size: 1.15rem !important; }
-        [data-testid="stDataFrame"] th { font-size: 1.05rem !important; font-weight: 600 !important; }
-        [data-testid="stDataFrame"] td { font-size: 1.15rem !important; padding: 0.75rem 1rem !important; }
-        </style>""", unsafe_allow_html=True)
-        st.dataframe(df_ranges, use_container_width=True, hide_index=True, height=210)
+        table_html = """<table style="width: 100%; border-collapse: collapse; font-size: 1.5rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid rgba(148, 163, 184, 0.2);">
+                    <th style="text-align: left; padding: 1rem 1.3rem; color: #94A3B8; font-weight: 600;">Condition</th>
+                    <th style="text-align: left; padding: 1rem 1.3rem; color: #9EDEBE; font-weight: 600;">Good Nights Avg</th>
+                    <th style="text-align: left; padding: 1rem 1.3rem; color: #E09C9C; font-weight: 600;">Poor Nights Avg</th>
+                    <th style="text-align: left; padding: 1rem 1.3rem; color: #94A3B8; font-weight: 600;">Difference</th>
+                </tr>
+            </thead>
+            <tbody>"""
+        for row in rows_data:
+            table_html += f"""
+                <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.1);">
+                    <td style="padding: 1rem 1.3rem; color: #CBD5E1; font-weight: 500;">{row["Condition"]}</td>
+                    <td style="padding: 1rem 1.3rem; color: #9EDEBE;">{row["Good Nights Avg"]}</td>
+                    <td style="padding: 1rem 1.3rem; color: #E09C9C;">{row["Poor Nights Avg"]}</td>
+                    <td style="padding: 1rem 1.3rem; color: #CBD5E1;">{row["Difference"]}</td>
+                </tr>"""
+        table_html += "</tbody></table>"
+        st.markdown(table_html, unsafe_allow_html=True)
 
     # ── SECTION 4: ACTIONABLE TAKEAWAY ──
     with st.container(border=True):
         st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Actionable Takeaway</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-size: 1.3rem; color: #8892a5; margin-bottom: 1.5rem;">What you can do to improve your sleep, based on {n_nights} nights of data.</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.4rem; color: #8892a5; margin-bottom: 1.5rem;">What you can do to improve your sleep, based on {n_nights} nights of data.</div>', unsafe_allow_html=True)
 
         env_correlations = {k: v for k, v in correlations.items() if k != "Sleep Awake Time"}
         strongest_col = max(env_correlations, key=lambda k: abs(env_correlations[k]["r"]))
@@ -1455,23 +1468,27 @@ elif page == "My Sleep Insights":
 
         col_left, col_right = st.columns(2)
         with col_left:
-            st.markdown(f"""<div style="font-size: 1.4rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.75rem;">
-                💡 Your #1 sleep predictor: {s_title}
+            st.markdown(f"""<div style="background: rgba(184, 154, 222, 0.08); border-radius: 12px; padding: 1.75rem 2rem;">
+                <div style="font-size: 1.8rem; font-weight: 700; color: #B89ADE; margin-bottom: 1.25rem;">
+                    💡 Your #1 sleep predictor: {s_title}
+                </div>
+                <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 2.5; padding-left: 1.5rem; margin: 0;">
+                    <li>Strongest correlation: <strong style="color: #CBD5E1;">r = {s_r:+.2f}</strong></li>
+                    <li>Good nights (avg score {good["Sleep Score"].mean():.0f}): averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong></li>
+                    <li>Poor nights (avg score {poor["Sleep Score"].mean():.0f}): averaged <strong style="color: #E09C9C;">{poor_val:.1f}</strong></li>
+                    <li>Sleep score difference: <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong></li>
+                </ul>
             </div>""", unsafe_allow_html=True)
-            st.markdown(f"""<ul style="font-size: 1.1rem; color: #94A3B8; line-height: 2.2; padding-left: 1.5rem;">
-                <li>Strongest correlation: <strong style="color: #CBD5E1;">r = {s_r:+.2f}</strong></li>
-                <li>Good nights (avg score {good["Sleep Score"].mean():.0f}): averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong></li>
-                <li>Poor nights (avg score {poor["Sleep Score"].mean():.0f}): averaged <strong style="color: #E09C9C;">{poor_val:.1f}</strong></li>
-                <li>Sleep score difference: <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong></li>
-            </ul>""", unsafe_allow_html=True)
         with col_right:
-            st.markdown("""<div style="font-size: 1.4rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.75rem;">
-                What you can try
+            st.markdown("""<div style="background: rgba(184, 154, 222, 0.08); border-radius: 12px; padding: 1.75rem 2rem;">
+                <div style="font-size: 1.8rem; font-weight: 600; color: #B89ADE; margin-bottom: 1.25rem;">
+                    🎯 What you can try
+                </div>
+                <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 2.5; padding-left: 1.5rem; margin: 0;">
+                    <li>Try earplugs or a white noise machine to mask intermittent disruptions</li>
+                    <li>Inconsistent noise from traffic or neighbours was the biggest factor</li>
+                    <li>A steady background sound is better than silence interrupted by spikes</li>
+                </ul>
             </div>""", unsafe_allow_html=True)
-            st.markdown("""<ul style="font-size: 1.1rem; color: #94A3B8; line-height: 2.2; padding-left: 1.5rem;">
-                <li>Try earplugs or a white noise machine to mask intermittent disruptions</li>
-                <li>Inconsistent noise from traffic or neighbours was the biggest factor</li>
-                <li>A steady background sound is better than silence interrupted by spikes</li>
-            </ul>""", unsafe_allow_html=True)
 
-        st.markdown(f'<div style="font-size: 0.95rem; color: #64748B; font-style: italic;">These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 1.3rem; color: #64748B; font-style: italic; margin-top: 1rem;">These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</div>', unsafe_allow_html=True)

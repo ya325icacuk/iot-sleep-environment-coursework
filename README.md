@@ -85,6 +85,6 @@ The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in three p
 5. **Intra-night profiles** - minute-by-minute sensor plots for the best and worst sleep nights
 
 **Part 3: Visualisation and Interface** - documents the interactive Streamlit dashboard (`app.py`) deployed at https://sleep-monitor.streamlit.app:
-1. **Sleep Dashboard** - 2-week overview of sleep quality and bedroom conditions
-2. **Night Explorer** - single-night deep dive with minute-level sensor timelines
-3. **My Comfort Zone** - correlation analysis and personalised recommendations
+1. **Sleep Dashboard** - 2-week overview of sleep scores, bedroom environment charts (colour-coded by sleep quality), and air quality trends
+2. **Night Explorer** - single-night deep dive with sleep stage breakdown, minute-level sensor timelines, air quality verdicts, and condition comparisons to personal medians
+3. **My Sleep Insights** - correlation analysis with scatter plots, optimal ranges table, and actionable recommendations
