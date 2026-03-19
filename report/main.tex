@@ -11,6 +11,7 @@
 \usepackage{tabularx}
 \usepackage{longtable}
 \usepackage{amsmath}
+\usepackage[round,authoryear]{natbib}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{enumitem}
@@ -91,7 +92,7 @@ Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.stream
 \section*{Executive Summary}
 {\small\color{red}\textbf{TODO:} Tweak executive summary when the paper is done.}\vspace{0.5em}
 
-Sleep quality is a growing public health concern. Average scores among users of the Sleep Cycle app fell by 0.46\% between 2023 and 2024~\cite{sleepcycle2025}, and a survey of over 30,000 respondents across 13 countries found that people report losing nearly three nights of restorative sleep each week~\cite{resmed2025}. Environmental factors including noise, temperature, humidity, light, and air quality are all known to affect sleep~\cite{caddick2018,yasmeen2025}. However, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\cite{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking. This report addresses that gap by investigating which bedroom environment conditions are most strongly associated with sleep quality, using affordable IoT hardware in a real London bedroom. It describes the sensing setup, data collection pipeline, statistical analysis, and an interactive dashboard built to present the findings.
+Sleep quality is a growing public health concern. Average scores among users of the Sleep Cycle app fell by 0.46\% between 2023 and 2024~\citep{sleepcycle2025}, and a survey of over 30,000 respondents across 13 countries found that people report losing nearly three nights of restorative sleep each week~\citep{resmed2025}. Environmental factors including noise, temperature, humidity, light, and air quality are all known to affect sleep~\citep{caddick2018,yasmeen2025}. However, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\citep{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking. This report addresses that gap by investigating which bedroom environment conditions are most strongly associated with sleep quality, using affordable IoT hardware in a real London bedroom. It describes the sensing setup, data collection pipeline, statistical analysis, and an interactive dashboard built to present the findings.
 
 Over 14 consecutive nights (9 to 22 February 2026), three data sources were collected: a custom sensor system logging temperature, humidity, light, and sound, hourly air quality data from the Breathe London API, and daily sleep metrics from an Ultrahuman Ring wearable. All data was filtered to a consistent 11\,pm to 9\,am sleep window and analysed using four methods: Spearman correlation to identify which factors relate to sleep quality, OLS regression to test their combined effects, a median-split comparison of the seven best versus seven worst nights, and minute-by-minute comparison of individual nights to examine how conditions changed across the night.
 
@@ -107,7 +108,7 @@ Based on the above findings, reducing noise variability through strategies such 
 
 \subsection{Introduction and Objectives}
 
-Sleep quality has a well-documented impact on cognitive performance, physical health, and daily productivity~\cite{medic2017}. A range of bedroom environment factors can disrupt sleep, and they do so through different mechanisms. Noise, particularly from road traffic, affects sleep architecture and triggers physiological stress responses~\cite{muzet2007,halperin2014}. Temperature and humidity influence sleep through thermoregulation, since core body cooling is a critical step in falling asleep and high bedroom temperature or humidity can interfere with this process~\cite{caddick2018}. Light exposure suppresses melatonin secretion and shifts circadian timing~\cite{yasmeen2025}. Outdoor air pollutants including PM2.5 and NO\textsubscript{2} have also been associated with increased risk of sleep disorders~\cite{zhao2024}. While each of these links is individually documented, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\cite{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking.
+Sleep quality has a well-documented impact on cognitive performance, physical health, and daily productivity~\citep{medic2017}. A range of bedroom environment factors can disrupt sleep, and they do so through different mechanisms. Noise, particularly from road traffic, affects sleep architecture and triggers physiological stress responses~\citep{muzet2007,halperin2014}. Temperature and humidity influence sleep through thermoregulation, since core body cooling is a critical step in falling asleep and high bedroom temperature or humidity can interfere with this process~\citep{caddick2018}. Light exposure suppresses melatonin secretion and shifts circadian timing~\citep{yasmeen2025}. Outdoor air pollutants including PM2.5 and NO\textsubscript{2} have also been associated with increased risk of sleep disorders~\citep{zhao2024}. While each of these links is individually documented, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\citep{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking.
 
 This project investigates the relationship between bedroom environment conditions and sleep quality over 14 consecutive nights (9 to 22 February 2026). It has three objectives:
 
@@ -152,7 +153,7 @@ Three data sources were used to investigate the relationship between bedroom env
 
 Both sound average and sound peak are logged each minute, but only sound average is used in the analysis. Sound average represents the sustained noise level during each one-minute interval, which is more relevant to sleep disruption than the momentary spikes captured by sound peak. This design decision is revisited in Section~2.2.
 
-\textbf{Source 2: External air quality.} Hourly air quality data was sourced from the Breathe London network~\cite{breathelondon}, which operates low-cost sensors across London. The Horseferry Road sensor (site code BL0046~\cite{bl0046}) was selected due to its proximity to the study location. This sensor provides hourly measurements of nitrogen dioxide (NO\textsubscript{2}) and fine particulate matter (PM2.5), both of which have been linked to respiratory disruption and reduced sleep quality in existing literature~\cite{zhao2024}. Data was bulk-downloaded after the study period in two weekly chunks to avoid API timeouts on large date ranges.
+\textbf{Source 2: External air quality.} Hourly air quality data was sourced from the Breathe London network~\citep{breathelondon}, which operates low-cost sensors across London. The Horseferry Road sensor (site code BL0046~\citep{bl0046}) was selected due to its proximity to the study location. This sensor provides hourly measurements of nitrogen dioxide (NO\textsubscript{2}) and fine particulate matter (PM2.5), both of which have been linked to respiratory disruption and reduced sleep quality in existing literature~\citep{zhao2024}. Data was bulk-downloaded after the study period in two weekly chunks to avoid API timeouts on large date ranges.
 
 \textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm; the exact formula is not published. This project treats it as the primary dependent variable but acknowledges it is a ``black box'' measure whose validity depends on Ultrahuman's internal calibration. The quality tiers used in the dashboard (green $\geq$80, gold 70--79, red $<$70) are defined by this project, not by Ultrahuman.
 
@@ -245,9 +246,9 @@ The environment variables and sleep metrics operate at different timescales. Bed
 
 \textbf{Step 1: Nightly feature aggregation.} Raw sensor readings ($\sim$600 per night) are converted into 12 comparable nightly summary features: mean, standard deviation, and range for temperature, humidity, and noise (9 features), light exposure as a percentage of readings with light detected (1 feature), and mean PM2.5 and NO\textsubscript{2} (2 features). These are merged with the six sleep metrics from the Ultrahuman Ring into a unified dataset of 14 rows $\times$ 18 columns. Sound average is used rather than sound peak, as it represents the sustained noise level during each interval, which is more relevant to sleep disruption than momentary spikes.
 
-\textbf{Step 2: Spearman correlation analysis.} Spearman rank correlations are computed between all 12 environment features and all 6 sleep metrics. Spearman was chosen over Pearson because normality cannot be verified with $n = 14$, and Pearson assumes normally distributed data to produce valid $p$-values~\cite{field2018}. Four environment features showed statistically significant correlations with sleep score ($p < 0.05$): noise variability ($r = -0.80$, $p < 0.01$), mean humidity ($r = -0.70$, $p < 0.01$), mean noise level ($r = -0.69$, $p < 0.01$), and temperature range ($r = -0.56$, $p = 0.037$). Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration, making noise the most consistent predictor across all sleep metrics. Humidity showed additional effects on sleep stage composition: higher humidity was associated with less light sleep ($r = -0.71$, $p < 0.01$) but more REM sleep ($r = 0.58$, $p < 0.05$), suggesting it may affect sleep architecture, not just overall quality. Light exposure, PM2.5, and NO\textsubscript{2} showed no statistically significant correlations with any sleep metric.
+\textbf{Step 2: Spearman correlation analysis.} Spearman rank correlations are computed between all 12 environment features and all 6 sleep metrics. Spearman was chosen over Pearson because normality cannot be verified with $n = 14$, and Pearson assumes normally distributed data to produce valid $p$-values~\citep{field2018}. Four environment features showed statistically significant correlations with sleep score ($p < 0.05$): noise variability ($r = -0.80$, $p < 0.01$), mean humidity ($r = -0.70$, $p < 0.01$), mean noise level ($r = -0.69$, $p < 0.01$), and temperature range ($r = -0.56$, $p = 0.037$). Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration, making noise the most consistent predictor across all sleep metrics. Humidity showed additional effects on sleep stage composition: higher humidity was associated with less light sleep ($r = -0.71$, $p < 0.01$) but more REM sleep ($r = 0.58$, $p < 0.05$), suggesting it may affect sleep architecture, not just overall quality. Light exposure, PM2.5, and NO\textsubscript{2} showed no statistically significant correlations with any sleep metric.
 
-\textbf{Step 3: Multiple regression (OLS).} For each of three target metrics, the two environment features with the highest absolute Spearman correlation were selected as predictors (limited to two by the rule of thumb requiring 7--10 observations per predictor~\cite{field2018}). Multicollinearity was checked against the $|r| > 0.7$ threshold~\cite{dormann2013}; all predictor pairs passed (Std Noise and Mean Humidity: $r = 0.60$; Std Noise and Mean Noise: $r = 0.57$). Table~\ref{tab:regression} summarises the results.
+\textbf{Step 3: Multiple regression (OLS).} For each of three target metrics, the two environment features with the highest absolute Spearman correlation were selected as predictors (limited to two by the rule of thumb requiring 7--10 observations per predictor~\citep{field2018}). Multicollinearity was checked against the $|r| > 0.7$ threshold~\citep{dormann2013}; all predictor pairs passed (Std Noise and Mean Humidity: $r = 0.60$; Std Noise and Mean Noise: $r = 0.57$). Table~\ref{tab:regression} summarises the results.
 
 \begin{table}[H]
 \centering
@@ -300,7 +301,7 @@ Temp/humidity sensor & DHT11 ($\pm2$\,\textdegree C, \pounds1) & BME280 ($\pm0.5
 Sampling rate & 1/min & 5/min & 1/min & Captures noise events without excess data \\[4pt]
 Sleep window & Fixed 11\,pm--9\,am & Actual bedtimes & Fixed & Ultrahuman doesn't export timestamps \\[4pt]
 Correlation & Spearman & Pearson & Spearman & $n{=}14$ too small to verify normality \\[4pt]
-Regression predictors & 2 per model & 3+ per model & 2 & 7--10 obs per predictor rule~\cite{field2018} \\[4pt]
+Regression predictors & 2 per model & 3+ per model & 2 & 7--10 obs per predictor rule~\citep{field2018} \\[4pt]
 Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group: very low test power \\
 \bottomrule
 \end{tabular}
@@ -344,49 +345,49 @@ Across all four analyses, \textbf{noise variability} emerged as the factor with 
 \newpage
 \begin{thebibliography}{15}
 
-\bibitem{basner2023}
+\bibitem[Basner et~al.(2023)]{basner2023}
 Basner, M., Smith, M.G., Jones, C.W. et al. (2023) `Associations of bedroom PM2.5, CO2, temperature, humidity, and noise with sleep: an observational actigraphy study', \textit{Sleep Health}, 9(3), pp.~253--263. doi:10.1016/j.sleh.2023.02.010.
 
-\bibitem{caddick2018}
+\bibitem[Caddick et~al.(2018)]{caddick2018}
 Caddick, Z.A., Gregory, K., Arsintescu, L. and Flynn-Evans, E.E. (2018) `A review of the environmental parameters necessary for an optimal sleep environment', \textit{Building and Environment}, 132, pp.~11--20. doi:10.1016/j.buildenv.2018.01.020.
 
-\bibitem{resmed2025}
+\bibitem[ResMed(2025)]{resmed2025}
 ResMed (2025) \textit{ResMed's fifth annual global sleep survey reveals a world struggling with poor sleep}. Available at: \url{https://newsroom.resmed.com/news-releases/news-details/2025/ResMeds-Fifth-Annual-Global-Sleep-Survey-Reveals-a-World-Struggling-with-Poor-Sleep/} (Accessed: March 2026).
 
-\bibitem{sleepcycle2025}
+\bibitem[Sleep~Cycle(2025)]{sleepcycle2025}
 Sleep Cycle (2025) \textit{New Sleep Cycle report: 105 million nights reveal a global decline in sleep quality}. Available at: \url{https://sleepcycle.com/newsroom/press-release/new-sleep-cycle-report-unveiling-global-sleep-trends-and-insights} (Accessed: March 2026).
 
-\bibitem{yasmeen2025}
+\bibitem[Yasmeen et~al.(2025)]{yasmeen2025}
 Yasmeen, S., Li, B., Du, C. and Liu, H. (2025) `Exploring the interconnection of sleep quality, indoor environmental factors, and energy efficiency: strategies for sustainable sleep environments', \textit{Indoor Air}, 2025, 8245786. doi:10.1155/ina/8245786.
 
-\bibitem{muzet2007}
+\bibitem[Muzet(2007)]{muzet2007}
 Muzet, A. (2007) `Environmental noise, sleep and health', \textit{Sleep Medicine Reviews}, 11(2), pp.~135--142. doi:10.1016/j.smrv.2006.09.001.
 
-\bibitem{breathelondon}
+\bibitem[Breathe~London(2026a)]{breathelondon}
 Breathe London (2026) Air Quality Monitoring Network. Available at: \url{https://www.breathelondon.org/} (Accessed: March 2026).
 
-\bibitem{ultrahuman}
+\bibitem[Ultrahuman(2026)]{ultrahuman}
 Ultrahuman (2026) Ultrahuman Ring Air. Available at: \url{https://www.ultrahuman.com/ring/} (Accessed: March 2026).
 
-\bibitem{bl0046}
+\bibitem[Breathe~London(2026b)]{bl0046}
 Breathe London (2026) Horseferry Road Sensor, Site BL0046. Available at: \url{https://www.breathelondon.org/} (Accessed: March 2026).
 
-\bibitem{halperin2014}
+\bibitem[Halperin(2014)]{halperin2014}
 Halperin, D. (2014) `Environmental noise and sleep disturbances: A threat to health?', \textit{Sleep Science}, 7(4), pp.~209--212. doi:10.1016/j.slsci.2014.11.003.
 
-\bibitem{field2018}
+\bibitem[Field(2018)]{field2018}
 Field, A. (2018) \textit{Discovering Statistics Using IBM SPSS Statistics}. 5th edn. London: SAGE Publications.
 
-\bibitem{dormann2013}
+\bibitem[Dormann et~al.(2013)]{dormann2013}
 Dormann, C.F. et al. (2013) `Collinearity: a review of methods to deal with it and a simulation study evaluating their performance', \textit{Ecography}, 36(1), pp.~27--46. doi:10.1111/j.1600-0587.2012.07348.x.
 
-\bibitem{jarque1987}
+\bibitem[Jarque and Bera(1987)]{jarque1987}
 Jarque, C.M. and Bera, A.K. (1987) `A test for normality of observations and regression residuals', \textit{International Statistical Review}, 55(2), pp.~163--172. doi:10.2307/1403192.
 
-\bibitem{medic2017}
+\bibitem[Medic et~al.(2017)]{medic2017}
 Medic, G., Wille, M. and Hemels, M.E. (2017) `Short- and long-term health consequences of sleep disruption', \textit{Nature and Science of Sleep}, 9, pp.~151--161. doi:10.2147/NSS.S134864.
 
-\bibitem{zhao2024}
+\bibitem[Zhao et~al.(2024)]{zhao2024}
 Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants and the risk of sleep disorders: a systematic review and meta-analysis', \textit{Aerosol and Air Quality Research}, 24, 230197. doi:10.4209/aaqr.230197.
 
 \end{thebibliography}
