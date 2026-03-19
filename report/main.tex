@@ -86,6 +86,18 @@ Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.stream
 \vspace{1cm}
 {\small\color{red}\textbf{TODO:} Make GitHub repository private before submission.}
 
+\vspace{0.3cm}
+{\small\color{red}\textbf{TODO:} Price vs Usability trade-off not explicitly covered. Suggested location: Appendix~J Table~7.}
+
+\vspace{0.1cm}
+{\small\color{red}\textbf{TODO:} Functionality vs Usability trade-off. Partially covered in Section~2.1 (notebook vs dashboard). Confirm explicit enough or add to Table~7.}
+
+\vspace{0.1cm}
+{\small\color{red}\textbf{TODO:} Functionality vs Rapid development trade-off not explicitly covered. Suggested: Appendix~J Table~7.}
+
+\vspace{0.1cm}
+{\small\color{red}\textbf{TODO:} Price vs Robustness/Reliability trade-off only partially covered. May need own row in Table~7.}
+
 \vspace{\fill}
 \end{center}
 \newpage
@@ -185,7 +197,7 @@ The Arduino sketch computes both sound average and sound peak each minute, and b
 
 \textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the setup are provided in Appendices~A and~B.
 
-\textbf{Sensor limitations and upgrade path.} Table~\ref{tab:upgrades} summarises the limitations of each current sensor and the recommended upgrade for future work.
+\textbf{Sensor limitations and upgrade path.} Understanding the limitations of the current sensors is important for interpreting the results and for planning improvements in future iterations. Table~\ref{tab:upgrades} summarises the key limitation of each sensor and a recommended upgrade that would address it.
 
 \begin{table}[H]
 \centering
@@ -206,15 +218,23 @@ KY-038 microphone & Outputs a raw voltage with no calibration to decibels or sou
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Collection and Storage/Communications Process}
 
-\textbf{Arduino sketch workflow.} The Arduino sketch running on the Heltec board reads all sensors every minute. Sound is sampled continuously at 5\,ms intervals ($\sim$12,000 samples per minute); the average and peak values are computed from these samples over each one-minute window. Temperature, humidity, and light are read once per minute. Each minute, the sketch outputs a single CSV-formatted line over USB serial.
+This section describes how each data source was collected, stored, and communicated to the analysis pipeline. Subsection~1.3.1 covers the collection process for each of the three sources. Subsection~1.3.2 explains the storage and communication design choices and their trade-offs. The end-to-end data flow, from raw data sources through to the three CSV files used in Part~2, is illustrated in Appendix~C.
 
-\textbf{Serial logging.} A Python script running in a Jupyter notebook on the laptop captures the serial output. Timestamps are generated on the laptop rather than the microcontroller, avoiding the complexity of WiFi/NTP synchronisation, which was unnecessary given that the Ultrahuman Ring provides daily (not timestamped) sleep metrics. Each row in the CSV contains six fields: \texttt{timestamp}, \texttt{temperature\_c}, \texttt{humidity\_pct}, \texttt{light\_detected}, \texttt{sound\_avg}, and \texttt{sound\_peak}. Each night's data is saved as a date-stamped CSV file (e.g.\ \texttt{2026-02-09\_sleep\_data.csv}) in the data folder. Over the 14-night study, this produced 14 files of approximately 600 rows each. After the collection period, all files were combined into a single \texttt{bedroom\_sensors.csv} for analysis.
+\subsubsection{Data Collection}
 
-\textbf{Night-assignment logic.} Because the sleep window spans midnight, each reading must be assigned to a ``night'' for cross-source merging. The rule applied is: if a reading's hour is $\geq$12 (evening), it belongs to that date's night; if $<$12 (morning), it belongs to the previous date's night. For example, a reading at 2026-02-10 01:30 belongs to the night of 9~February. This same logic is applied to the air quality data and serves as the join key when merging all three sources into the nightly summary dataset.
+The most complex collection path was the bedroom sensors. The data moves through four stages. First, each minute, the Arduino sketch outputs a single CSV-formatted line containing five sensor values over USB serial. Second, a Python script running in a Jupyter notebook on the laptop captures this serial output, prepends a timestamp from the laptop clock, and writes the result to a CSV file. Each reading is written to disk immediately, so no data is lost if the laptop or notebook crashes mid-night. Timestamps are generated on the laptop rather than the microcontroller, avoiding the complexity of WiFi/NTP synchronisation, which was unnecessary given that the Ultrahuman Ring provides daily (not timestamped) sleep metrics. Third, each row in the CSV contains six fields: \texttt{timestamp}, \texttt{temperature\_c}, \texttt{humidity\_pct}, \texttt{light\_detected}, \texttt{sound\_avg}, and \texttt{sound\_peak}. Each night's data is saved as a date-stamped CSV file (e.g.\ \texttt{2026-02-09\_sleep\_data.csv}) in the data folder. Fourth, over the 14-night study, this produced 14 files of approximately 600 rows each. After the collection period, all files were manually combined in Excel into a single \texttt{bedroom\_sensors.csv} for analysis.
 
-\textbf{Air quality collection.} Air quality data was retrieved in bulk from the Breathe London API after the two-week collection period completed, rather than in real-time during each night, to avoid the risk of missed API calls during overnight sessions. The API was found to timeout (HTTP 504) when requesting large date ranges in a single call, so the data was fetched in two weekly chunks with a 15-second pause between requests. The API returns data in long format (one row per measurement per species), which was transformed to wide format (one row per hour) with columns for the hour, PM2.5, and NO\textsubscript{2}. Only readings within the sleep window were retained, and the result was saved as \texttt{breathe\_london\_air\_quality.csv}.
+The air quality data followed a different approach. Rather than fetching data in real-time during each night, which risked missed API calls during overnight sessions, the data was retrieved in bulk from the Breathe London API after the two-week collection period completed. The API was found to timeout (HTTP 504) when requesting large date ranges in a single call, so the data was fetched in two weekly chunks with a 15-second pause between requests. The API returns data in long format (one row per measurement per species), which was transformed to wide format (one row per hour) with columns for the hour, PM2.5, and NO\textsubscript{2}. Only readings within the sleep window were retained, and the result was saved as \texttt{breathe\_london\_air\_quality.csv}.
 
-\textbf{Sleep data collection.} The Ultrahuman data was downloaded manually from the app at the end of the collection period and saved as \texttt{ultrahuman\_sleep\_data.csv}. Each row corresponds to one night, with the date used as the key to join with the nightly sensor and air quality summaries.
+The sleep data was the simplest to collect. The Ultrahuman data was downloaded manually from the website at the end of the collection period and saved as \texttt{ultrahuman\_sleep\_data.csv}.
+
+\subsubsection{Storage and Communications}
+
+The three sources use distinct communication paths: USB serial for the bedroom sensors, HTTPS API calls for air quality, and manual app export for sleep data. Each was chosen to match the constraints of its source.
+
+USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable; no readings were lost to network dropouts over the 14-night study. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. The Breathe London data was retrieved via API rather than scraped from the website, as the API provides structured JSON that is easier to work with and can be filtered and transformed programmatically.
+
+All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (approximately 8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private. The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~J (Table~\ref{tab:tradeoffs-hw}).
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
@@ -272,7 +292,9 @@ The dashboard design was directly shaped by the analysis results presented in Se
 
 The environment variables and sleep metrics operate at different timescales. Bedroom sensors log every minute ($\sim$600 readings per night), air quality data is hourly ($\sim$10 readings per night), and sleep metrics are single daily values. These cannot be compared directly in their raw form. The analysis proceeds in five steps.
 
-\textbf{Step 1: Nightly feature aggregation.} Raw sensor readings ($\sim$600 per night) are converted into 12 comparable nightly summary features: mean, standard deviation, and range for temperature, humidity, and noise (9 features), light exposure as a percentage of readings with light detected (1 feature), and mean PM2.5 and NO\textsubscript{2} (2 features). These are merged with the six sleep metrics from the Ultrahuman Ring into a unified dataset of 14 rows $\times$ 18 columns. Sound average is used rather than sound peak, as it represents the sustained noise level during each interval, which is more relevant to sleep disruption than momentary spikes.
+\textbf{Step 1: Nightly feature aggregation.} Because the sleep window spans midnight, each reading must first be assigned to a ``night'' for cross-source merging. The rule applied is: if a reading's hour is $\geq$12 (evening), it belongs to that date's night; if $<$12 (morning), it belongs to the previous date's night. For example, a reading at 2026-02-10 01:30 belongs to the night of 9~February. This same logic is applied to the air quality data and serves as the join key when merging all three sources into the nightly summary dataset.
+
+Raw sensor readings ($\sim$600 per night) are then converted into 12 comparable nightly summary features: mean, standard deviation, and range for temperature, humidity, and noise (9 features), light exposure as a percentage of readings with light detected (1 feature), and mean PM2.5 and NO\textsubscript{2} (2 features). These are merged with the six sleep metrics from the Ultrahuman Ring into a unified dataset of 14 rows $\times$ 18 columns. Sound average is used rather than sound peak, as it represents the sustained noise level during each interval, which is more relevant to sleep disruption than momentary spikes.
 
 \textbf{Step 2: Spearman correlation analysis.} Spearman rank correlations are computed between all 12 environment features and all 6 sleep metrics. Spearman was chosen over Pearson because normality cannot be verified with $n = 14$, and Pearson assumes normally distributed data to produce valid $p$-values~\citep{field2018}. Four environment features showed statistically significant correlations with sleep score ($p < 0.05$): noise variability ($r = -0.80$, $p < 0.01$), mean humidity ($r = -0.70$, $p < 0.01$), mean noise level ($r = -0.69$, $p < 0.01$), and temperature range ($r = -0.56$, $p = 0.037$). Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration, making noise the most consistent predictor across all sleep metrics. Humidity showed additional effects on sleep stage composition: higher humidity was associated with less light sleep ($r = -0.71$, $p < 0.01$) but more REM sleep ($r = 0.58$, $p < 0.05$), suggesting it may affect sleep architecture, not just overall quality. Light exposure, PM2.5, and NO\textsubscript{2} showed no statistically significant correlations with any sleep metric.
 
@@ -325,7 +347,7 @@ All three models are statistically significant ($p < 0.05$). Sleep Score has the
 \toprule
 \textbf{Decision} & \textbf{Option A} & \textbf{Option B} & \textbf{Chosen} & \textbf{Rationale} \\
 \midrule
-Temp/humidity sensor & DHT11 ($\pm2$\,\textdegree C, \pounds1) & BME280 ($\pm0.5$\,\textdegree C, \pounds8) & DHT11 & Sufficient for detecting gross changes; cost prioritised \\[4pt]
+Temp/humidity sensor & DHT11 ($\pm2$\,\textdegree C, \pounds1) & BME280 ($\pm1$\,\textdegree C, \pounds8) & DHT11 & Sufficient for detecting gross changes; cost prioritised \\[4pt]
 Sampling rate & 1/min & 5/min & 1/min & Captures noise events without excess data \\[4pt]
 Sleep window & Fixed 11\,pm--9\,am & Actual bedtimes & Fixed & Ultrahuman doesn't export timestamps \\[4pt]
 Correlation & Spearman & Pearson & Spearman & $n{=}14$ too small to verify normality \\[4pt]
@@ -346,7 +368,7 @@ Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Avenues for Future Work and Potential Impact}
 
-\textbf{Better sensors.} A BME280 would provide $\pm0.5$\,\textdegree C temperature accuracy, $\pm3$\%\,RH humidity, and barometric pressure. A BH1750 would provide calibrated lux readings, enabling comparison with published light thresholds. An INMP441 I2S digital microphone would enable frequency-domain analysis and dB calibration. A CO\textsubscript{2} sensor (e.g.\ SCD40) would serve as a ventilation proxy, since CO\textsubscript{2} buildup in closed bedrooms is a known sleep disruptor.
+\textbf{Better sensors.} A BME280 would provide $\pm1$\,\textdegree C temperature accuracy, $\pm3$\%\,RH humidity, and barometric pressure. A BH1750 would provide calibrated lux readings, enabling comparison with published light thresholds. An INMP441 I2S digital microphone would enable frequency-domain analysis and dB calibration. A CO\textsubscript{2} sensor (e.g.\ SCD40) would serve as a ventilation proxy, since CO\textsubscript{2} buildup in closed bedrooms is a known sleep disruptor.
 
 \textbf{Longer study and multiple participants.} A study of three or more months would capture seasonal variation, increase statistical power, and enable stronger regression models with additional predictors. Including multiple participants would enable generalisable conclusions and reveal individual differences in environmental sensitivity.
 
@@ -469,9 +491,9 @@ Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants a
 \textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
 \midrule
 Processing & Local / Cloud & Local & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
-Communication & USB serial / WiFi & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be adjacent, no remote monitoring \\[4pt]
+Communication & USB serial / WiFi & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be physically close, no remote monitoring \\[4pt]
 Power & Continuous USB / Battery & USB & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
-Sensors & Low-cost (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Low-cost & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm0.5$\,\textdegree C \\[4pt]
+Sensors & Low-cost (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Low-cost & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm1$\,\textdegree C \\[4pt]
 Analysis & Spearman/OLS / ML & Spearman/OLS & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
 Data privacy & All local / Cloud & All local & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
 \bottomrule
