@@ -41,7 +41,9 @@
 \titleformat{\section}{\Large\bfseries}{}{0em}{}
 \titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.5em}{}
 \titlespacing*{\section}{0pt}{1.5em}{0.8em}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0.5em}{}
 \titlespacing*{\subsection}{0pt}{1.2em}{0.6em}
+\titlespacing*{\subsubsection}{0pt}{1.0em}{0.4em}
 
 % ── Header / Footer ──────────────────────────────────────────────────
 \pagestyle{fancy}
@@ -149,7 +151,9 @@ Table~\ref{tab:sources} summarises each source, its collection method, and measu
 \end{tabularx}
 \end{table}
 
-The following subsections describe each source in detail, including the hardware design, signal processing approach, and known limitations.
+Subsection~1.2.1 describes each source in detail. Subsection~1.2.2 covers the physical installation and sensor limitations.
+
+\subsubsection{Data Sources}
 
 \textbf{Source 1: Bedroom environment sensors.} The Heltec WiFi LoRa 32 V3 development board (ESP32-S3 microcontroller) was chosen as it provides analog-to-digital conversion pins required by the KY-038 sound sensor, as well as digital GPIO for the other sensors. Three sensors were connected, all powered at 3.3\,V to remain within the safe operating range of the ESP32-S3. Table~\ref{tab:sensorspecs} details each sensor's specifications and signal processing.
 
@@ -162,39 +166,24 @@ The following subsections describe each source in detail, including the hardware
 \toprule
 \textbf{Sensor} & \textbf{GPIO} & \textbf{Function} & \textbf{Key Specifications} \\
 \midrule
-KY-015 / DHT11 & 7 & Temperature and humidity &
-\begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
-  \item $\pm2$\,\textdegree C, $\pm5$\%\,RH accuracy
-  \item Reads once per minute via DHT single-wire digital protocol
-  \item Retries up to 3 times with 500\,ms delays on failed reads
-  \item Internal ADC and calibration within the chip; outputs a digital readout directly
-\end{itemize} \\
+KY-015 / DHT11 & 7 & Temperature and humidity & $\pm2$\,\textdegree C, $\pm5$\%\,RH accuracy \textbullet{} Reads once per minute \textbullet{} Retries up to 3 times with 500\,ms delays on failed reads \\
 \midrule
-ELB0604 photoresistor & 1 & Light detection &
-\begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
-  \item Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as an adjustable threshold comparator
-  \item Potentiometer manually calibrated to bedroom ambient light conditions
-  \item Module outputs 0 for light and 1 for dark; inverted in the Arduino sketch so that 1 = light detected, making values more intuitive to interpret
-\end{itemize} \\
+ELB0604 photoresistor & 1 & Light detection & Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as an adjustable threshold comparator \textbullet{} Potentiometer manually calibrated to bedroom ambient light conditions \textbullet{} Module outputs 0 for light and 1 for dark; inverted in the Arduino sketch so that 1 = light detected \\
 \midrule
-KY-038 microphone & 2 & Sound level &
-\begin{itemize}[noitemsep,topsep=0pt,leftmargin=*]
-  \item Analog envelope output, no frequency or decibel calibration
-  \item Raw analog readings (0--4095 scale, 12-bit ADC resolution)
-  \item Sampled every 5\,ms ($\sim$12,000 samples per minute), then aggregated into two features per minute: sound average (sum/count) and sound peak (max in interval)
-  \item This compresses $\sim$12,000 readings into 2 summary statistics per minute, reducing data volume by approximately 6,000$\times$
-\end{itemize} \\
+KY-038 microphone & 2 & Sound level & Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \textbullet{} Raw analog readings on a 0--4095 scale \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute); the Arduino sketch then computes two summary features per minute: sound average (sum/count) and sound peak (max in interval) \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textbf{Signal conditioning pipeline.} Each sensor involves a distinct signal processing chain before data reaches the CSV file, as detailed in the Key Specifications column of Table~\ref{tab:sensorspecs}. Both sound average and sound peak are logged each minute, but only sound average is used in the analysis. Sound average represents the sustained noise level during each one-minute interval, which is more relevant to sleep disruption than the momentary spikes captured by sound peak. This design decision is revisited in Section~2.2. A second stage of signal processing occurs during analysis (Section~2.2, Step~1), where $\sim$600 minute-level readings per night are transformed into 12 nightly summary features through statistical aggregation (mean, standard deviation, range, percentage).
+The Arduino sketch computes both sound average and sound peak each minute, and both are logged to the CSV. During analysis, only sound average was retained as it represents the sustained noise level during each one-minute interval, which is more relevant to sleep disruption than the momentary spikes captured by sound peak.
 
-\textbf{Source 2: External air quality.} Hourly air quality data was sourced from the Breathe London network~\citep{breathelondon}, which operates low-cost sensors across London. The Horseferry Road sensor (site code BL0046;~\citealt{bl0046}) was selected due to its proximity to the study location. This sensor provides hourly measurements of nitrogen dioxide (NO\textsubscript{2}) and fine particulate matter (PM2.5), both of which have been associated with increased risk of sleep disorders~\citep{zhao2024}.
+\textbf{Source 2: External air quality.} The Horseferry Road sensor (site code BL0046) was selected from the Breathe London network due to its proximity to the study location.
 
-\textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air~\citep{ultrahuman} wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm; the exact formula is not published. This project treats it as the primary dependent variable but acknowledges it is a ``black box'' measure whose validity depends on Ultrahuman's internal calibration. The quality tiers used in the dashboard (green $\geq$80, gold 70--79, red $<$70) are defined by this project, not by Ultrahuman.
+\textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm; the exact formula is not published, so it is treated as a ``black box'' measure in this study. To aid interpretation in the dashboard, sleep scores are grouped into three quality tiers: green ($\geq$80), gold (70--79), and red ($<$70).
 
-\textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. This fixed single-point installation means all readings represent conditions at the bedside location only; spatial variation across the room is not captured. The wiring diagram and an annotated photograph of the physical setup are provided in Appendices~A and~B respectively.
+\subsubsection{System Design and Limitations}
+
+\textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the setup are provided in Appendices~A and~B.
 
 \textbf{Sensor limitations and upgrade path.} Table~\ref{tab:upgrades} summarises the limitations of each current sensor and the recommended upgrade for future work.
 
@@ -207,14 +196,12 @@ KY-038 microphone & 2 & Sound level &
 \toprule
 \textbf{Current Sensor} & \textbf{Limitation} & \textbf{Recommended Upgrade} \\
 \midrule
-DHT11 & $\pm2$\,\textdegree C / $\pm5$\%\,RH, slow response & BME280 ($\pm0.5$\,\textdegree C, $\pm3$\%\,RH, + pressure) \\
-ELB0604 photoresistor & Non-linear, uncalibrated, binary only & BH1750 (calibrated lux output) \\
-KY-038 microphone & Analog envelope, no dB / frequency & INMP441 I2S digital mic (dB, frequency spectrum) \\
+DHT11 & Low accuracy ($\pm2$\,\textdegree C, $\pm5$\%\,RH) and slow response time, limiting the ability to detect rapid changes in bedroom conditions & BME280 ($\pm1$\,\textdegree C, $\pm3$\%\,RH), which also adds barometric pressure sensing \\
+ELB0604 photoresistor & Outputs only light on/off after manual calibration; cannot measure how bright the room actually is & BH1750, which outputs light intensity directly as a numeric value in lux (1--65,535\,lx), removing the need for manual calibration \\
+KY-038 microphone & Outputs a raw voltage with no calibration to decibels or sound frequency, making readings difficult to compare with published noise guidelines & INMP441 I2S digital microphone (24-bit, 61\,dB signal-to-noise ratio, 60\,Hz--15\,kHz range), which would allow sound levels to be measured in decibels and compared against WHO night noise thresholds \\
 \bottomrule
 \end{tabularx}
 \end{table}
-
-\textbf{Evaluation metrics.} The primary outcome variable for the study is the Ultrahuman sleep score, with five individual sleep duration metrics (total sleep, awake time, deep sleep, REM sleep, and light sleep) used as secondary outcomes. On the environment side, 12 nightly summary features are derived from the raw sensor data, capturing both the average level and the variability of each condition across the night. The derivation of these features is detailed in Section~2.2, Step~1.
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Collection and Storage/Communications Process}
@@ -231,6 +218,8 @@ KY-038 microphone & Analog envelope, no dB / frequency & INMP441 I2S digital mic
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
+
+{\small\color{red}\textbf{TODO:} The checklist asks `Have you identified the metrics for evaluating the performance of your system?' This must be addressed in Section~1.4 (data completeness, coverage, consistency).}\vspace{0.5em}
 
 \textbf{Sampling rates and data volume.} Table~\ref{tab:sampling} summarises the sampling characteristics of each data source.
 
