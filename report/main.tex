@@ -490,12 +490,12 @@ Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants a
 \toprule
 \textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
 \midrule
-Processing & Local / Cloud & Local & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
-Communication & USB serial / WiFi & USB & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be physically close, no remote monitoring \\[4pt]
-Power & Continuous USB / Battery & USB & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
-Sensors & Low-cost (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & Low-cost & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm1$\,\textdegree C \\[4pt]
-Analysis & Spearman/OLS / ML & Spearman/OLS & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
-Data privacy & All local / Cloud & All local & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
+Processing & Local / Cloud & A & No internet dependency overnight, zero latency, personal sleep data stays on device & No remote access, no automated backup \\[4pt]
+Communication & USB serial / WiFi & A & Simpler, no network config, zero dropped readings over 14 nights & Laptop must be physically close, no remote monitoring \\[4pt]
+Power & Continuous USB / Battery & A & No battery constraint over 10-hr sleep windows, always-on & Not portable, tied to laptop location \\[4pt]
+Sensors & Low-cost (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & A & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm1$\,\textdegree C \\[4pt]
+Analysis & Spearman/OLS / ML & A & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
+Data privacy & All local / Cloud & A & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
 \bottomrule
 \end{tabular}
 \end{table}
