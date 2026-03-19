@@ -178,11 +178,11 @@ Subsection~1.2.1 describes each source in detail. Subsection~1.2.2 covers the ph
 \toprule
 \textbf{Sensor} & \textbf{GPIO} & \textbf{Function} & \textbf{Key Specifications} \\
 \midrule
-KY-015 / DHT11 & 7 & Temperature and humidity & $\pm2$\,\textdegree C, $\pm5$\%\,RH accuracy \textbullet{} Reads once per minute \textbullet{} Retries up to 3 times with 500\,ms delays on failed reads \\
+KY-015 / DHT11 & 7 & Temperature and humidity & \textbullet{} $\pm2$\,\textdegree C, $\pm5$\%\,RH accuracy \textbullet{} Reads once per minute \textbullet{} Retries up to 3 times with 500\,ms delays on failed reads \\
 \midrule
-ELB0604 photoresistor & 1 & Light detection & Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as an adjustable threshold comparator \textbullet{} Potentiometer manually calibrated to bedroom ambient light conditions \textbullet{} Module outputs 0 for light and 1 for dark; inverted in the Arduino sketch so that 1 = light detected \\
+ELB0604 photoresistor & 1 & Light detection & \textbullet{} Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as an adjustable threshold comparator \textbullet{} Potentiometer manually calibrated to bedroom ambient light conditions \textbullet{} Module outputs 0 for light and 1 for dark; inverted in the Arduino sketch so that 1 = light detected \\
 \midrule
-KY-038 microphone & 2 & Sound level & Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \textbullet{} Raw analog readings on a 0--4095 scale \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute); the Arduino sketch then computes two summary features per minute: sound average (sum/count) and sound peak (max in interval) \\
+KY-038 microphone & 2 & Sound level & \textbullet{} Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \textbullet{} Raw analog readings on a 0--4095 scale \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute); the Arduino sketch then computes two summary features per minute: sound average (sum/count) and sound peak (max in interval) \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -241,31 +241,31 @@ All data is stored locally as CSV files on the laptop, with no cloud database or
 
 {\small\color{red}\textbf{TODO:} The checklist asks `Have you identified the metrics for evaluating the performance of your system?' This must be addressed in Section~1.4 (data completeness, coverage, consistency).}\vspace{0.5em}
 
-\textbf{Sampling rates and data volume.} Table~\ref{tab:sampling} summarises the sampling characteristics of each data source.
+Before proceeding to the analysis in Part~2, it is important to understand how the data acquisition system performed in practice, as the sampling resolution, reliability, and latency of each data path affect the confidence that can be placed in the results. Table~\ref{tab:sampling} summarises the sampling characteristics of each data source.
 
 \begin{table}[H]
 \centering
 \caption{Sampling Rates and Data Volume}
 \label{tab:sampling}
 \small
-\begin{tabular}{l l r r}
+\begin{tabularx}{\textwidth}{l l r r X}
 \toprule
-\textbf{Source} & \textbf{Sampling Rate} & \textbf{Readings/Night} & \textbf{Total (14 nights)} \\
+\textbf{Source} & \textbf{Sampling Rate} & \textbf{Readings/Night} & \textbf{Total (14 nights)} & \textbf{Justification} \\
 \midrule
-Bedroom sensors & 1/min (sound: 1/5\,ms internally) & $\sim$600 & $\sim$8,400 \\
-Air quality & Hourly & $\sim$10 & $\sim$140 \\
-Sleep metrics & Daily & 1 & 14 \\
+Bedroom sensors & 1/min (sound: 1/5\,ms internally) & $\sim$600 & $\sim$8,400 & \textbullet{} Temperature and humidity change slowly, so sub-minute resolution is unnecessary \textbullet{} Sound is sampled at 5\,ms to capture transient noise events (traffic, sirens, door slams) that would be missed at 1-min polling \textbullet{} The resulting minute-level summaries are what gets logged to the CSV \\
+Air quality & Hourly & $\sim$10 & $\sim$140 & Maximum resolution available from the Breathe London API \\
+Sleep metrics & Daily & 1 & 14 & Output granularity of the Ultrahuman Ring \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-\textbf{Sampling rate justification.} The one-minute logging interval balances temporal granularity with storage efficiency. Bedroom temperature and humidity change slowly, making sub-minute resolution unnecessary. The 5\,ms internal sound sampling captures transient noise events (traffic, sirens, door slams) that would be missed at one-minute polling; these are then aggregated to minute-level summaries for logging. Air quality data is hourly, which is the maximum resolution available from the Breathe London API. Sleep metrics are single daily values, reflecting the output granularity of the Ultrahuman Ring.
+In each case, the sampling rate balances temporal granularity with storage efficiency and source constraints.
 
-\textbf{Reliability and anomalies.} The primary reliability challenge was macOS power management: the laptop entered sleep mode during the first test night, cutting off serial capture after approximately two hours. This was resolved by installing the Amphetamine application to prevent sleep while the notebook kernel was active, and was tested over two full nights before the study began. The Breathe London API timeout issue (HTTP 504 on large date ranges) was resolved by splitting requests into weekly chunks as described in Section~1.3. No serial disconnections or significant data gaps were observed during the 14-night study period.
+Over the 14-night study, the system captured data without serial disconnections or significant gaps. The one reliability challenge was macOS power management: the laptop entered sleep mode during the first test night, cutting off serial capture after approximately two hours. This was resolved by installing the Amphetamine application to prevent sleep while the notebook kernel was active, and was tested over two full nights before the study began. The Breathe London API timeout issue (HTTP 504 on large date ranges) was resolved by splitting requests into weekly chunks, as described in Section~1.3.
 
-\textbf{Latency.} Sensor capture is near real-time via USB serial. Air quality data was retrieved retrospectively after the study. Sleep data was exported the morning after each night.
+The three data paths operate at different latencies. Sensor capture is near real-time via USB serial, with each reading written to disk within seconds of measurement. Air quality data was retrieved retrospectively in bulk after the study period completed. Sleep data was also downloaded retrospectively from the Ultrahuman website at the end of the collection period. Because the analysis is retrospective rather than real-time, these latency differences do not affect the results; all three sources were merged after collection was complete.
 
-\textbf{Limitations.} The DHT11 has low precision ($\pm2$\,\textdegree C, $\pm5$\%\,RH) and a slow response time. The photoresistor is uncalibrated with a non-linear response, producing binary output only. The KY-038 provides no decibel reference, so sound values are relative analog readings (0--4095) rather than absolute acoustic measurements. The sensor system is fixed at a single bedside location and does not capture spatial variation within the room. The sleep window is fixed at 11\,pm to 9\,am regardless of actual bedtimes. With a single participant and 14 nights, the study has limited statistical power and no generalisability.
+The main system-level limitations are the fixed sleep window (11\,pm to 9\,am regardless of actual bedtimes) and the single-point sensor placement, which means the readings represent conditions at the bedside only. Sensor-specific limitations and upgrade paths are discussed in Section~1.2.2 (Table~\ref{tab:upgrades}), and broader study limitations (sample size, seasonality, observational design) are discussed in Section~2.3.
 
 % ══════════════════════════════════════════════════════════════════════
 \vspace{0.5em}
