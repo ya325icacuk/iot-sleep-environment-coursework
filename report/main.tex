@@ -248,9 +248,9 @@ Before proceeding to the analysis in Part~2, it is important to understand how t
 \caption{Sampling Rates and Data Volume}
 \label{tab:sampling}
 \small
-\begin{tabularx}{\textwidth}{l l r r X}
+\begin{tabularx}{\textwidth}{p{1.8cm} p{2.6cm} >{\raggedleft\arraybackslash}p{1.5cm} >{\raggedleft\arraybackslash}p{1.5cm} X}
 \toprule
-\textbf{Source} & \textbf{Sampling Rate} & \textbf{Readings/Night} & \textbf{Total (14 nights)} & \textbf{Justification} \\
+\textbf{Source} & \textbf{Sampling Rate} & \textbf{Readings/ Night} & \textbf{Total (14 nights)} & \textbf{Justification} \\
 \midrule
 Bedroom sensors & 1/min (sound: 1/5\,ms internally) & $\sim$600 & $\sim$8,400 & \textbullet{} Temperature and humidity change slowly, so sub-minute resolution is unnecessary \textbullet{} Sound is sampled at 5\,ms to capture transient noise events (traffic, sirens, door slams) that would be missed at 1-min polling \textbullet{} The resulting minute-level summaries are what gets logged to the CSV \\
 Air quality & Hourly & $\sim$10 & $\sim$140 & Maximum resolution available from the Breathe London API \\
