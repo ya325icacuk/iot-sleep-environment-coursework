@@ -107,13 +107,17 @@ Based on the above findings, reducing noise variability through strategies such 
 
 \subsection{Introduction and Objectives}
 
-Sleep quality affects cognitive performance, physical health, and productivity, yet the bedroom environment factors that influence it are typically studied in isolation rather than in combination~\cite{muzet2007}. Most research uses controlled laboratory settings or expensive polysomnography equipment that is very different from a typical home bedroom. This leaves a gap in understanding how multiple, interacting environmental conditions collectively influence sleep in real home environments.
+Sleep quality has a well-documented impact on cognitive performance, physical health, and daily productivity~\cite{medic2017}. A range of bedroom environment factors can disrupt sleep, and they do so through different mechanisms. Noise, particularly from road traffic, affects sleep architecture and triggers physiological stress responses~\cite{muzet2007,halperin2014}. Temperature and humidity influence sleep through thermoregulation, since core body cooling is a critical step in falling asleep and high bedroom temperature or humidity can interfere with this process~\cite{caddick2018}. Light exposure suppresses melatonin secretion and shifts circadian timing~\cite{yasmeen2025}. Outdoor air pollutants including PM2.5 and NO\textsubscript{2} have also been associated with increased risk of sleep disorders~\cite{zhao2024}. While each of these links is individually documented, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\cite{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking.
 
-This project investigates the relationship between bedroom environment conditions and sleep quality over a 14-night study period (9--22 February 2026) in a real London bedroom. The central research question is: \textit{which environmental conditions most strongly predict sleep quality, and how do they interact?}
+This project investigates the relationship between bedroom environment conditions and sleep quality over 14 consecutive nights (9 to 22 February 2026). It has three objectives:
 
-The study is motivated by two factors. First, the growing accessibility of low-cost IoT hardware makes personal environment monitoring feasible without specialist equipment. A microcontroller board and a handful of sensors costing under \pounds30 can continuously log temperature, humidity, light, and noise (parameters that the sleep science literature identifies as relevant to sleep disruption). Second, the study location, a bedroom on Horse Ferry Road in Westminster, faces a busy road, providing a naturalistic setting where noise, air quality, and other conditions vary meaningfully from night to night.
+\begin{enumerate}[nosep]
+    \item To identify which bedroom environment conditions are most strongly associated with sleep quality.
+    \item To explore whether these associations hold when multiple conditions are considered together.
+    \item To compare how bedroom conditions differ between good and poor sleep nights.
+\end{enumerate}
 
-Three time-series data sources are integrated: (1)~custom-built bedroom sensors logging every minute, (2)~hourly air quality data from the Breathe London network~\cite{breathelondon}, and (3)~daily sleep metrics from an Ultrahuman Ring~\cite{ultrahuman} wearable. All data was collected or filtered to a consistent sleep window of 11\,pm to 9\,am. The analysis combines Spearman correlation, multiple regression, group comparison, and intra-night profiling to identify which conditions matter most. An interactive Streamlit dashboard translates the findings into an accessible interface. Together, these components demonstrate how affordable DIY hardware and publicly available APIs can produce meaningful, personalised insights into sleep quality.
+The study is motivated by two factors. First, low-cost IoT hardware now makes personal environment monitoring feasible without specialist equipment. A microcontroller board and a handful of sensors costing under \pounds30 can continuously log temperature, humidity, light, and noise throughout the night. Second, the study location, a bedroom on Horse Ferry Road in Westminster, faces a busy road, providing a naturalistic setting where noise, air quality, and other conditions vary meaningfully from night to night. This combination of affordable hardware and a high-variability environment creates an opportunity to study how multiple bedroom conditions relate to sleep in a way that would be difficult to replicate in a controlled laboratory.
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Sources and Sensing Set-up}
@@ -148,7 +152,7 @@ Three data sources were used to investigate the relationship between bedroom env
 
 Both sound average and sound peak are logged each minute, but only sound average is used in the analysis. Sound average represents the sustained noise level during each one-minute interval, which is more relevant to sleep disruption than the momentary spikes captured by sound peak. This design decision is revisited in Section~2.2.
 
-\textbf{Source 2: External air quality.} Hourly air quality data was sourced from the Breathe London network~\cite{breathelondon}, which operates low-cost sensors across London. The Horseferry Road sensor (site code BL0046~\cite{bl0046}) was selected due to its proximity to the study location. This sensor provides hourly measurements of nitrogen dioxide (NO\textsubscript{2}) and fine particulate matter (PM2.5), both of which have been linked to respiratory disruption and reduced sleep quality in existing literature~\cite{halperin2014}. Data was bulk-downloaded after the study period in two weekly chunks to avoid API timeouts on large date ranges.
+\textbf{Source 2: External air quality.} Hourly air quality data was sourced from the Breathe London network~\cite{breathelondon}, which operates low-cost sensors across London. The Horseferry Road sensor (site code BL0046~\cite{bl0046}) was selected due to its proximity to the study location. This sensor provides hourly measurements of nitrogen dioxide (NO\textsubscript{2}) and fine particulate matter (PM2.5), both of which have been linked to respiratory disruption and reduced sleep quality in existing literature~\cite{zhao2024}. Data was bulk-downloaded after the study period in two weekly chunks to avoid API timeouts on large date ranges.
 
 \textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm; the exact formula is not published. This project treats it as the primary dependent variable but acknowledges it is a ``black box'' measure whose validity depends on Ultrahuman's internal calibration. The quality tiers used in the dashboard (green $\geq$80, gold 70--79, red $<$70) are defined by this project, not by Ultrahuman.
 
@@ -276,7 +280,7 @@ All three models are statistically significant ($p < 0.05$). Sleep Score has the
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Discussions on the Important Aspects of the Project}
 
-\textbf{Key finding.} Noise variability is the single strongest predictor of sleep quality, consistent across all four analyses: correlation, regression, group comparison, and intra-night profiling. It is the pattern of repeated disruptions (intermittent traffic spikes, door closings, sirens) rather than sustained loudness that most impacts sleep. Research suggests that noise variability disrupts sleep architecture more than constant background noise.
+\textbf{Key finding.} Noise variability showed the strongest statistical association with sleep quality, consistent across all four analyses: correlation, regression, group comparison, and intra-night profiling. It is the pattern of repeated disruptions (intermittent traffic spikes, door closings, sirens) rather than sustained loudness that most impacts sleep. Research suggests that noise variability disrupts sleep architecture more than constant background noise.
 
 \textbf{Air quality interpretation.} NO\textsubscript{2} and PM2.5 stayed well within WHO guidelines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}) throughout the study. The inability to detect an effect may reflect genuinely clean overnight air during this winter period rather than an absence of any relationship between air quality and sleep. WHO guidelines are based on 24-hour averages; this study uses overnight-only data, so comparisons are indicative rather than direct.
 
@@ -317,7 +321,7 @@ Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group
 
 \textbf{Longer study and multiple participants.} A study of three or more months would capture seasonal variation, increase statistical power, and enable stronger regression models with additional predictors. Including multiple participants would enable generalisable conclusions and reveal individual differences in environmental sensitivity.
 
-\textbf{Real-time alerts and smart home integration.} The Heltec board's WiFi or LoRa radio could be used to push notifications when conditions deteriorate (e.g.\ humidity spike, sustained noise event), triggering within-night interventions rather than next-morning retrospective analysis. This could extend to smart home integration: triggering fans, dehumidifiers, or white noise machines based on sensor thresholds derived from the optimal ranges analysis, creating a closed-loop actuation system (sense $\rightarrow$ predict $\rightarrow$ intervene $\rightarrow$ measure outcome).
+\textbf{Real-time alerts and smart home integration.} The Heltec board's WiFi or LoRa radio could be used to push notifications when conditions deteriorate (e.g.\ humidity spike, sustained noise event), triggering within-night interventions rather than next-morning retrospective analysis. This could extend to smart home integration: triggering fans, dehumidifiers, or white noise machines based on sensor thresholds derived from the optimal ranges analysis, creating a closed-loop actuation system (sense $\rightarrow$ assess $\rightarrow$ intervene $\rightarrow$ measure outcome).
 
 \textbf{Machine learning prediction.} With sufficient data, a sleep quality classifier (e.g.\ random forest, gradient boosting) could be trained on environment features to predict tonight's expected sleep quality from current bedroom conditions.
 
@@ -326,17 +330,19 @@ Group comparison & Descriptive & Mann--Whitney & Descriptive & $n{=}7$ per group
 % ── Conclusion ────────────────────────────────────────────────────────
 \section*{Conclusion}
 
-The research question posed in Section~1.1 was: \textit{which environmental conditions most strongly predict sleep quality, and how do they interact?}
+Section~1.1 set out three objectives: (1)~to identify which bedroom environment conditions are most strongly associated with sleep quality, (2)~to explore whether these associations hold when multiple conditions are considered together, and (3)~to compare how bedroom conditions differ between good and poor sleep nights.
 
-The answer, consistent across all four analyses, is \textbf{noise variability}. It is the pattern of repeated noise spikes throughout the night, not the average noise level, that most distinguishes good from poor sleep. This was the only predictor that remained significant across correlation ($r = -0.80$), regression (significant in all three models), group comparison (largest difference between good and poor nights), and intra-night profiling (most visually striking contrast). Humidity, noise level, and temperature range also showed significant individual correlations, but none retained significance once noise variability was accounted for in regression, suggesting they are partially confounded with noise patterns rather than independent sleep disruptors.
+\textbf{Objective~1} was addressed through Spearman correlation analysis. Four environment features showed statistically significant correlations with sleep score: noise variability ($r = -0.80$), humidity ($r = -0.70$), noise level ($r = -0.69$), and temperature range ($r = -0.56$). Light, PM2.5, and NO\textsubscript{2} showed no significant association, though the study conditions (winter, closed windows, clean air) may not have provided enough variation to test these adequately.
 
-Light, PM2.5, and NO\textsubscript{2} showed no effect, though the study conditions (winter, closed windows, clean air) may not have provided enough variation to test these adequately. The ``how do they interact'' part of the research question is only partially answered: the regression models suggest noise variability dominates, but with $n = 14$ the study lacks power to disentangle more subtle interactions. A longer study would enable this.
+\textbf{Objective~2} was addressed through OLS regression. When multiple conditions were considered together, noise variability was the only factor that retained statistical significance; humidity and noise level did not reach significance once noise variability was accounted for, suggesting they are partially confounded with noise patterns rather than independent sleep disruptors. With $n = 14$, the study lacks power to disentangle more subtle interactions. A longer study would enable this.
 
-The project demonstrates that affordable IoT hardware (under \pounds30) combined with public APIs and a wearable device can produce actionable, personalised sleep environment insights, closing the gap between clinical sleep research and home monitoring described in Section~1.1. Reducing noise variability, through earplugs, white noise machines, or improved window insulation, is the single most impactful change indicated by this dataset.
+\textbf{Objective~3} was addressed through median-split comparison and intra-night profiling. The seven poorest sleep nights had substantially higher mean noise, greater noise variability, and higher humidity than the seven best nights. Minute-by-minute comparison of the single best and worst nights confirmed that it is the pattern of repeated noise spikes, not sustained loudness, that most distinguishes good from poor sleep.
+
+Across all four analyses, \textbf{noise variability} emerged as the factor with the strongest and most consistent association with sleep quality. The project demonstrates that affordable IoT hardware (under \pounds30) combined with public APIs and a wearable device can produce actionable, personalised sleep environment insights. Reducing noise variability, through earplugs, white noise machines, or improved window insulation, is the single most impactful change indicated by this dataset.
 
 % ── References ────────────────────────────────────────────────────────
 \newpage
-\begin{thebibliography}{13}
+\begin{thebibliography}{15}
 
 \bibitem{basner2023}
 Basner, M., Smith, M.G., Jones, C.W. et al. (2023) `Associations of bedroom PM2.5, CO2, temperature, humidity, and noise with sleep: an observational actigraphy study', \textit{Sleep Health}, 9(3), pp.~253--263. doi:10.1016/j.sleh.2023.02.010.
@@ -376,6 +382,12 @@ Dormann, C.F. et al. (2013) `Collinearity: a review of methods to deal with it a
 
 \bibitem{jarque1987}
 Jarque, C.M. and Bera, A.K. (1987) `A test for normality of observations and regression residuals', \textit{International Statistical Review}, 55(2), pp.~163--172. doi:10.2307/1403192.
+
+\bibitem{medic2017}
+Medic, G., Wille, M. and Hemels, M.E. (2017) `Short- and long-term health consequences of sleep disruption', \textit{Nature and Science of Sleep}, 9, pp.~151--161. doi:10.2147/NSS.S134864.
+
+\bibitem{zhao2024}
+Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants and the risk of sleep disorders: a systematic review and meta-analysis', \textit{Aerosol and Air Quality Research}, 24, 230197. doi:10.4209/aaqr.230197.
 
 \end{thebibliography}
 
