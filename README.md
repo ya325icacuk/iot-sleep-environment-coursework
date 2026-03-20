@@ -72,10 +72,11 @@ streamlit run app.py
 
 The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in three parts:
 
-**Part 1: Data Collection** - documents the methodology and code for collecting data from all three sources:
+**Part 1: Data Collection** - documents the methodology and code for collecting data from all three sources, and evaluates data quality:
 1. **Bedroom environment sensors** - serial logging from the Heltec board, one reading per minute. Each night produces a separate CSV file (14 in total), which are then combined into a single `bedroom_sensors.csv` for analysis
 2. **External air quality** - bulk retrieval from the Breathe London API after the collection period
 3. **Personal sleep metrics** - manual export from the Ultrahuman app
+4. **Data collection evaluation** - completeness, missing value, and sleep window validation checks across all three sources
 
 **Part 2: Data Analysis** - analyses the integrated dataset in five steps:
 1. **Nightly feature aggregation** - converts raw sensor readings into 12 comparable nightly summary features

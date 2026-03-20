@@ -239,8 +239,6 @@ All data is stored locally as CSV files on the laptop, with no cloud database or
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
 
-{\small\color{red}\textbf{TODO:} The checklist asks `Have you identified the metrics for evaluating the performance of your system?' This must be addressed in Section~1.4 (data completeness, coverage, consistency).}\vspace{0.5em}
-
 Before proceeding to the analysis in Part~2, it is important to understand how the data acquisition system performed in practice, as the sampling resolution, reliability, and latency of each data path affect the confidence that can be placed in the results. Table~\ref{tab:sampling} summarises the sampling characteristics of each data source.
 
 \begin{table}[H]
@@ -270,6 +268,28 @@ The three data paths operate at different latencies:
 \end{itemize}
 
 \noindent Because the analysis is entirely retrospective, these latency differences do not affect the results; all three sources were merged into a single dataset after the collection period ended. If the system were extended to provide real-time alerts (as proposed in Section~2.4), latency would become a design constraint, as delayed data could not trigger timely interventions.
+
+To verify that the data acquisition system performed as expected, three categories of checks were applied to the collected data. Table~\ref{tab:eval-checks} summarises the results; the full output is reproduced in the project notebook (Part~1, Subpart~4).
+
+\begin{table}[H]
+\centering
+\caption{Data Collection Evaluation Results}
+\label{tab:eval-checks}
+\small
+\begin{tabularx}{\textwidth}{p{3.2cm} p{4.5cm} X}
+\toprule
+\textbf{Check} & \textbf{Source(s)} & \textbf{Result} \\
+\midrule
+Completeness & \texttt{bedroom\_sensors.csv} & 600 readings per night across all 14 nights (10\,hrs $\times$ 1/min), 100\% complete \\
+Completeness & \texttt{breathe\_london\_air\_quality.csv} & 10 readings per night across all 14 nights (10\,hrs $\times$ 1/hr), 100\% complete \\
+Completeness & \texttt{ultrahuman\_sleep\_data.csv} & All 14 rows present, covering the full study period (9--22 Feb 2026) \\
+Missing values & All three sources & Zero missing values across all columns in all three datasets \\
+Sleep window validation & \texttt{bedroom\_sensors.csv} + \texttt{breathe\_london\_air\_quality.csv} & All readings fall within the 11\,pm--9\,am sleep window \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent All checks passed, confirming that the dataset is suitable for the statistical analysis in Part~2 without requiring imputation or exclusion of any nights.
 
 System-level and sensor-specific limitations are discussed in Sections~1.2.2 and~2.3 respectively.
 
