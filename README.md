@@ -81,7 +81,7 @@ The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in three p
 **Part 2: Data Analysis** - analyses the integrated dataset in five steps:
 1. **Nightly feature aggregation** - converts raw sensor readings into 12 comparable nightly summary features
 2. **Correlation analysis** - Spearman rank correlations between all environment features and sleep metrics
-3. **Multiple regression** - OLS models for sleep score, awake time, and light sleep duration
+3. **OLS regression** - OLS models for sleep score, awake time, and light sleep duration
 4. **Optimal conditions comparison** - median split comparing environment conditions on good vs poor sleep nights
 5. **Intra-night profiles** - minute-by-minute sensor plots for the best and worst sleep nights
 
