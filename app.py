@@ -1195,7 +1195,7 @@ elif page == "My Sleep Insights":
         <span style="color: #8892a5; font-size: 1.575rem;">Compare your
         </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">best and worst nights</span><span style="color: #8892a5; font-size: 1.575rem;">,
         explore how </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">bedroom conditions correlated with sleep</span><span style="color: #8892a5; font-size: 1.575rem;">,
-        see your </span><span style="color: #E8937A; font-weight: 600; font-size: 1.575rem;">optimal ranges</span><span style="color: #8892a5; font-size: 1.575rem;"> on good vs poor nights,
+        see your </span><span style="color: #B89ADE; font-weight: 600; font-size: 1.575rem;">optimal ranges</span><span style="color: #8892a5; font-size: 1.575rem;"> on good vs poor nights,
         and get an </span><span style="color: #B89ADE; font-weight: 600; font-size: 1.575rem;">actionable takeaway</span><span style="color: #8892a5; font-size: 1.575rem;">.</span>
     </div>
     """, unsafe_allow_html=True)
