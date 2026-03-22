@@ -1377,7 +1377,7 @@ elif page == "My Sleep Insights":
 
     # ── SECTION 3: YOUR OPTIMAL RANGES ──
     with st.container(border=True):
-        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #E8937A; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232, 147, 122, 0.20);">Your Optimal Ranges</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">Your Optimal Ranges</div>', unsafe_allow_html=True)
         median_score = analysis["Sleep Score"].median()
         good = analysis[analysis["Sleep Score"] >= median_score]
         poor = analysis[analysis["Sleep Score"] < median_score]
