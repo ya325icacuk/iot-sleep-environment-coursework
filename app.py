@@ -1447,9 +1447,10 @@ elif page == "My Sleep Insights":
             <div style="font-size: 1.8rem; font-weight: 700; color: #B89ADE; margin-bottom: 1.25rem;">
                 🔊 Why noise variability matters
             </div>
-            <div style="font-size: 1.4rem; color: #94A3B8; line-height: 2.2;">
-                It's not about how loud your room is overall. It's the sudden jumps in noise (traffic, doors, neighbours) that pull you out of deep sleep without fully waking you up.
-                The WHO Night Noise Guidelines found that intermittent noise is more disruptive than steady noise at the same volume, because your brain keeps reacting to each new sound even while you sleep.
+            <div style="font-size: 1.4rem; color: #94A3B8; line-height: 1.8;">
+                It's not about how loud your room is overall. It's the sudden jumps in noise (traffic, doors, neighbours) that pull you out of deep sleep without fully waking you up. The WHO Night Noise Guidelines found that intermittent noise is more disruptive than steady noise at the same volume, because your brain keeps reacting to each new sound even while you sleep.
+            </div>
+            <div style="font-size: 1.4rem; color: #94A3B8; line-height: 1.8; margin-top: 1rem;">
                 On your <strong style="color: #9EDEBE;">best nights</strong>, noise variability averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong>. On your <strong style="color: #E09C9C;">worst nights</strong>, it jumped to <strong style="color: #E09C9C;">{poor_val:.1f}</strong>. That difference alone was worth about <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong> on your sleep score.
             </div>
         </div>""", unsafe_allow_html=True)
