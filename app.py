@@ -1451,7 +1451,7 @@ elif page == "My Sleep Insights":
                 It's not about how loud your room is overall. It's the <strong style="color: #B89ADE;">sudden jumps in noise</strong> (traffic, doors, neighbours) that pull you out of deep sleep without fully waking you up. The WHO Night Noise Guidelines found that <strong style="color: #B89ADE;">intermittent noise is more disruptive than steady noise</strong> at the same volume, because your brain keeps reacting to each new sound even while you sleep.
             </div>
             <div style="font-size: 1.4rem; color: #94A3B8; line-height: 1.8; margin-top: 1rem;">
-                On your <strong style="color: #9EDEBE;">best nights</strong>, noise variability averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong>. On your <strong style="color: #E09C9C;">worst nights</strong>, it jumped to <strong style="color: #E09C9C;">{poor_val:.1f}</strong>. That difference alone was worth about <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong> on your sleep score.
+                On your <strong style="color: #9EDEBE;">best nights</strong>, noise variability averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong>. On your <strong style="color: #E09C9C;">worst nights</strong>, it jumped to <strong style="color: #E09C9C;">{poor_val:.1f}</strong>. That difference was associated with a gap of about <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong> in sleep score.
             </div>
         </div>""", unsafe_allow_html=True)
 
@@ -1466,7 +1466,7 @@ elif page == "My Sleep Insights":
                 <li><strong style="color: #B89ADE;">Move your bed</strong> away from the noisiest wall if possible</li>
             </ul>
             <div style="font-size: 1.3rem; color: #64748B; margin-top: 1.2rem; line-height: 1.7;">
-                The goal isn't silence. A steady, predictable sound is better than quiet that gets interrupted by random spikes.
+                <strong style="color: #B89ADE;">The goal isn't silence.</strong> A steady, predictable sound is better than <strong style="color: #B89ADE;">quiet that gets interrupted by random spikes.</strong>
             </div>
         </div>""", unsafe_allow_html=True)
 
