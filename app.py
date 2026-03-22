@@ -124,8 +124,8 @@ st.markdown("""
 
     /* ── Night at a Glance grouped panel ── */
     [class*="st-key-night-glance-group"] {
-        background: rgba(232, 147, 122, 0.06);
-        border: 1px solid rgba(232, 147, 122, 0.18);
+        background: rgba(92, 184, 178, 0.06);
+        border: 1px solid rgba(92, 184, 178, 0.18);
         border-radius: 14px;
         padding: 1rem 1.25rem 0.75rem 1.25rem;
         margin-top: 0.25rem;
@@ -604,25 +604,25 @@ if page == "Sleep Dashboard":
         with col1:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Avg Noise Variability</div>
+                <div class="metric-label-top">Average Noise Variability</div>
                 <div class="metric-value">{avg_std_sound:.1f}</div>
             </div>""", unsafe_allow_html=True)
         with col2:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Avg Humidity</div>
+                <div class="metric-label-top">Average Humidity</div>
                 <div class="metric-value">{avg_humidity:.0f}<span class="metric-unit">%</span></div>
             </div>""", unsafe_allow_html=True)
         with col3:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Avg Noise Level</div>
+                <div class="metric-label-top">Average Noise Level</div>
                 <div class="metric-value">{avg_sound:.0f}</div>
             </div>""", unsafe_allow_html=True)
         with col4:
             st.markdown(f"""
             <div class="metric-card card-turquoise">
-                <div class="metric-label-top">Avg Temp Range</div>
+                <div class="metric-label-top">Average Temp Range</div>
                 <div class="metric-value">{avg_range_temp:.1f}<span class="metric-unit">°C</span></div>
             </div>""", unsafe_allow_html=True)
 
@@ -676,7 +676,7 @@ if page == "Sleep Dashboard":
         with tab_noise:
             st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-top: 1rem; margin-bottom: 0.25rem;">Nightly Noise Level</div>', unsafe_allow_html=True)
             st.plotly_chart(env_bar_chart(nightly["avg_sound"], "Noise Level (sensor units)",
-                "<b>%{x}</b><br>Avg Noise: %{y:.0f}<extra></extra>"), use_container_width=True)
+                "<b>%{x}</b><br>Average Noise: %{y:.0f}<extra></extra>"), use_container_width=True)
             st.markdown('<div style="font-size: 1.3rem; color: #64748B; line-height: 1.5;"><em>Average noise level per night on a relative sensor scale. Higher values correspond to louder environments.</em></div>', unsafe_allow_html=True)
 
         with tab_temp_range:
@@ -761,16 +761,16 @@ elif page == "Night Explorer":
     <div style="font-size: 1.575rem; line-height: 1.8; margin-bottom: 3rem; font-weight: 400;">
         <span style="color: #8892a5; font-size: 1.575rem;">Select a night below to explore what happened while you slept.
         This page breaks down your </span><span style="color: #C4A44E; font-weight: 600; font-size: 1.575rem;">sleep architecture</span><span style="color: #8892a5; font-size: 1.575rem;">,
-        shows a minute-by-minute </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">bedroom environment timeline</span><span style="color: #8892a5; font-size: 1.575rem;">,
+        shows a minute-by-minute </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">bedroom environment timeline</span><span style="color: #8892a5; font-size: 1.575rem;">
+        with a </span><span style="color: #5CB8B2; font-weight: 600; font-size: 1.575rem;">quick summary</span><span style="color: #8892a5; font-size: 1.575rem;"> of the night,
         checks whether </span><span style="color: #D47A98; font-weight: 600; font-size: 1.575rem;">outdoor air quality</span><span style="color: #8892a5; font-size: 1.575rem;"> met WHO guidelines,
-        provides a </span><span style="color: #E8937A; font-weight: 600; font-size: 1.575rem;">quick summary</span><span style="color: #8892a5; font-size: 1.575rem;"> of the night,
-        and explains </span><span style="color: #B89ADE; font-weight: 600; font-size: 1.575rem;">why your sleep scored the way it did</span><span style="color: #8892a5; font-size: 1.575rem;">.</span>
+        and explores </span><span style="color: #B89ADE; font-weight: 600; font-size: 1.575rem;">what was different</span><span style="color: #8892a5; font-size: 1.575rem;"> about this night.</span>
     </div>
     """, unsafe_allow_html=True)
 
     # ── Night selector ──
     available_nights = sorted(sleep["Date"].tolist())
-    st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; font-weight: 600; margin-bottom: 0.5rem;">Select a Night</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 1.8rem; color: #94A3B8; font-weight: 600; margin-bottom: 0.5rem;">Please Select a Night</div>', unsafe_allow_html=True)
     selected_night = st.date_input("Select a night", value=available_nights[-1],
         min_value=available_nights[0], max_value=available_nights[-1],
         key="night_selector", label_visibility="collapsed")
@@ -814,7 +814,7 @@ elif page == "Night Explorer":
         with col_compare:
             st.markdown(f"""
             <div class="metric-card card-gold">
-                <div class="metric-label-top">vs. 2-Week Average</div>
+                <div class="metric-label-top">vs. 2-Week Average Score</div>
                 <div class="metric-value" style="color: {diff_color};">{diff_sign}{score_diff:.0f}<span class="metric-unit" style="color: {diff_color};">points</span></div>
             </div>""", unsafe_allow_html=True)
         with col_total:
@@ -905,8 +905,8 @@ elif page == "Night Explorer":
                                 use_container_width=True, config={"displayModeBar": False})
 
             with st.container(key="env-card-noise"):
-                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #5B8FB9; margin-top: 0.2rem; margin-bottom: 0;">Noise Level</div>', unsafe_allow_html=True)
-                st.plotly_chart(make_env_line(time_vals, sound_vals, "Noise", "Sensor Units", "#5B8FB9", "", fill=True),
+                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #3A9E8F; margin-top: 0.2rem; margin-bottom: 0;">Noise Level</div>', unsafe_allow_html=True)
+                st.plotly_chart(make_env_line(time_vals, sound_vals, "Noise", "Sensor Units", "#3A9E8F", "", fill=True),
                                 use_container_width=True, config={"displayModeBar": False})
 
             # Light — binary strip (inherently categorical)
@@ -920,7 +920,7 @@ elif page == "Night Explorer":
 
             fig_light = go.Figure()
             fig_light.add_trace(go.Heatmap(z=[light_vals], x=time_labels_light, y=["Light"],
-                colorscale=[[0.0, "#0F172A"], [1.0, "#F5E6D3"]], zmin=0, zmax=1,
+                colorscale=[[0.0, "#0F172A"], [1.0, "#A8DCD1"]], zmin=0, zmax=1,
                 showscale=False, hovertemplate="<b>%{x}</b><br>Light: %{z}<extra></extra>"))
             fig_light.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(color="#E2E8F0", size=14), height=100,
@@ -929,11 +929,83 @@ elif page == "Night Explorer":
                 tickfont=dict(size=13, color="#94A3B8"), gridcolor="rgba(51,65,85,0.3)")
             fig_light.update_yaxes(showticklabels=False, gridcolor="rgba(51,65,85,0.3)")
             with st.container(key="env-card-light"):
-                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #94A3B8; margin-top: 0.2rem; margin-bottom: 0;">Light On / Off</div>', unsafe_allow_html=True)
+                st.markdown('<div style="font-size: 1rem; font-weight: 600; color: #A8DCD1; margin-top: 0.2rem; margin-bottom: 0;">Light On / Off</div>', unsafe_allow_html=True)
                 st.plotly_chart(fig_light, use_container_width=True, config={"displayModeBar": False})
 
     # ============================================================
-    # SECTION 3: AIR QUALITY VERDICT
+    # SECTION 3: NIGHT AT A GLANCE
+    # Icon card grid with auto-generated insights.
+    # ============================================================
+    with st.container(border=True):
+        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #5CB8B2; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(92, 184, 178, 0.20);">Night at a Glance</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #5CB8B2; margin-bottom: 0.25rem;">A quick snapshot of your bedroom conditions for this night.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.4rem; color: #94A3B8; margin-bottom: 1rem;">Temperature, humidity, and noise were associated with sleep quality across your 14 nights. Light exposure is included for general context.</div>', unsafe_allow_html=True)
+
+        def insight_card(icon, value, description, accent="#CBD5E1"):
+            return f"""
+            <div class="night-glance-item">
+                <div style="font-size: 3.2rem; margin-bottom: 0.4rem;">{icon}</div>
+                <div style="font-size: 1.35rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.25rem;">{value}</div>
+                <div style="font-size: 1.3rem; color: #64748B; line-height: 1.4;">{description}</div>
+            </div>"""
+
+        extreme_cards = []
+        context_cards = []
+
+        def fmt_hour(h):
+            if h == 0: return "12 AM"
+            elif h < 12: return f"{h} AM"
+            elif h == 12: return "12 PM"
+            else: return f"{h - 12} PM"
+
+        if len(night_sensors) > 0:
+            night_sensors["hour"] = night_sensors["timestamp"].dt.hour
+
+            hourly_temp = night_sensors.groupby("hour")["temperature_c"].mean()
+            coolest_hr = hourly_temp.idxmin()
+            warmest_hr = hourly_temp.idxmax()
+            extreme_cards.append(insight_card("❄️", f"{hourly_temp[coolest_hr]:.1f}°C at {fmt_hour(coolest_hr)}", "Coolest hour", "#7BC8A4"))
+            extreme_cards.append(insight_card("🔥", f"{hourly_temp[warmest_hr]:.1f}°C at {fmt_hour(warmest_hr)}", "Warmest hour", "#E8937A"))
+
+            hourly_sound = night_sensors.groupby("hour")["sound_avg"].mean()
+            quietest_hr = hourly_sound.idxmin()
+            noisiest_hr = hourly_sound.idxmax()
+            extreme_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)}, avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
+            extreme_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)}, avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
+
+            night_avg_humidity = night_sensors["humidity_pct"].mean()
+            overall_avg_humidity = nightly["avg_humidity"].mean()
+            context_cards.append(insight_card("💧", f"{night_avg_humidity:.1f}%", f"Average humidity (14-night avg: {overall_avg_humidity:.1f}%)", "#5CB8B2"))
+
+            night_avg_sound = night_sensors["sound_avg"].mean()
+            overall_avg_sound = nightly["avg_sound"].mean()
+            context_cards.append(insight_card("🔉", f"{night_avg_sound:.0f}", f"Average noise level (14-night avg: {overall_avg_sound:.0f})", "#D4A574"))
+
+            light_on_minutes = int(night_sensors["light_detected"].sum())
+            total_minutes = len(night_sensors)
+            light_pct = (light_on_minutes / total_minutes) * 100
+            context_cards.append(insight_card("💡", f"{light_on_minutes} of {total_minutes} min ({light_pct:.0f}%)", "Light exposure", "#94A3B8"))
+
+
+        def render_group_box(title, cards, key):
+            if not cards:
+                return
+            with st.container(key=key):
+                st.markdown(
+                    f'<div style="font-size: 1.4rem; font-weight: 600; color: #5CB8B2; margin-bottom: 0.45rem;">{title}</div>',
+                    unsafe_allow_html=True,
+                )
+                n_cols = len(cards)
+                cols = st.columns(n_cols)
+                for i, card in enumerate(cards):
+                    with cols[i]:
+                        st.markdown(card, unsafe_allow_html=True)
+
+        render_group_box("Highs & Lows", extreme_cards, "night-glance-group-extremes")
+        render_group_box("Averages & Comparison", context_cards, "night-glance-group-context")
+
+    # ============================================================
+    # SECTION 4: AIR QUALITY VERDICT
     # Rose-themed verdict cards with green/red accents for pass/fail.
     # ============================================================
     with st.container(border=True):
@@ -1014,96 +1086,6 @@ elif page == "Night Explorer":
             st.markdown('<div style="font-size: 1.4rem; color: #64748B;">Air quality data unavailable for this night.</div>', unsafe_allow_html=True)
 
     # ============================================================
-    # SECTION 4: NIGHT AT A GLANCE
-    # Icon card grid with auto-generated insights.
-    # ============================================================
-    with st.container(border=True):
-        st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #E8937A; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(232, 147, 122, 0.20);">Night at a Glance</div>', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #E8937A; margin-bottom: 0.25rem;">A quick snapshot of your bedroom conditions for this night.</div>', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 1.4rem; color: #94A3B8; margin-bottom: 1rem;">Temperature, humidity, and noise were linked to sleep quality across your 14 nights. Light exposure and air quality are included for general context.</div>', unsafe_allow_html=True)
-
-        def insight_card(icon, value, description, accent="#CBD5E1"):
-            return f"""
-            <div class="night-glance-item">
-                <div style="font-size: 3.2rem; margin-bottom: 0.4rem;">{icon}</div>
-                <div style="font-size: 1.35rem; font-weight: 700; color: {accent}; line-height: 1.3; margin-bottom: 0.25rem;">{value}</div>
-                <div style="font-size: 1.3rem; color: #64748B; line-height: 1.4;">{description}</div>
-            </div>"""
-
-        extreme_cards = []
-        context_cards = []
-
-        def fmt_hour(h):
-            if h == 0: return "12 AM"
-            elif h < 12: return f"{h} AM"
-            elif h == 12: return "12 PM"
-            else: return f"{h - 12} PM"
-
-        if len(night_sensors) > 0:
-            night_sensors["hour"] = night_sensors["timestamp"].dt.hour
-
-            hourly_temp = night_sensors.groupby("hour")["temperature_c"].mean()
-            coolest_hr = hourly_temp.idxmin()
-            warmest_hr = hourly_temp.idxmax()
-            extreme_cards.append(insight_card("❄️", f"{hourly_temp[coolest_hr]:.1f}°C at {fmt_hour(coolest_hr)}", "Coolest hour", "#7BC8A4"))
-            extreme_cards.append(insight_card("🔥", f"{hourly_temp[warmest_hr]:.1f}°C at {fmt_hour(warmest_hr)}", "Warmest hour", "#E8937A"))
-
-            hourly_sound = night_sensors.groupby("hour")["sound_avg"].mean()
-            quietest_hr = hourly_sound.idxmin()
-            noisiest_hr = hourly_sound.idxmax()
-            extreme_cards.append(insight_card("🤫", f"{fmt_hour(quietest_hr)}, avg {hourly_sound[quietest_hr]:.0f}", "Quietest hour", "#5B8FB9"))
-            extreme_cards.append(insight_card("🔊", f"{fmt_hour(noisiest_hr)}, avg {hourly_sound[noisiest_hr]:.0f}", "Noisiest hour", "#E8C88A"))
-
-            night_avg_humidity = night_sensors["humidity_pct"].mean()
-            overall_avg_humidity = nightly["avg_humidity"].mean()
-            context_cards.append(insight_card("💧", f"{night_avg_humidity:.1f}%", f"Avg humidity (14-night avg: {overall_avg_humidity:.1f}%)", "#5CB8B2"))
-
-            night_avg_sound = night_sensors["sound_avg"].mean()
-            overall_avg_sound = nightly["avg_sound"].mean()
-            context_cards.append(insight_card("🔉", f"{night_avg_sound:.0f}", f"Avg noise level (14-night avg: {overall_avg_sound:.0f})", "#D4A574"))
-
-            light_on_minutes = int(night_sensors["light_detected"].sum())
-            total_minutes = len(night_sensors)
-            light_pct = (light_on_minutes / total_minutes) * 100
-            context_cards.append(insight_card("💡", f"{light_on_minutes} of {total_minutes} min ({light_pct:.0f}%)", "Light exposure", "#94A3B8"))
-
-        if len(night_air) > 0:
-            if pm25_ok and no2_ok:
-                context_cards.append(insight_card("🌿", "Within WHO guidelines", "Overnight air quality", "#9EDEBE"))
-            else:
-                exceeded_names = []
-                if not pm25_ok: exceeded_names.append("PM2.5")
-                if not no2_ok: exceeded_names.append("NO₂")
-                context_cards.append(insight_card("⚠️", f"{' & '.join(exceeded_names)} elevated", "Overnight air quality", "#E09C9C"))
-        else:
-            context_cards.append(insight_card("🌫️", "Data unavailable", "Overnight air quality", "#94A3B8"))
-
-        def render_group_box(title, cards, key):
-            if not cards:
-                return
-            with st.container(key=key):
-                st.markdown(
-                    f'<div style="font-size: 1.4rem; font-weight: 600; color: #E8937A; margin-bottom: 0.45rem;">{title}</div>',
-                    unsafe_allow_html=True,
-                )
-                n_cols = 2
-                rows_needed = (len(cards) + n_cols - 1) // n_cols
-                card_idx = 0
-                for _ in range(rows_needed):
-                    cols = st.columns(n_cols)
-                    for col_i in range(n_cols):
-                        if card_idx < len(cards):
-                            with cols[col_i]:
-                                st.markdown(cards[card_idx], unsafe_allow_html=True)
-                            card_idx += 1
-
-        group_col_left, group_col_right = st.columns(2, gap="large")
-        with group_col_left:
-            render_group_box("Night Extremes", extreme_cards, "night-glance-group-extremes")
-        with group_col_right:
-            render_group_box("Night Averages & Context", context_cards, "night-glance-group-context")
-
-    # ============================================================
     # SECTION 5: WHAT WAS DIFFERENT?
     # Contextualises this night's environment against the 14-night
     # study using hardcoded Spearman correlation findings from the
@@ -1114,12 +1096,12 @@ elif page == "Night Explorer":
         night_row = night_row.iloc[0]
         with st.container(border=True):
             st.markdown('<div style="font-size: 2rem; font-weight: 700; color: #B89ADE; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(184, 154, 222, 0.20);">What Was Different?</div>', unsafe_allow_html=True)
-            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your usual, based on what affected your sleep.</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.25rem;">How this night\'s conditions compare to your usual, focusing on factors most associated with your sleep quality.</div>', unsafe_allow_html=True)
 
             st.markdown("""
             <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: 1.3rem; color: #64748B;">
                 <span><span style="font-size: 1.35rem; color: #9EDEBE;">&#9679;</span> Better than usual</span>
-                <span><span style="font-size: 1.35rem; color: #C4A44E;">&#9679;</span> Close to usual</span>
+                <span><span style="font-size: 1.35rem; color: #E8C88A;">&#9679;</span> Close to usual</span>
                 <span><span style="font-size: 1.35rem; color: #E09C9C;">&#9679;</span> Worse than usual</span>
             </div>""", unsafe_allow_html=True)
 
@@ -1143,7 +1125,7 @@ elif page == "Night Explorer":
                 # Traffic light colour
                 abs_diff_pct = abs(diff_from_median) / median_val * 100 if median_val != 0 else 0
                 if abs_diff_pct < 10:
-                    dot_color = "#C4A44E"  # yellow — close to median
+                    dot_color = "#E8C88A"  # yellow — close to median
                 elif is_bad:
                     dot_color = "#E09C9C"  # red — bad direction
                 else:
@@ -1173,26 +1155,14 @@ elif page == "Night Explorer":
                 </div>"""
 
             if predictor_cards:
-                group_defs = [
-                    ("Noise Statistics", ["std_sound", "avg_sound"], "predictor-pair-noise"),
-                    ("Humidity & Temperature", ["avg_humidity", "range_temp"], "predictor-pair-climate"),
-                ]
-                group_cols = st.columns(2, gap="large")
-                for i, (title, features, key) in enumerate(group_defs):
-                    cards = [predictor_cards[f] for f in features if f in predictor_cards]
-                    if not cards:
-                        continue
-                    with group_cols[i]:
-                        with st.container(key=key):
-                            st.markdown(
-                                f'<div style="font-size: 1.3rem; font-weight: 600; color: #B89ADE; margin-bottom: 0.4rem;">{title}</div>',
-                                unsafe_allow_html=True,
-                            )
-                            inner_cols = st.columns(2)
-                            for j in range(2):
-                                with inner_cols[j]:
-                                    if j < len(cards):
-                                        st.markdown(cards[j], unsafe_allow_html=True)
+                all_features = ["std_sound", "avg_sound", "avg_humidity", "range_temp"]
+                all_cards = [predictor_cards[f] for f in all_features if f in predictor_cards]
+                if all_cards:
+                    with st.container(key="predictor-pair-all"):
+                        card_cols = st.columns(len(all_cards))
+                        for i, card in enumerate(all_cards):
+                            with card_cols[i]:
+                                st.markdown(card, unsafe_allow_html=True)
 
             # Non-significant factors note
             non_sig_str = ", ".join(NON_SIGNIFICANT)
@@ -1311,9 +1281,9 @@ elif page == "My Sleep Insights":
                     <div style="flex: 1; border-left: 1px solid rgba(148, 163, 184, 0.15); padding-left: 1.5rem;">
                         <div style="font-size: 1.3rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Bedroom Conditions</div>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Avg temp:</strong> {row["avg_temp"]:.1f}°C <span style="color: #64748B;">(range: {row["range_temp"]:.1f}°C)</span></div>
-                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Avg humidity:</strong> {row["avg_humidity"]:.0f}%</div>
-                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Avg noise:</strong> {row["avg_sound"]:.0f} <span style="color: #64748B;">(variability: {row["std_sound"]:.1f})</span></div>
+                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Average temp:</strong> {row["avg_temp"]:.1f}°C <span style="color: #64748B;">(range: {row["range_temp"]:.1f}°C)</span></div>
+                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Average humidity:</strong> {row["avg_humidity"]:.0f}%</div>
+                            <div class="snapshot-env-item" style="font-size: 1.4rem;"><strong style="color: {accent_color};">Average noise:</strong> {row["avg_sound"]:.0f} <span style="color: #64748B;">(variability: {row["std_sound"]:.1f})</span></div>
                         </div>
                     </div>
                 </div>
@@ -1338,8 +1308,8 @@ elif page == "My Sleep Insights":
         </div>""", unsafe_allow_html=True)
 
         scatter_vars = [
-            ("avg_humidity", "Humidity", "Avg Humidity (%)", "%", "Higher humidity linked to lower sleep scores."),
-            ("avg_sound", "Noise Level", "Avg Noise (sensor units)", "", "Noisier nights meant worse sleep."),
+            ("avg_humidity", "Humidity", "Average Humidity (%)", "%", "Higher humidity linked to lower sleep scores."),
+            ("avg_sound", "Noise Level", "Average Noise (sensor units)", "", "Noisier nights meant worse sleep."),
             ("std_sound", "Noise Variability", "Noise Std Dev (sensor units)", "", "Inconsistent noise was the strongest predictor of poor sleep."),
             ("Sleep Awake Time", "Awake Time", "Awake Time (min)", "min", "More time awake during the night correlated with lower scores."),
         ]

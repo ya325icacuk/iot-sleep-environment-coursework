@@ -64,10 +64,7 @@
 
 {\LARGE\bfseries ELEC70126: Internet of Things and Applications}
 
-\vspace{0.5cm}
-{\Large Module Exam}
-
-\vspace{2cm}
+\vspace{2.5cm}
 
 \begin{tabular}{@{} >{\bfseries}l l @{}}
 \toprule
@@ -97,6 +94,23 @@ Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.stream
 
 \vspace{0.1cm}
 {\small\color{red}\textbf{TODO:} Price vs Robustness/Reliability trade-off only partially covered. May need own row in Table~7.}
+
+\vspace{0.5cm}
+{\small\color{red}\textbf{TODO: Marking criteria trade-offs status:}}
+
+\vspace{0.2cm}
+{\small\color{red}
+\begin{tabular}{p{4.5cm} p{2cm} p{7cm}}
+\textbf{Trade-off} & \textbf{Status} & \textbf{Notes} \\
+\hline
+Throughput vs. Power consumption & Not addressed & Not covered anywhere \\
+Latency / Delay vs. Accuracy & Partially & Section 1.4.3 discusses latency but not framed as a trade-off against accuracy \\
+Performance vs. Security & Not addressed & Not covered anywhere \\
+Price vs. Usability & Not addressed & TODO on your front page \\
+Functionality vs. Usability & Partially & 2.1.2 describes the choices but doesn't explicitly frame them as this trade-off \\
+Functionality vs. Backward compatibility & Not addressed & Arguably not relevant to this project \\
+\end{tabular}
+}
 
 \vspace{\fill}
 \end{center}
@@ -232,32 +246,62 @@ The sleep data was the simplest to collect. The Ultrahuman data was downloaded m
 
 The three sources use distinct communication paths: USB serial for the bedroom sensors, HTTPS API calls for air quality, and manual app export for sleep data. Each was chosen to match the constraints of its source.
 
-USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable; no readings were lost to network dropouts over the 14-night study. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. The Breathe London data was retrieved via API rather than scraped from the website, as the API provides structured JSON that is easier to work with and can be filtered and transformed programmatically.
+USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable. No readings were lost to network dropouts over the 14-night study. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. The Breathe London data was retrieved via API rather than scraped from the website, as the API provides structured JSON that is easier to work with and can be filtered and transformed programmatically.
 
-All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (approximately 8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private. The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~J (Table~\ref{tab:tradeoffs-hw}).
+All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private. The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~J (Table~\ref{tab:tradeoffs-hw}).
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
 
-Before proceeding to the analysis in Part~2, it is important to understand how the data acquisition system performed in practice, as the sampling resolution, reliability, and latency of each data path affect the confidence that can be placed in the results. Table~\ref{tab:sampling} summarises the sampling characteristics of each data source.
+Before proceeding to the analysis in Part~2, it is important to understand how the data acquisition system performed in practice, as the sampling resolution, reliability, and latency of each data path affect the confidence that can be placed in the results.
+
+\subsubsection{Sampling Characteristics}
+
+The sampling rate for each source reflects a trade-off between capturing environmental variation and the practical limits of each sensor or API. Table~\ref{tab:sampling} summarises the sampling characteristics and data volume for each source.
 
 \begin{table}[H]
 \centering
 \caption{Sampling Rates and Data Volume}
 \label{tab:sampling}
 \small
-\begin{tabularx}{\textwidth}{p{1.8cm} p{2.6cm} >{\raggedleft\arraybackslash}p{1.5cm} >{\raggedleft\arraybackslash}p{1.5cm} X}
+\begin{tabularx}{\textwidth}{p{2.4cm} p{1.6cm} >{\raggedleft\arraybackslash}p{1.5cm} >{\raggedleft\arraybackslash}p{1.5cm} X}
 \toprule
-\textbf{Source} & \textbf{Sampling Rate} & \textbf{Readings/ Night} & \textbf{Total (14 nights)} & \textbf{Justification} \\
+\textbf{Source} & \textbf{Sampling\newline Rate} & \textbf{Readings/ Night} & \textbf{Total (14 nights)} & \textbf{Justification} \\
 \midrule
-Bedroom sensors & 1/min & $\sim$600 & $\sim$8,400 & \textbullet{} Temperature and humidity change slowly, so sub-minute resolution is unnecessary \textbullet{} Sound is sampled at 5\,ms to capture transient noise events (traffic, sirens, door slams) that would be missed at 1-min polling \textbullet{} The resulting minute-level summaries are then logged to the CSV \\
-Air quality & Hourly & $\sim$10 & $\sim$140 & Maximum resolution available from the Breathe London API \\
+Bedroom sensors & 1/min & 600 & 8,400 & \textbullet{} Temperature and humidity change slowly, so sub-minute resolution is unnecessary \textbullet{} Sound is sampled at 5\,ms to capture transient noise events (traffic, sirens, door slams) that would be missed at 1-min polling \textbullet{} The resulting minute-level summaries are then logged to the CSV \\
+Air quality & Hourly & 10 & 140 & Maximum resolution available from the Breathe London API \\
 Sleep metrics & Daily & 1 & 14 & Output granularity of the Ultrahuman Ring \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Over the 14-night study, the system captured data without serial disconnections or significant gaps. To avoid macOS power management putting the laptop to sleep during overnight collection, the Amphetamine application~\citep{amphetamine2026} was used to keep the system awake while the notebook kernel was active. The Breathe London API timeout issue (HTTP 504 on large date ranges) was resolved by splitting requests into weekly chunks, as described in Section~1.3. Timestamps are generated by the laptop clock at the moment each serial line is received, so minor timing drift between readings is possible, though this has no effect on the analysis since sleep metrics are daily values.
+\subsubsection{Reliability and Data Quality}
+
+Several measures were taken to ensure reliable data capture over the 14-night study. To avoid macOS power management putting the laptop to sleep during overnight collection, the Amphetamine application~\citep{amphetamine2026} was used to keep the system awake while the notebook kernel was active. The Breathe London API timeout issue (HTTP 504 on large date ranges) was resolved by splitting requests into weekly chunks, as described in Section~1.3. Timestamps are generated by the laptop clock at the moment each serial line is received, so minor timing drift between readings is possible, though this has no effect on the analysis since sleep metrics are daily values.
+
+To evaluate the performance of the data acquisition system, three metrics were used: data completeness, missing values, and sleep window validation. Table~\ref{tab:eval-checks} summarises the results.
+
+\begin{table}[H]
+\centering
+\caption{Data Collection Evaluation Results}
+\label{tab:eval-checks}
+\small
+\begin{tabularx}{\textwidth}{p{3.6cm} p{5.0cm} X}
+\toprule
+\textbf{Check} & \textbf{Source(s)} & \textbf{Result} \\
+\midrule
+Completeness & \texttt{bedroom\_sensors.csv} & 600 readings per night across all 14 nights (10\,hrs $\times$ 1/min), 100\% complete \\
+Completeness & \texttt{breathe\_london\_air\_quality.csv} & 10 readings per night across all 14 nights (10\,hrs $\times$ 1/hr), 100\% complete \\
+Completeness & \texttt{ultrahuman\_sleep\_data.csv} & All 14 rows present, covering the full study period (9--22 Feb 2026) \\
+Missing values & All three sources & Zero missing values across all columns in all three datasets \\
+Sleep window validation & \texttt{bedroom\_sensors.csv}, \texttt{breathe\_london\_air\_quality.csv} & All readings fall within the 11\,pm--9\,am sleep window \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent All checks passed. The collected data contains no gaps or missing values, so no imputation, interpolation, or exclusion of nights is required before analysis.
+
+\subsubsection{Latency}
 
 The three data paths operate at different latencies:
 
@@ -267,51 +311,58 @@ The three data paths operate at different latencies:
     \item \textbf{Sleep data:} downloaded retrospectively from the Ultrahuman website at the end of the collection period.
 \end{itemize}
 
-\noindent Because the analysis is entirely retrospective, these latency differences do not affect the results; all three sources were merged into a single dataset after the collection period ended. If the system were extended to provide real-time alerts (as proposed in Section~2.4), latency would become a design constraint, as delayed data could not trigger timely interventions.
-
-To verify that the data acquisition system performed as expected, three categories of checks were applied to the collected data. Table~\ref{tab:eval-checks} summarises the results; the full output is reproduced in the project notebook (Part~1, Subpart~4).
-
-\begin{table}[H]
-\centering
-\caption{Data Collection Evaluation Results}
-\label{tab:eval-checks}
-\small
-\begin{tabularx}{\textwidth}{p{3.2cm} p{4.5cm} X}
-\toprule
-\textbf{Check} & \textbf{Source(s)} & \textbf{Result} \\
-\midrule
-Completeness & \texttt{bedroom\_sensors.csv} & 600 readings per night across all 14 nights (10\,hrs $\times$ 1/min), 100\% complete \\
-Completeness & \texttt{breathe\_london\_air\_quality.csv} & 10 readings per night across all 14 nights (10\,hrs $\times$ 1/hr), 100\% complete \\
-Completeness & \texttt{ultrahuman\_sleep\_data.csv} & All 14 rows present, covering the full study period (9--22 Feb 2026) \\
-Missing values & All three sources & Zero missing values across all columns in all three datasets \\
-Sleep window validation & \texttt{bedroom\_sensors.csv} + \texttt{breathe\_london\_air\_quality.csv} & All readings fall within the 11\,pm--9\,am sleep window \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\noindent All checks passed, confirming that the dataset is suitable for the statistical analysis in Part~2 without requiring imputation or exclusion of any nights.
-
-System-level and sensor-specific limitations are discussed in Sections~1.2.2 and~2.3 respectively.
+\noindent Because the analysis is entirely retrospective, these latency differences do not affect the results. All three sources were merged into a single dataset after the collection period ended. If the system were extended to provide real-time alerts (as proposed in Section~2.4 below), latency requirements would need to be revisited to ensure timely interventions.
 
 % ══════════════════════════════════════════════════════════════════════
-\vspace{0.5em}
-\begingroup\Large\bfseries Part 2: Internet of Things\endgroup
-\addtocounter{section}{1}\setcounter{subsection}{0}\vspace{0.8em}
+\section*{Part 2: Internet of Things}
+\setcounter{section}{2}
+\setcounter{subsection}{0}
 % ══════════════════════════════════════════════════════════════════════
 
 \subsection{Data Interaction/Visualisation/Actuation Platform}
 
-The dashboard design was directly shaped by the analysis results presented in Section~2.2. To make this section self-contained, the key findings are previewed here: the analysis identified four environment features with statistically significant correlations to sleep score, specifically noise variability ($r = -0.80$), humidity ($r = -0.70$), noise level ($r = -0.69$), and temperature range ($r = -0.56$). Three other factors (light, PM2.5, NO\textsubscript{2}) showed no significant association. These findings determined which variables are featured prominently in the dashboard and which appear only in contextual views.
+Part~1 produced three raw datasets that, on their own, cannot answer the project's central question: which bedroom conditions matter most for sleep. This section describes the dashboard built to answer that question, covering its technical implementation (2.1.1), user interface design (2.1.2), and page-by-page walkthrough (2.1.3). The dashboard is organised around the four environment variables with statistically significant Spearman correlations to sleep score (noise variability, humidity, noise level, and temperature range), though all measured variables including light, PM2.5, and NO\textsubscript{2} are still presented for completeness. These correlations are based on 14 nights of data, so should be treated as indicative rather than conclusive. The full analysis, including discussion of sample size limitations, is covered in Section~2.2.
 
-\textbf{Platform and deployment.} The dashboard, named RestNet, was built using Streamlit with Plotly for interactive charting, and is deployed at \url{https://sleep-monitor.streamlit.app}. The application and data files are hosted in a public GitHub repository and deployed automatically via Streamlit Community Cloud. The dashboard reads the same CSV files produced in Part~1 directly from the repository.
+\subsubsection{Platform and Technical Implementation}
 
-\textbf{UX rationale.} Key design decisions and their reasoning are as follows. A \textbf{dark theme} was chosen because the primary user context is reviewing sleep data, often in the evening or at night; a dark interface reduces eye strain and feels contextually appropriate, with a warm coral accent (\texttt{\#E8937A}) providing contrast without harsh brightness. \textbf{Section-specific colour coding} (gold for sleep overview, turquoise for bedroom environment, rose for air quality, purple for insights) allows the user to instantly identify which data domain they are viewing, reducing cognitive load when scrolling between sections. A \textbf{three-page structure} was adopted rather than a single scrolling page because 14 nights of data across multiple sensor types and sources would overwhelm the user. Page~1 (Sleep Dashboard) answers ``how did I sleep this fortnight?'', Page~2 (Night Explorer) answers ``what happened on a specific night?'', and Page~3 (My Sleep Insights) answers ``what should I change?'', forming a progressive disclosure hierarchy matching distinct user intents. A \textbf{consistent sleep-score colour mapping} (green $\geq$80, gold 70--79, red $<$70) is applied to bars, dots, and cards across all charts, so the user can visually scan any chart and immediately see whether good or poor sleep nights cluster at certain values. \textbf{Full-word labelling} replaced abbreviations throughout (e.g.\ ``Average'' not ``Avg'', ``Noise Variability'' not ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. These quality tiers are defined by this dashboard and are not official Ultrahuman classifications.
+The dashboard, named RestNet, was built using Streamlit, a Python framework for building web applications, and Plotly, a library for creating interactive graphs. The dashboard and the data files powering it are hosted in a public GitHub repository and deployed automatically via Streamlit Community Cloud. The dashboard reads the same CSV files produced in Part~1 directly from the repository, with all data loading, transformation, and rendering handled by a single Python script.
 
-\textbf{Page 1: Sleep Dashboard} provides a two-week overview with three sections. The Sleep Overview section displays metric cards for average sleep score, average duration, and average deep sleep, followed by a nightly sleep score bar chart colour-coded by quality tier. The Bedroom Environment section shows metric cards for the four significant predictors (noise variability, humidity, noise level, temperature range) with tabbed nightly bar charts for each, colour-coded by that night's sleep score. The External Air Quality section presents PM2.5 and NO\textsubscript{2} line charts with WHO guideline reference lines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}), with a caveat that these guidelines are based on 24-hour averages while this data covers only the sleep window.
+\subsubsection{User Interface Design}
 
-\textbf{Page 2: Night Explorer} allows the user to select any of the 14 nights and view five sections. Sleep Architecture shows the night's score, comparison to the two-week average, and a stacked bar of sleep stages. The Bedroom Environment Timeline presents minute-by-minute line charts for temperature, humidity, and noise, plus a binary heatmap strip for light. The Air Quality Verdict displays pass/fail cards against WHO guidelines. Night at a Glance provides auto-generated insight cards for bedroom extremes (coolest/warmest hour, quietest/noisiest hour) and averages (humidity, noise, light exposure, air quality). What Was Different? compares this night's four significant predictors to personal medians using traffic-light colour coding (green = better than usual, gold = close to usual, red = worse than usual).
+The dashboard's design involved a number of decisions around how the data is structured across pages, how colour coding is used to organise that structure, and how the information is presented to be easy to understand.
 
-\textbf{Page 3: My Sleep Insights} brings all three data sources together. Best vs Worst Night shows side-by-side snapshot cards with sleep scores and bedroom conditions. The Correlation Explorer displays Spearman scatter plots for three environment predictors (noise variability, humidity, noise level) plus awake time (a sleep metric included because it strongly correlates with sleep score); temperature range, the fourth significant predictor, is not plotted here but is covered in the optimal ranges table. Your Optimal Ranges presents a median-split table comparing good vs poor nights across all four significant predictors. The Actionable Takeaway section highlights the strongest predictor and provides practical recommendations.
+\textbf{Three-page structure.} Rather than presenting all data on a single scrolling page, the dashboard splits content across three pages so that users see summary-level information first and can drill into detail when needed. Each page targets a distinct user question:
+
+\begin{itemize}[nosep]
+    \item Page~1 (Sleep Dashboard): ``how did I sleep this fortnight?''
+    \item Page~2 (Night Explorer): ``what happened on a specific night?''
+    \item Page~3 (My Sleep Insights): ``what should I change?''
+\end{itemize}
+
+\textbf{Colour scheme.} The dashboard uses a dark theme because the primary user context is reviewing sleep data, often in the evening or at night. A dark interface reduces eye strain and feels contextually appropriate, with a warm coral accent providing contrast without harsh brightness. Two colour systems operate across the dashboard:
+
+\begin{itemize}[nosep]
+    \item \textbf{Section colours:} each data source has its own colour (gold for sleep metrics, turquoise for bedroom environment, rose for air quality, purple for comparisons and recommendations), consistent across all three pages so the user always knows what type of content they are viewing.
+    \item \textbf{Sleep-score colours:} a separate scheme (green for scores $\geq$80, gold for 70--79, red for $<$70) is applied to bars, dots, and cards across all charts, allowing the user to visually scan any chart and immediately see whether good or poor sleep nights cluster at certain values. These quality tiers are defined by this dashboard and are not official Ultrahuman classifications.
+\end{itemize}
+
+\noindent To achieve this theming, all metric cards, section headers, and insight panels were built as custom HTML and CSS rather than using Streamlit's native components, which offered limited control over colour and layout.
+
+\textbf{Readability.} All graphs are interactive: users can hover over any data point to see its exact value, zoom into specific time ranges, and pan across the timeline. All labels use plain language (e.g.\ ``Noise Variability'' rather than ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. Matplotlib was retained in the notebook where static figures are more appropriate.
+
+Further platform and visualisation trade-offs are summarised in Appendix~K (Table~\ref{tab:tradeoffs-vis}).
+
+\subsubsection{Dashboard Pages}
+
+\textbf{Page 1: Sleep Dashboard} provides a two-week overview with three sections. Sleep Overview displays metric cards for average sleep score, duration, and deep sleep, followed by a nightly sleep score bar chart colour-coded by quality tier. Bedroom Environment shows metric cards for the four significant predictors with tabbed nightly bar charts for each, colour-coded by that night's sleep score so the user can see whether poor conditions and poor sleep coincide. External Air Quality presents PM2.5 and NO\textsubscript{2} line charts with WHO guideline reference lines (15\,\textmu g/m\textsuperscript{3} and 25\,\textmu g/m\textsuperscript{3} respectively), noting that these guidelines are based on 24-hour averages while this data covers only the sleep window.
+
+\textbf{Page 2: Night Explorer} allows the user to select any of the 14 nights and view five sections. Sleep Architecture shows the night's score, comparison to the two-week average, and a stacked bar of sleep stages. The Bedroom Environment Timeline presents minute-by-minute line charts for temperature, humidity, and noise, plus a binary heatmap strip for light, allowing the user to see exactly when disruptions occurred overnight. This corresponds directly to the intra-night profiling in Section~2.2, Step~5. The Air Quality Verdict displays pass/fail cards against WHO guidelines. Night at a Glance provides auto-generated insight cards for bedroom extremes (coolest/warmest hour, quietest/noisiest hour) and averages (humidity, noise, light exposure), each compared to the 14-night average. What Was Different? compares this night's four significant predictors to personal medians using traffic-light colour coding (green = better than usual, gold = close to usual, red = worse than usual).
+
+\textbf{Page 3: My Sleep Insights} brings all three data sources together. Best vs Worst Night shows side-by-side snapshot cards with sleep scores, stage breakdowns, and bedroom conditions for the highest- and lowest-scoring nights. The Correlation Explorer displays Spearman scatter plots for three environment predictors (noise variability, humidity, noise level) plus awake time, each with colour-coded dots, a trend line, and the Spearman $r$ value; temperature range, the fourth significant predictor, is not plotted here but is covered in the optimal ranges table. Your Optimal Ranges presents a median-split table comparing good versus poor nights across all four significant predictors. The Actionable Takeaway identifies the strongest predictor and provides practical recommendations (earplugs, white noise machine, masking intermittent disruptions).
+
+\textbf{Notebook and dashboard roles.} The notebook provides statistical rigour (regression diagnostics, $p$-values, residual tests) for academic assessment, while the dashboard provides accessibility and interactivity for a user exploring their own sleep data. Both use the same underlying CSVs and aggregation logic, ensuring consistency. The notebook discovers the findings; the dashboard communicates them.
+
+\textbf{Perceiving time-series correlations.} The dashboard surfaces environment--sleep relationships at three temporal levels: nightly aggregates (Pages~1 and~3) show how conditions co-vary with sleep quality across the 14-night study, minute-level timelines (Page~2) reveal the structure of disruptions within a single night, and comparative views (Pages~2 and~3) connect individual nights back to the broader patterns. This mirrors the analytical approach in Section~2.2, where Steps~2--4 operate on nightly aggregates and Step~5 examines intra-night profiles.
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Analytics, Inferences and Insights}
@@ -525,6 +576,27 @@ Power & Continuous USB / Battery & A & No battery constraint over 10-hr sleep wi
 Sensors & Low-cost (${\sim}$\pounds30) / Calibrated (${\sim}$\pounds60+) & A & 4$\times$ cheaper, faster prototyping, sufficient to detect relative patterns & No absolute dB or lux; DHT11 $\pm2$\,\textdegree C vs BME280 $\pm1$\,\textdegree C \\[4pt]
 Analysis & Spearman/OLS / ML & A & Transparent, interpretable coefficients, works with $n{=}14$ & May miss non-linear relationships; justified by small sample \\[4pt]
 Data privacy & All local / Cloud & A & Zero exposure of personal sleep data to third parties & No collaborative features, no multi-device sync \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Appendix K: Platform and Visualisation Trade-offs}
+
+{\small\color{red}\textbf{TODO:} Review this table --- check all entries are accurate and complete.}
+
+\begin{table}[H]
+\centering
+\caption{Platform and Visualisation Trade-offs}
+\label{tab:tradeoffs-vis}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} p{2cm} p{2.8cm} >{\centering\arraybackslash}p{0.8cm} p{5.6cm} p{5.2cm} @{}}
+\toprule
+\textbf{Trade-off} & \textbf{Options (A / B)} & \textbf{Chosen} & \textbf{Gain} & \textbf{Cost} \\
+\midrule
+Functionality vs.\ Rapid development & Streamlit / Flask with Dash & A & Rapid prototyping with built-in widgets, reactive model, and free cloud hosting & Limited layout control; script re-executes on every user interaction, requiring explicit caching and state management \\[4pt]
+Price vs.\ Robustness & Streamlit Community Cloud (free) / Self-hosted server & A & Zero cost, automatic deploys from GitHub, HTTPS by default & Limited server resources, no custom domain, cold starts after inactivity \\[4pt]
+Performance vs.\ Usability & Cached data loading / No caching & A & Data processing runs once per session rather than on every page change, keeping navigation responsive & Slightly higher memory usage; cached results not updated if source files change mid-session \\
 \bottomrule
 \end{tabular}
 \end{table}
