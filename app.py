@@ -1447,25 +1447,30 @@ elif page == "My Sleep Insights":
         with col_left:
             st.markdown(f"""<div style="background: rgba(184, 154, 222, 0.08); border-radius: 12px; padding: 1.75rem 2rem;">
                 <div style="font-size: 1.8rem; font-weight: 700; color: #B89ADE; margin-bottom: 1.25rem;">
-                    💡 Your #1 sleep predictor: {s_title}
+                    🔊 Why noise variability matters
                 </div>
-                <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 2.5; padding-left: 1.5rem; margin: 0;">
-                    <li>Strongest correlation: <strong style="color: #CBD5E1;">r = {s_r:+.2f}</strong></li>
-                    <li>Good nights (avg score {good["Sleep Score"].mean():.0f}): averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong></li>
-                    <li>Poor nights (avg score {poor["Sleep Score"].mean():.0f}): averaged <strong style="color: #E09C9C;">{poor_val:.1f}</strong></li>
-                    <li>Sleep score difference: <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong></li>
-                </ul>
+                <div style="font-size: 1.4rem; color: #94A3B8; line-height: 2.2;">
+                    It's not about how loud your room is overall. It's the sudden jumps in noise (traffic, doors, neighbours) that pull you out of deep sleep without fully waking you up.
+                    <br><br>
+                    The WHO Night Noise Guidelines found that intermittent noise is more disruptive than steady noise at the same volume, because your brain keeps reacting to each new sound even while you sleep.
+                    <br><br>
+                    On your <strong style="color: #9EDEBE;">best nights</strong>, noise variability averaged <strong style="color: #9EDEBE;">{good_val:.1f}</strong>. On your <strong style="color: #E09C9C;">worst nights</strong>, it jumped to <strong style="color: #E09C9C;">{poor_val:.1f}</strong>. That difference alone was worth about <strong style="color: #CBD5E1;">{score_diff:.0f} points</strong> on your sleep score.
+                </div>
             </div>""", unsafe_allow_html=True)
         with col_right:
             st.markdown("""<div style="background: rgba(184, 154, 222, 0.08); border-radius: 12px; padding: 1.75rem 2rem;">
                 <div style="font-size: 1.8rem; font-weight: 600; color: #B89ADE; margin-bottom: 1.25rem;">
-                    🎯 What you can try
+                    🎯 Things worth trying
                 </div>
-                <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 2.5; padding-left: 1.5rem; margin: 0;">
-                    <li>Try earplugs or a white noise machine to mask intermittent disruptions</li>
-                    <li>Inconsistent noise from traffic or neighbours was the biggest factor</li>
-                    <li>A steady background sound is better than silence interrupted by spikes</li>
+                <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 2.2; padding-left: 1.5rem; margin: 0;">
+                    <li><strong style="color: #CBD5E1;">White noise machine or fan</strong> to create a steady background hum that masks sudden spikes</li>
+                    <li><strong style="color: #CBD5E1;">Earplugs (NRR 20+)</strong> for a low-tech fix on noisy nights</li>
+                    <li><strong style="color: #CBD5E1;">Close windows</strong> facing busy roads, especially late evening when traffic noise tends to peak</li>
+                    <li><strong style="color: #CBD5E1;">Move your bed</strong> away from the noisiest wall if possible</li>
                 </ul>
+                <div style="font-size: 1.3rem; color: #64748B; margin-top: 1rem; line-height: 1.6;">
+                    The goal isn't silence. A steady, predictable sound is better than quiet that gets interrupted by random spikes.
+                </div>
             </div>""", unsafe_allow_html=True)
 
         st.markdown(f'<div style="font-size: 1.3rem; color: #64748B; font-style: italic; margin-top: 1rem;">These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</div>', unsafe_allow_html=True)
