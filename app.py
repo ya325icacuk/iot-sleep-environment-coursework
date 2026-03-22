@@ -1459,13 +1459,13 @@ elif page == "My Sleep Insights":
             <div style="font-size: 1.8rem; font-weight: 600; color: #B89ADE; margin-bottom: 1.25rem;">
                 🎯 Things worth trying
             </div>
-            <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 2.2; padding-left: 1.5rem; margin: 0;">
-                <li><strong style="color: #B89ADE;">White noise machine or fan</strong> to create a steady background hum that masks sudden spikes</li>
-                <li><strong style="color: #B89ADE;">Earplugs (NRR 20+)</strong> for a low-tech fix on noisy nights</li>
-                <li><strong style="color: #B89ADE;">Close windows</strong> facing busy roads, especially late evening when traffic noise tends to peak</li>
+            <ul style="font-size: 1.4rem; color: #94A3B8; line-height: 1.8; padding-left: 1.5rem; margin: 0;">
+                <li style="margin-bottom: 0.6rem;"><strong style="color: #B89ADE;">White noise machine or fan</strong> to create a steady background hum that masks sudden spikes</li>
+                <li style="margin-bottom: 0.6rem;"><strong style="color: #B89ADE;">Earplugs (NRR 20+)</strong> for a low-tech fix on noisy nights</li>
+                <li style="margin-bottom: 0.6rem;"><strong style="color: #B89ADE;">Close windows</strong> facing busy roads, especially late evening when traffic noise tends to peak</li>
                 <li><strong style="color: #B89ADE;">Move your bed</strong> away from the noisiest wall if possible</li>
             </ul>
-            <div style="font-size: 1.3rem; color: #64748B; margin-top: 1rem; line-height: 1.6;">
+            <div style="font-size: 1.3rem; color: #64748B; margin-top: 1.2rem; line-height: 1.7;">
                 The goal isn't silence. A steady, predictable sound is better than quiet that gets interrupted by random spikes.
             </div>
         </div>""", unsafe_allow_html=True)
