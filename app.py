@@ -1158,11 +1158,18 @@ elif page == "Night Explorer":
                 all_features = ["std_sound", "avg_sound", "avg_humidity", "range_temp"]
                 all_cards = [predictor_cards[f] for f in all_features if f in predictor_cards]
                 if all_cards:
-                    with st.container(key="predictor-pair-all"):
-                        card_cols = st.columns(len(all_cards))
-                        for i, card in enumerate(all_cards):
-                            with card_cols[i]:
+                    # 2x2 grid layout
+                    with st.container(key="predictor-pair-row1"):
+                        row1_cols = st.columns(2)
+                        for i, card in enumerate(all_cards[:2]):
+                            with row1_cols[i]:
                                 st.markdown(card, unsafe_allow_html=True)
+                    if len(all_cards) > 2:
+                        with st.container(key="predictor-pair-row2"):
+                            row2_cols = st.columns(2)
+                            for i, card in enumerate(all_cards[2:]):
+                                with row2_cols[i]:
+                                    st.markdown(card, unsafe_allow_html=True)
 
             # Non-significant factors note
             non_sig_str = ", ".join(NON_SIGNIFICANT)
