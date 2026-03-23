@@ -70,6 +70,8 @@
 
 \vspace{2cm}
 
+\newsavebox{\infotablebox}
+\savebox{\infotablebox}{%
 \begin{tabular}{@{} >{\bfseries}l l @{}}
 \toprule
 Student CID & \textit{06053600} \\
@@ -85,7 +87,8 @@ GitHub Project Repository (Code \& Data) & \textit{\href{https://github.com/ya32
 \midrule
 Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.streamlit.app}{sleep-monitor.streamlit.app}} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
+\usebox{\infotablebox}
 
 \vspace{1.5cm}
 
@@ -93,7 +96,7 @@ Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.stream
 
 \vspace{0.4cm}
 
-\begin{tabular*}{\textwidth}{@{} l @{\extracolsep{\fill}\dotfill\extracolsep{0pt}} r @{}}
+\begin{tabular*}{\wd\infotablebox}{@{} l @{\extracolsep{\fill}\dotfill\extracolsep{0pt}} r @{}}
 Executive Summary & 1 \\[4pt]
 Part 1: Sensing & 2 \\[4pt]
 Part 2: Internet of Things & 6 \\[4pt]
