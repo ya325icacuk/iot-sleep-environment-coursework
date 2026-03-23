@@ -355,9 +355,9 @@ Three design principles guided the dashboard's interface: a progressive page str
 \begin{tcolorbox}[colback=imperialblue!5, colframe=imperialblue!60, left=4mm, right=4mm, top=2mm, bottom=2mm, boxrule=0pt, borderline west={3pt}{0pt}{imperialblue!60}]
 Each page targets a distinct user question:
 \begin{itemize}[nosep]
-    \item Page~1 (Sleep Dashboard): ``how did I sleep this fortnight?''
-    \item Page~2 (Night Explorer): ``what happened on a specific night?''
-    \item Page~3 (My Sleep Insights): ``what should I change?''
+    \item \textbf{Page~1 (Sleep Dashboard):} ``how did I sleep this fortnight?''
+    \item \textbf{Page~2 (Night Explorer):} ``what happened on a specific night?''
+    \item \textbf{Page~3 (My Sleep Insights):} ``what should I change?''
 \end{itemize}
 \end{tcolorbox}
 
@@ -598,17 +598,23 @@ Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants a
 \textit{This appendix contains all figures, diagrams, and screenshots referenced in the report.}
 
 \subsection*{Appendix A: Wiring Diagram and Sensor Assembly}
-\textit{(a) Circuit diagram showing the Heltec WiFi LoRa 32 V3 board connected to the KY-015/DHT11 (GPIO~7), ELB0604 photoresistor (GPIO~1), and KY-038 sound sensor (GPIO~2), all powered at 3.3\,V.}
 
-\begin{center}
-\includegraphics[width=0.60\textwidth]{figures/wiring_diagram.png}
-\end{center}
-
-\textit{(b) Sensor assembly: KY-015/DHT11 (left), KY-038 microphone (middle), ELB0604 photoresistor (right), wired to the Heltec WiFi LoRa 32 V3 on a mini breadboard, powered via USB.}
-
-\begin{center}
-\includegraphics[width=0.60\textwidth]{figures/sensor_assembly.png}
-\end{center}
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/wiring_diagram.png}
+\par\vspace{4pt}
+\textit{\small (a) Circuit diagram showing the Heltec WiFi LoRa 32 V3 board connected to the KY-015/DHT11 (GPIO~7), ELB0604 photoresistor (GPIO~1), and KY-038 sound sensor (GPIO~2), all powered at 3.3\,V.}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/sensor_assembly.png}
+\par\vspace{4pt}
+\textit{\small (b) Sensor assembly: KY-015/DHT11 (left), KY-038 microphone (middle), ELB0604 photoresistor (right), wired to the Heltec WiFi LoRa 32 V3 on a mini breadboard, powered via USB.}
+\end{minipage}
+\end{figure}
 
 \subsection*{Appendix B: Data Flow Diagram}
 \textit{Diagram showing the end-to-end data pipeline: three sources (Heltec board via USB serial, Breathe London API, Ultrahuman app) producing raw CSV files, combined into a unified dataset, feeding into the Jupyter notebook analysis and Streamlit dashboard.}
