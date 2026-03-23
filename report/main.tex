@@ -352,12 +352,23 @@ Three design principles guided the dashboard's interface: a progressive page str
 
 \textbf{Three-page structure.} Rather than presenting all data on a single scrolling page, the dashboard splits content across three pages so that users see summary-level information first and can drill into detail when needed.
 
-\begin{tcolorbox}[colback=imperialblue!5, colframe=imperialblue!60, left=4mm, right=4mm, top=2mm, bottom=2mm, boxrule=0pt, borderline west={3pt}{0pt}{imperialblue!60}]
+\begin{tcolorbox}[
+  colback=imperialblue!5,
+  colframe=imperialblue,
+  leftrule=3pt,
+  rightrule=0pt,
+  toprule=0pt,
+  bottomrule=0pt,
+  boxsep=4pt,
+  left=8pt,
+  right=8pt,
+  sharp corners
+]
 Each page targets a distinct user question:
 \begin{itemize}[nosep]
-    \item Page~1 (Sleep Dashboard): ``how did I sleep this fortnight?''
-    \item Page~2 (Night Explorer): ``what happened on a specific night?''
-    \item Page~3 (My Sleep Insights): ``what should I change?''
+    \item Page~1 (Sleep Dashboard): ``how did I sleep this \textbf{fortnight}?''
+    \item Page~2 (Night Explorer): ``what happened on a \textbf{specific night}?''
+    \item Page~3 (My Sleep Insights): ``what should I \textbf{change}?''
 \end{itemize}
 \end{tcolorbox}
 
