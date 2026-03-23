@@ -348,15 +348,18 @@ The dashboard, named RestNet, was built using Streamlit, a Python framework for 
 
 \subsubsection{User Interface Design}
 
-The dashboard's design involved a number of decisions around how the data is structured across pages, how colour coding is used to organise that structure, and how the information is presented to be easy to understand.
+Three design principles guided the dashboard's interface: a progressive page structure, consistent colour coding, and plain-language readability.
 
-\textbf{Three-page structure.} Rather than presenting all data on a single scrolling page, the dashboard splits content across three pages so that users see summary-level information first and can drill into detail when needed. Each page targets a distinct user question:
+\textbf{Three-page structure.} Rather than presenting all data on a single scrolling page, the dashboard splits content across three pages so that users see summary-level information first and can drill into detail when needed.
 
+\begin{tcolorbox}[colback=imperialblue!5, colframe=imperialblue!60, left=4mm, right=4mm, top=2mm, bottom=2mm, boxrule=0pt, borderline west={3pt}{0pt}{imperialblue!60}]
+Each page targets a distinct user question:
 \begin{itemize}[nosep]
     \item Page~1 (Sleep Dashboard): ``how did I sleep this fortnight?''
     \item Page~2 (Night Explorer): ``what happened on a specific night?''
     \item Page~3 (My Sleep Insights): ``what should I change?''
 \end{itemize}
+\end{tcolorbox}
 
 \textbf{Colour scheme.} The dashboard uses a dark theme because the primary user context is reviewing sleep data, often in the evening or at night. A dark interface reduces eye strain and feels contextually appropriate, with a warm coral accent providing contrast without harsh brightness. Two colour systems operate across the dashboard:
 
