@@ -221,11 +221,11 @@ The Arduino sketch computes both sound average and sound peak each minute, and b
 
 \textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm. The exact formula is not published, so it is treated as a ``black box'' measure in this study. To aid interpretation in the dashboard, sleep scores are grouped into three quality tiers: green ($\geq$80), gold (70--79), and red ($<$70).
 
+\subsubsection{Physical Installation and Sensor Limitations}
+
 \textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the assembled sensor setup are provided in Appendix~A.
 
-\subsubsection{Sensor Limitations and Upgrade Path}
-
-Table~\ref{tab:upgrades} summarises the key limitation of each sensor and a recommended upgrade that would address it.
+\textbf{Sensor limitations and upgrade path.} Table~\ref{tab:upgrades} summarises the key limitation of each sensor and a recommended upgrade that would address it.
 
 \begin{table}[H]
 \centering
