@@ -23,6 +23,7 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{pdflscape}
+\usepackage[most]{tcolorbox}
 
 % ── Colours ───────────────────────────────────────────────────────────
 \definecolor{imperialblue}{RGB}{0,62,116}
@@ -117,7 +118,20 @@ Over 14 consecutive nights (9 to 22 February 2026), three data sources were coll
 
 Across all four analyses, noise variability (the standard deviation of sound readings) had the strongest statistical association with sleep quality, with a Spearman correlation of $r = -0.80$ ($p < 0.01$). A regression model combining noise variability with humidity explained 64.3\% of the variance in sleep score, though noise variability was the only predictor that reached statistical significance in that model. Humidity, mean noise level, and temperature range also showed statistically significant Spearman correlations with sleep score individually. Light, PM2.5, and NO\textsubscript{2} showed no significant associations. The median-split and intra-night analyses confirmed these patterns, showing that poor sleep nights were consistently noisier, more humid, and characterised by repeated noise spikes rather than sustained loudness.
 
+\begin{tcolorbox}[
+  colback=imperialblue!5,
+  colframe=imperialblue,
+  leftrule=3pt,
+  rightrule=0pt,
+  toprule=0pt,
+  bottomrule=0pt,
+  boxsep=4pt,
+  left=8pt,
+  right=8pt,
+  sharp corners
+]
 Based on the above findings, reducing noise variability through strategies such as earplugs, white noise, or improved window insulation is the most practical change suggested by this dataset. The findings are based on one participant over 14 nights and should be treated as indicative rather than generalisable.
+\end{tcolorbox}
 
 % ══════════════════════════════════════════════════════════════════════
 \section*{Part 1: Sensing}
