@@ -168,7 +168,7 @@ This study investigates the relationship between bedroom environment conditions 
 \end{enumerate}
 \end{tcolorbox}
 
-Two factors make this study feasible. First, low-cost IoT hardware now makes personal environment monitoring even more feasible without specialist equipment. A microcontroller board and a handful of sensors costing under \pounds30 can continuously log temperature, humidity, light, and noise throughout the night. Second, the study location, a central London flat facing a busy road, provides a naturalistic setting where noise, air quality, and other conditions vary meaningfully from night to night. Together, these make it possible to monitor multiple bedroom environment variables alongside sleep quality in a real home setting, an area where relatively few studies have been conducted. While the study is based on a single participant over 14 nights, it provides suggestive results on which bedroom conditions matter most for sleep and demonstrates an affordable, replicable approach to home-based sleep environment monitoring.
+Two factors make this study feasible. First, low-cost IoT hardware now makes personal environment monitoring even more feasible without specialist equipment. A microcontroller board and a handful of sensors costing under \pounds30 can continuously log temperature, humidity, light, and noise throughout the night. Second, the study location, a central London flat facing a busy road, provides a naturalistic setting where noise, air quality, and other conditions vary meaningfully from night to night. Together, these make it possible to monitor multiple bedroom environment variables alongside sleep quality in a real home setting, an area where relatively few studies have been conducted. \textit{While the study is based on a single participant over 14 nights, it provides suggestive results on which bedroom conditions matter most for sleep and demonstrates an affordable, replicable approach to home-based sleep environment monitoring.}
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Sources and Sensing Set-up}
@@ -192,18 +192,18 @@ Table~\ref{tab:sources} summarises each source, its collection method, and measu
 \toprule
 \textbf{\#} & \textbf{Data Source} & \textbf{Collection Method} & \textbf{Parameters} & \textbf{Frequency} \\
 \midrule
-1 & Bedroom sensors & Heltec WiFi LoRa 32 V3 with DHT11, photoresistor, KY-038 mic, USB serial & Temperature, humidity, light, sound avg, sound peak & Every minute \\
+1 & Bedroom sensors & Heltec WiFi LoRa 32 V3 with DHT11, photoresistor, KY-038 mic via USB serial & Temperature, humidity, light, sound average, sound peak & Every minute \\
 \midrule
-2 & Air quality & Breathe London API, Horseferry Rd sensor (BL0046) & NO\textsubscript{2} (\textmu g/m\textsuperscript{3}), PM2.5 (\textmu g/m\textsuperscript{3}) & Hourly \\
+2 & Air quality & Horseferry Road sensor (BL0046) via Breathe London REST API & NO\textsubscript{2} (\textmu g/m\textsuperscript{3}), PM2.5 (\textmu g/m\textsuperscript{3}) & Hourly \\
 \midrule
-3 & Sleep metrics & Ultrahuman Ring Air wearable, manual export & Sleep score, total sleep, awake time, deep/REM/light sleep & Daily \\
+3 & Sleep metrics & Ultrahuman Ring Air wearable via manual CSV export & Sleep score, total sleep, awake time, deep sleep, REM sleep, light sleep & Daily \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Subsection~1.2.1 describes each source in detail. Subsection~1.2.2 covers the physical installation and sensor limitations.
-
 \subsubsection{Data Sources}
+
+Each of the three data sources is described below.
 
 \textbf{Source 1: Bedroom environment sensors.} The Heltec WiFi LoRa 32 V3 development board (ESP32-S3 microcontroller) was chosen as it provides analog-to-digital conversion pins required by the KY-038 sound sensor, as well as digital GPIO for the other sensors. Three sensors were connected, all powered at 3.3\,V to remain within the safe operating range of the ESP32-S3. Table~\ref{tab:sensorspecs} details each sensor's specifications and signal processing.
 
@@ -232,6 +232,8 @@ The Arduino sketch computes both sound average and sound peak each minute, and b
 \textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm. The exact formula is not published, so it is treated as a ``black box'' measure in this study. To aid interpretation in the dashboard, sleep scores are grouped into three quality tiers: green ($\geq$80), gold (70--79), and red ($<$70).
 
 \subsubsection{System Design and Limitations}
+
+This section covers the physical installation and sensor limitations.
 
 \textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the sensor assembly are provided in Appendix~A.
 
