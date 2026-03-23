@@ -210,7 +210,7 @@ KY-015 / DHT11 & Temperature, humidity & \textbullet{} $\pm2$\,\textdegree C, $\
 \midrule
 ELB0604 photoresistor & Light detection & \textbullet{} Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as a manually adjustable threshold comparator \newline \textbullet{} Potentiometer manually calibrated to bedroom ambient light conditions \newline \textbullet{} Module outputs 0 for light and 1 for dark; inverted in the Arduino sketch so that 1 = light detected, which is more intuitive \\
 \midrule
-KY-038 microphone & Sound level & \textbullet{} Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \newline \textbullet{} Raw analog readings on a 0--4095 scale \newline \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute). The Arduino sketch then computes two summary features per minute: sound average (sum/count) and sound peak (max in interval) \\
+KY-038 microphone & Sound level & \textbullet{} Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \newline \textbullet{} Raw analog readings on a 0--4095 scale \newline \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute) \\
 \bottomrule
 \end{tabularx}
 \end{table}
