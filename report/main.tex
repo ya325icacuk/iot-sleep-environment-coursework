@@ -477,7 +477,15 @@ All three models are statistically significant ($p < 0.05$), with Sleep Score sh
 
 \textbf{Step 4: Optimal conditions comparison (median split).} To compare how bedroom conditions differ between good and poor sleep nights, the 14 nights are split at the median sleep score into the top 7 (``good sleep'', scores 86--96) and bottom 7 (``poor sleep'', scores 66--82). A descriptive comparison was used given the low test power at $n = 7$ per group. Mean noise was 15.2 points higher on poor nights (86.0 vs 70.7), noise variability was greater (22.2 vs 20.3), and humidity was 5.3 percentage points higher (53.4\% vs 48.1\%). Temperature differed by only 0.6\,\textdegree C. Light, PM2.5, and NO\textsubscript{2} showed negligible differences (all $<$1 unit).
 
-\textbf{Step 5: Intra-night profiles.} Steps 2--4 use nightly aggregates and cannot capture variation within a single night. To examine how conditions evolved overnight, minute-by-minute sensor data for the best and worst sleep nights was plotted side by side. The worst night was warmer (20.5\,\textdegree C vs 18.6\,\textdegree C), more humid ($\sim$58\% vs $\sim$44\%), and had more frequent noise spikes, particularly around 11\,pm--1\,am and after 5\,am. The best night had early spikes but settled into a quieter, more stable pattern overnight.
+\textbf{Step 5: Intra-night profiles.} Steps 2--4 use nightly aggregates and cannot capture variation within a single night. To examine how conditions evolved overnight, minute-by-minute sensor data for the best and worst sleep nights was plotted side by side. The worst night was warmer (20.5\,\textdegree C vs 18.6\,\textdegree C), more humid ($\sim$58\% vs $\sim$44\%), and had more frequent noise spikes, particularly around 11\,pm--1\,am and after 5\,am. The best night had early spikes but settled into a quieter, more stable pattern overnight. This illustrates why noise variability (not just average level) emerged as the dominant predictor.
+
+\subsubsection{Key Findings by Study Objective}
+
+\textbf{Objective~1:} to identify which bedroom conditions are most strongly associated with sleep quality. Spearman correlation (Step~2) identified four statistically significant predictors of sleep score: noise variability ($r = -0.80$), humidity ($r = -0.70$), noise level ($r = -0.69$), and temperature range ($r = -0.56$). Light, PM2.5, and NO\textsubscript{2} showed no significant associations. NO\textsubscript{2} and PM2.5 stayed well within WHO guidelines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}) throughout the study, so the inability to detect an effect may reflect genuinely clean overnight air during this winter period rather than an absence of any relationship. WHO guidelines are based on 24-hour averages, while this study uses overnight-only data, so comparisons are indicative rather than direct.
+
+\textbf{Objective~2:} to explore whether these associations hold when multiple conditions are considered together. OLS regression (Step~3) showed that when multiple predictors are combined, noise variability was the only factor that retained statistical significance. Humidity and noise level did not reach significance once noise variability was accounted for, suggesting they may be partially confounded with noise patterns rather than acting as independent sleep disruptors. With $n = 14$, the study lacks power to disentangle more subtle interactions.
+
+\textbf{Objective~3:} to compare how bedroom conditions differ between good and poor sleep nights. The median-split comparison (Step~4) showed that the seven poorest sleep nights had substantially higher mean noise, greater noise variability, and higher humidity than the seven best. Intra-night profiling (Step~5) confirmed that the pattern of repeated noise spikes, not sustained loudness, most distinguishes good from poor sleep.
 
 \begin{tcolorbox}[
   colback=imperialblue!5,
@@ -491,18 +499,8 @@ All three models are statistically significant ($p < 0.05$), with Sleep Score sh
   right=8pt,
   sharp corners
 ]
-This illustrates why \textbf{noise variability} (not just average level) emerged as the \textbf{dominant predictor}.
+Overall, \textbf{noise variability} emerged as the factor with the \textbf{strongest and most consistent association} with sleep quality across correlation, regression, group comparison, and intra-night profiling.
 \end{tcolorbox}
-
-\subsubsection{Key Findings by Study Objective}
-
-\textbf{Objective~1:} to identify which bedroom conditions are most strongly associated with sleep quality. Spearman correlation (Step~2) identified four statistically significant predictors of sleep score: noise variability ($r = -0.80$), humidity ($r = -0.70$), noise level ($r = -0.69$), and temperature range ($r = -0.56$). Light, PM2.5, and NO\textsubscript{2} showed no significant associations. NO\textsubscript{2} and PM2.5 stayed well within WHO guidelines (15\,\textmu g/m\textsuperscript{3} for PM2.5, 25\,\textmu g/m\textsuperscript{3} for NO\textsubscript{2}) throughout the study, so the inability to detect an effect may reflect genuinely clean overnight air during this winter period rather than an absence of any relationship. WHO guidelines are based on 24-hour averages, while this study uses overnight-only data, so comparisons are indicative rather than direct.
-
-\textbf{Objective~2:} to explore whether these associations hold when multiple conditions are considered together. OLS regression (Step~3) showed that when multiple predictors are combined, noise variability was the only factor that retained statistical significance. Humidity and noise level did not reach significance once noise variability was accounted for, suggesting they may be partially confounded with noise patterns rather than acting as independent sleep disruptors. With $n = 14$, the study lacks power to disentangle more subtle interactions.
-
-\textbf{Objective~3:} to compare how bedroom conditions differ between good and poor sleep nights. The median-split comparison (Step~4) showed that the seven poorest sleep nights had substantially higher mean noise, greater noise variability, and higher humidity than the seven best. Intra-night profiling (Step~5) confirmed that the pattern of repeated noise spikes, not sustained loudness, most distinguishes good from poor sleep.
-
-Overall, noise variability emerged as the factor with the strongest and most consistent association with sleep quality across correlation, regression, group comparison, and intra-night profiling.
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Discussions on the Important Aspects of the Project}
