@@ -638,21 +638,24 @@ Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants a
 \end{minipage}
 \end{figure}
 
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Appendix B: Data Flow Diagram}
-\textit{End-to-end data pipeline: three sources (Heltec board, Breathe London API, Ultrahuman app) producing CSV files, unified into a single dataset for notebook analysis and Streamlit dashboard.}
+\textit{\small End-to-end data pipeline: three sources (Heltec board, Breathe London API, Ultrahuman app) producing CSV files, unified into a single dataset for notebook analysis and Streamlit dashboard.}
 
-\begin{center}
-\includegraphics[width=0.60\textwidth]{data_flow_pipeline.png}
-\end{center}
-
-\clearpage
+\vspace{4pt}
+\centering
+\includegraphics[width=\textwidth]{data_flow_pipeline.png}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Appendix C: Spearman Correlation Heatmap}
-\vspace{-2pt}
 \textit{\small Heatmap showing Spearman rank correlations between all 12 environment features and 6 sleep metrics, with significance stars ($^*\,p < 0.05$, $^{**}\,p < 0.01$).}
 
-\begin{center}
-\includegraphics[width=0.65\textwidth]{spearman_corr_heatmap.png}
-\end{center}
+\vspace{4pt}
+\centering
+\includegraphics[width=\textwidth]{spearman_corr_heatmap.png}
+\end{minipage}
 
 \vspace{-4pt}
 \subsection*{Appendix D: Good vs Poor Sleep Nights}
