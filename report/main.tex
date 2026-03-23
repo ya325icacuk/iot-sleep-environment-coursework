@@ -250,7 +250,7 @@ KY-038 microphone & Outputs a raw voltage with no calibration to decibels or sou
 
 This section describes how each data source was collected, stored, and communicated to the analysis pipeline. The end-to-end data flow, from raw data sources through to the three CSV files used in Part~2, is illustrated in Appendix~B. The accompanying code for all collection, retrieval, and preprocessing steps can be found in Part~1 of the \texttt{sleep\_analysis} notebook.
 
-\subsubsection{Data Collection}
+\subsubsection{Data Collection and Communication}
 
 \textbf{Bedroom sensors.} The most complex collection path was the bedroom sensors. USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. No readings were lost to network dropouts over the 14-night study. The data moves through four stages:
 
@@ -265,7 +265,7 @@ This section describes how each data source was collected, stored, and communica
 
 \textbf{Sleep data.} The sleep data was the simplest to collect. The Ultrahuman data was downloaded manually from the website at the end of the collection period and saved as \texttt{ultrahuman\_sleep\_data.csv}.
 
-\subsubsection{Local Storage and Trade-offs}
+\subsubsection{Storage and Trade-offs}
 
 All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private.
 
