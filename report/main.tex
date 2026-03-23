@@ -4,7 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[margin=1.5cm]{geometry}
+\usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
@@ -65,12 +65,13 @@
 
 {\LARGE\bfseries ELEC70126: Internet of Things and Applications}
 
-\vspace{2.5cm}
+\vspace{0.5cm}
+{\large Imperial College London}
+
+\vspace{2cm}
 
 \begin{tabular}{@{} >{\bfseries}l l @{}}
 \toprule
-Module Code \& Name & \textit{ELEC70126: Internet of Things and Applications} \\
-\midrule
 Student CID & \textit{06053600} \\
 \midrule
 Student Name & \textit{Yasmin Akhmedova} \\
@@ -86,42 +87,20 @@ Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.stream
 \bottomrule
 \end{tabular}
 
-\vspace{1cm}
-% TODO removed: repo will remain public, participant anonymised as User Y.A.
+\vspace{1.5cm}
 
-\vspace{0.3cm}
-{\small\color{red}\textbf{TODO:} Price vs Usability trade-off not explicitly covered. Suggested location: Appendix~J Table~7.}
+{\large\bfseries Contents}
 
-\vspace{0.1cm}
-{\small\color{red}\textbf{TODO:} Functionality vs Usability trade-off. Partially covered in Section~2.1 (notebook vs dashboard). Confirm explicit enough or add to Table~7.}
+\vspace{0.4cm}
 
-\vspace{0.1cm}
-{\small\color{red}\textbf{TODO:} Functionality vs Rapid development trade-off not explicitly covered. Suggested: Appendix~J Table~7.}
-
-\vspace{0.1cm}
-{\small\color{red}\textbf{TODO:} Price vs Robustness/Reliability trade-off only partially covered. May need own row in Table~7.}
-
-\vspace{0.5cm}
-{\small\color{red}\textbf{TODO: Marking criteria trade-offs status:}}
-
-\vspace{0.2cm}
-{\small\color{red}
-\begin{tabular}{p{4.5cm} p{2cm} p{7cm}}
-\textbf{Trade-off} & \textbf{Status} & \textbf{Notes} \\
-\hline
-Throughput vs. Power consumption & Not addressed & Not covered anywhere \\
-\midrule
-Latency / Delay vs. Accuracy & Partially & Section 1.4.3 discusses latency but not framed as a trade-off against accuracy \\
-\midrule
-Performance vs. Security & Not addressed & Not covered anywhere \\
-\midrule
-Price vs. Usability & Not addressed & TODO on your front page \\
-\midrule
-Functionality vs. Usability & Partially & 2.1.2 describes the choices but doesn't explicitly frame them as this trade-off \\
-\midrule
-Functionality vs. Backward compatibility & Not addressed & Arguably not relevant to this project \\
+\begin{tabular}{@{} l @{\dotfill} r @{}}
+Executive Summary & 1 \\[3pt]
+Part 1: Sensing & 2 \\[3pt]
+Part 2: Internet of Things & 6 \\[3pt]
+Conclusion & 10 \\[3pt]
+References & 10 \\[3pt]
+Appendix: Figures and Illustrations & 12 \\
 \end{tabular}
-}
 
 \vspace{\fill}
 \end{center}
@@ -129,13 +108,11 @@ Functionality vs. Backward compatibility & Not addressed & Arguably not relevant
 
 % ── Executive Summary ─────────────────────────────────────────────────
 \section*{Executive Summary}
-{\small\color{red}\textbf{TODO:} Tweak executive summary when the paper is done.}\vspace{0.5em}
-
-Sleep quality is a growing public health concern. Average scores among users of the Sleep Cycle app fell by 0.46\% between 2023 and 2024~\citep{sleepcycle2025}, and a survey of over 30,000 respondents across 13 countries found that people report losing nearly three nights of restorative sleep each week~\citep{resmed2025}. Environmental factors including noise, temperature, humidity, light, and air quality are all known to affect sleep~\citep{caddick2018,yasmeen2025}. However, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\citep{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking. This report addresses that gap by investigating which bedroom environment conditions are most strongly associated with sleep quality, using affordable IoT hardware in a real London bedroom. It describes the sensing setup, data collection pipeline, statistical analysis, and an interactive dashboard built to present the findings.
+Sleep quality is a growing public health concern. Average sleep quality scores among users of the Sleep Cycle app declined between 2023 and 2024~\citep{sleepcycle2025}, and a survey of over 30,000 respondents across 13 countries found that people report losing nearly three nights of restorative sleep each week~\citep{resmed2025}. Environmental factors including noise, temperature, humidity, light, and air quality are all known to affect sleep~\citep{caddick2018,yasmeen2025}. However, studies that objectively assess multiple bedroom environment variables alongside sleep in real home settings remain scarce~\citep{basner2023}, and fewer still combine low-cost sensor data with consumer wearable sleep tracking. This report addresses that gap by investigating which bedroom environment conditions are most strongly associated with sleep quality, using affordable IoT hardware costing under \pounds30 in a real London bedroom. It describes the sensing setup, data collection pipeline, statistical analysis, and RestNet, an interactive Streamlit dashboard built to communicate the findings to non-technical users.
 
 Over 14 consecutive nights (9 to 22 February 2026), three data sources were collected: a custom sensor system logging temperature, humidity, light, and sound, hourly air quality data from the Breathe London API, and daily sleep metrics from an Ultrahuman Ring wearable. All data was filtered to a consistent 11\,pm to 9\,am sleep window and analysed using four methods: Spearman correlation to identify which factors relate to sleep quality, OLS regression to test their combined effects, a median-split comparison of the seven best versus seven worst nights, and minute-by-minute comparison of individual nights to examine how conditions changed across the night.
 
-Across all four analyses, noise variability (the standard deviation of sound readings) had the strongest statistical association with sleep quality, with a Spearman correlation of $r = -0.80$ ($p < 0.01$). A regression model combining noise variability with humidity explained 64.3\% of the variance in sleep score (Adj~$R^2 = 0.643$), though noise variability was the only predictor that reached statistical significance in that model. Humidity ($r = -0.70$), mean noise level ($r = -0.69$), and temperature range ($r = -0.56$) also showed statistically significant Spearman correlations with sleep score individually. Light, PM2.5, and NO\textsubscript{2} showed no statistically significant Spearman correlations with sleep quality.
+Across all four analyses, noise variability (the standard deviation of sound readings) had the strongest statistical association with sleep quality, with a Spearman correlation of $r = -0.80$ ($p < 0.01$). A regression model combining noise variability with humidity explained 64.3\% of the variance in sleep score (Adj~$R^2 = 0.643$), though noise variability was the only predictor that reached statistical significance in that model. Humidity ($r = -0.70$), mean noise level ($r = -0.69$), and temperature range ($r = -0.56$) also showed statistically significant Spearman correlations with sleep score individually. Light, PM2.5, and NO\textsubscript{2} showed no significant associations. The median-split and intra-night analyses confirmed these patterns, showing that poor sleep nights were consistently noisier, more humid, and characterised by repeated noise spikes rather than sustained loudness.
 
 Based on the above findings, reducing noise variability through strategies such as earplugs, white noise, or improved window insulation is the most practical change suggested by this dataset. The findings are based on one participant over 14 winter nights and should be treated as indicative rather than generalisable.
 
@@ -222,7 +199,7 @@ The Arduino sketch computes both sound average and sound peak each minute, and b
 
 \subsubsection{System Design and Limitations}
 
-\textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the setup are provided in Appendices~A and~B.
+\textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the sensor assembly are provided in Appendix~A.
 
 \textbf{Sensor limitations and upgrade path.} Understanding the limitations of the current sensors is important for interpreting the results and for planning improvements in future iterations. Table~\ref{tab:upgrades} summarises the key limitation of each sensor and a recommended upgrade that would address it.
 
@@ -247,7 +224,7 @@ KY-038 microphone & Outputs a raw voltage with no calibration to decibels or sou
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Collection and Storage/Communications Process}
 
-This section describes how each data source was collected, stored, and communicated to the analysis pipeline. Subsection~1.3.1 covers the collection process for each of the three sources. Subsection~1.3.2 explains the storage and communication design choices and their trade-offs. The end-to-end data flow, from raw data sources through to the three CSV files used in Part~2, is illustrated in Appendix~C. The accompanying code for all collection, retrieval, and preprocessing steps can be found in Part~1 of the \texttt{sleep\_analysis} notebook.
+This section describes how each data source was collected, stored, and communicated to the analysis pipeline. Subsection~1.3.1 covers the collection process for each of the three sources. Subsection~1.3.2 explains the storage and communication design choices and their trade-offs. The end-to-end data flow, from raw data sources through to the three CSV files used in Part~2, is illustrated in Appendix~B. The accompanying code for all collection, retrieval, and preprocessing steps can be found in Part~1 of the \texttt{sleep\_analysis} notebook.
 
 \subsubsection{Data Collection}
 
@@ -263,7 +240,7 @@ The three sources use distinct communication paths: USB serial for the bedroom s
 
 USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable. No readings were lost to network dropouts over the 14-night study. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. The Breathe London data was retrieved via API rather than scraped from the website, as the API provides structured JSON that is easier to work with and can be filtered and transformed programmatically.
 
-All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private. The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~J (Table~\ref{tab:tradeoffs-hw}).
+All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private. The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~F (Table~\ref{tab:tradeoffs-hw}).
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
@@ -373,7 +350,7 @@ The dashboard's design involved a number of decisions around how the data is str
 
 \textbf{Readability.} All graphs are interactive: users can hover over any data point to see its exact value, zoom into specific time ranges, and pan across the timeline. All labels use plain language (e.g.\ ``Noise Variability'' rather than ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. Matplotlib was retained in the notebook where static figures are more appropriate.
 
-Further platform and visualisation trade-offs are summarised in Appendix~K (Table~\ref{tab:tradeoffs-vis}).
+Further platform and visualisation trade-offs are summarised in Appendix~G (Table~\ref{tab:tradeoffs-vis}).
 
 \subsubsection{Dashboard Pages}
 
@@ -484,7 +461,7 @@ Overall, noise variability emerged as the factor with the strongest and most con
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Discussions on the Important Aspects of the Project}
 
-This section reflects on the limitations of the study and considerations around privacy, ethics, and scalability.
+This section reflects on the limitations of the study and considerations around privacy, ethics, and security.
 
 \subsubsection{Limitations and Data Quality}
 
@@ -502,36 +479,29 @@ This subsection consolidates and expands on the key limitations raised throughou
 
 \subsubsection{Privacy, Ethics, and Security}
 
-\textbf{Privacy and ethical considerations.} The study collects personal sleep data (sleep score, duration, sleep stage breakdown) from a wearable device, alongside continuous bedroom environment monitoring. Several steps were taken to handle this responsibly. All data is stored locally as CSV files on the researcher's laptop, with no cloud database or third-party storage involved. The Streamlit dashboard is read-only and displays only aggregated or anonymised data. The GitHub repository is public to support reproducibility, but no personally identifiable information beyond anonymised sleep metrics is included. The dashboard displays the participant as ``User Y.A.'' rather than by full name. If this system were deployed for multiple users, a formal data protection framework would be needed, including informed consent, encrypted storage, and compliance with GDPR given the UK context. The sound sensor captures noise levels but not audio recordings, avoiding the more intrusive privacy concerns associated with bedroom microphones.
+\textbf{Privacy.} The study collects two categories of personal data: sleep metrics from a wearable device (sleep score, duration, stage breakdown) and continuous bedroom environment readings (temperature, humidity, noise, light). Under the UK GDPR~\citep{ukgdpr2018}, sleep data qualifies as health-related personal data (Article~9), which requires both a lawful basis for processing and a specific condition for handling special category data. As the sole participant and data subject, the researcher provided implicit consent for processing their own data, satisfying the explicit consent condition under the regulation. A multi-user deployment would require written informed consent specifying what data is collected, how long it is retained, and the right to withdraw. Several steps were taken to minimise privacy risk: all data is stored locally as CSV files with no cloud database or third-party storage, the dashboard displays the participant as ``User Y.A.'' rather than by full name, and the public GitHub repository uses pseudonymised data with no direct identifiers beyond dates and the repository username. Full anonymisation would require removing dates and hosting under a non-identifying account.
 
-\textbf{Data quality considerations.} The dataset has several characteristics that affect interpretation. The sound sensor is uncalibrated (raw analog values, not decibels), so noise readings cannot be compared directly with published WHO thresholds. The light sensor is binary (on/off), missing the gradations that a lux sensor would capture. The Ultrahuman sleep score is a proprietary metric whose algorithm is not published, making it a ``black box'' outcome variable. Air quality data comes from an outdoor sensor approximately 500\,m from the study location and may not reflect actual indoor exposure. These data limitations are partially offset by the study's focus on relative patterns (which nights were noisier, more humid) rather than absolute thresholds.
+\textbf{Ethics.} Continuous bedroom monitoring raises ethical considerations even in a self-study. The sound sensor records noise levels (analog voltage) rather than audio, avoiding the more intrusive concerns of bedroom audio capture. However, if deployed in shared households, the system would passively monitor the sleep environment of other occupants who have not consented. The ICO's draft guidance on consumer IoT products~\citep{ico2025iot} notes that IoT devices can process special category data including health information, and that data protection law applies to the manufacturer even when users process data in a domestic setting. A multi-participant study would also require a clear data retention policy (e.g.\ deletion after analysis) and transparency about how findings are used.
 
-\subsubsection{System Architecture and Scalability}
-
-\textbf{Integration pipeline.} The system follows a linear pipeline: hardware sensors $\rightarrow$ serial capture $\rightarrow$ CSV files $\rightarrow$ analysis (notebook) $\rightarrow$ visualisation (dashboard). There is no feedback loop: the system senses and reports but does not actuate or intervene. This was a deliberate choice for an observational study, as changing conditions mid-study would confound the analysis. Section~2.4 proposes how future iterations could close the loop with real-time alerts and smart home integration.
-
-\textbf{Scalability.} The current system monitors a single room for a single participant. Scaling to multiple rooms or participants would require replacing USB serial with wireless communication (WiFi or LoRa), moving from local CSV storage to a cloud database, and adding user authentication to the dashboard. The Heltec board's built-in WiFi and LoRa radios were not used in this study because USB serial was simpler for a bedside setup, but they provide a clear upgrade path. The Streamlit dashboard already supports deployment via Streamlit Community Cloud, so the visualisation layer would scale with minimal changes.
-
-\textbf{Challenges and lessons learned.} Key challenges included macOS putting the laptop to sleep during overnight collection (resolved with Amphetamine), API timeouts when fetching air quality data (resolved by splitting into weekly chunks), and the sound sampling iteration (initially 1/min, revised to 5\,ms high-frequency sampling after early tests missed transient noise events like traffic spikes and door slams). In hindsight, investing in a calibrated sound sensor (INMP441) from the start would have enabled direct comparison with WHO noise guidelines and strengthened the study's practical recommendations.
+\textbf{Security.} Data is currently stored as unencrypted CSV files on a single laptop, which presents a risk if the device is lost or stolen. The Streamlit dashboard is served over HTTPS (provided by Streamlit Community Cloud), but there is no user authentication, meaning anyone with the URL can view the data. For a production deployment, the following measures would be needed: encrypted storage at rest (e.g.\ AES-256), user authentication on the dashboard, secure API endpoints if sensor data were transmitted wirelessly, and regular backups to prevent data loss. The current USB serial connection avoids wireless interception risks but limits the system to a single-room, single-device setup.
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Avenues for Future Work and Potential Impact}
 
-\subsubsection{Hardware and Study Design Improvements}
+The findings and limitations discussed in Section~2.3 point to several directions for improving and extending this study, ranging from straightforward hardware upgrades to broader applications.
 
-\textbf{Better sensors.} A BME280 would provide $\pm1$\,\textdegree C temperature accuracy, $\pm3$\%\,RH humidity, and barometric pressure. A BH1750 would provide calibrated lux readings, enabling comparison with published light thresholds. An INMP441 I2S digital microphone would enable frequency-domain analysis and dB calibration. A CO\textsubscript{2} sensor (e.g.\ SCD40) would serve as a ventilation proxy, since CO\textsubscript{2} buildup in closed bedrooms is a known sleep disruptor.
+\subsubsection{Future Extensions}
 
-\textbf{Longer study and multiple participants.} A study of three or more months would capture seasonal variation, increase statistical power, and enable stronger regression models with additional predictors. Including multiple participants would enable generalisable conclusions and reveal individual differences in environmental sensitivity.
+\textbf{Sensor upgrades.} Replacing the current temperature, humidity, light, and sound sensors with calibrated alternatives (e.g.\ decibel-rated microphone, lux-capable light sensor) would allow direct comparison with published health guidelines such as the WHO night noise guideline of $<$40\,dB L\textsubscript{night,outside}~\citep{who2009}. Beyond improving existing measurements, the kit could be extended with entirely new sensors: a CO\textsubscript{2} sensor (e.g.\ SCD40) would add a ventilation proxy, since elevated CO\textsubscript{2} in closed bedrooms has been associated with reduced sleep quality~\citep{basner2023, caddick2018}, and a barometric pressure sensor could potentially capture weather-related changes that may affect sleep. 
+\textbf{Longer study and multiple participants.} Extending the study to three months ($n \approx 90$ nights) would help capture subtler effects such as temperature or light, which may require larger samples to reach statistical significance. Depending on timing, it could also cover seasonal variation (e.g.\ winter into spring) and support more predictors per regression model without overfitting. Including multiple participants would help test whether noise variability is a broadly relevant sleep disruptor or specific to this individual and location, and could enable between-subject comparisons across different bedroom setups and neighbourhoods.
 
-\subsubsection{System Extensions}
+\textbf{Real-time alerts and smart home integration.} The current system is open-loop: it records conditions but cannot intervene. The Heltec board's built-in WiFi or LoRa radio could close this loop by pushing alerts when conditions exceed the good-sleep group means identified in Step~4 (e.g.\ noise variability rising above 20.3, humidity exceeding 48\%). This could extend to smart home actuation: triggering a white noise machine when noise spikes are detected, or a dehumidifier when humidity rises, creating a closed-loop system (sense $\rightarrow$ assess $\rightarrow$ intervene $\rightarrow$ measure outcome).
 
-\textbf{Real-time alerts and smart home integration.} The Heltec board's WiFi or LoRa radio could be used to push notifications when conditions deteriorate (e.g.\ humidity spike, sustained noise event), triggering within-night interventions rather than next-morning retrospective analysis. This could extend to smart home integration: triggering fans, dehumidifiers, or white noise machines based on sensor thresholds derived from the optimal ranges analysis, creating a closed-loop actuation system (sense $\rightarrow$ assess $\rightarrow$ intervene $\rightarrow$ measure outcome).
-
-\textbf{Machine learning prediction.} With sufficient data, a sleep quality classifier (e.g.\ random forest, gradient boosting) could be trained on environment features to predict tonight's expected sleep quality from current bedroom conditions.
+\textbf{Machine learning prediction.} With sufficient data (e.g.\ 90+ nights from a longer study), a sleep quality classifier such as random forest or gradient boosting could be trained on the 12 environment features to predict tonight's expected sleep quality from current bedroom conditions. This would move the system from retrospective analysis to prospective guidance, alerting the user before bed that conditions are suboptimal.
 
 \subsubsection{Broader Impact}
 
- Affordable personal sleep environment monitoring could complement clinical sleep studies, particularly in urban settings where traffic noise and air quality are persistent concerns. The total hardware cost of under \pounds30 makes this approach accessible to individuals, not just research labs. Open-source hardware designs and code could enable community-scale studies, where multiple households in a neighbourhood monitor their sleep environments simultaneously, producing datasets large enough for generalisable conclusions about urban sleep health.
+The total hardware cost of this system is under \pounds30, compared with clinical polysomnography studies that typically cost over \pounds1{,}000 per night per participant. While low-cost sleep environment sensors are not new, this combination of price and open-source design lowers the barrier to repeated, multi-night monitoring at individual or household level, which is relevant given that ResMed's 2025 global survey found respondents lose nearly three nights of restorative sleep per week on average~\citep{resmed2025}. The full hardware design, Arduino sketch, analysis notebook, and dashboard code are published as an open-source repository, enabling replication of the sensing and analysis pipeline, though a wearable sleep tracker (or substitute) would still be needed for the sleep quality outcome data. A neighbourhood-scale deployment, for example 20 households each running the same sensor kit for three months, would yield approximately 1{,}800 participant-nights, sufficient to detect correlations below $|r| = 0.10$ and to control for between-household variation in building insulation, floor level, and street-facing orientation. Such a dataset could test whether the noise variability effect observed here ($r = -0.80$) holds across different urban environments or is specific to this participant's location and sleeping habits.
 
 % ── Conclusion ────────────────────────────────────────────────────────
 \section*{Conclusion}
@@ -540,11 +510,11 @@ This study set out to investigate which bedroom environment conditions are most 
 
 Across all four analyses, \textbf{noise variability} emerged as the factor with the strongest and most consistent association with sleep quality. Reducing noise variability, through earplugs, white noise machines, or improved window insulation, is the single most impactful change indicated by this dataset.
 
-The end-to-end system worked well for a 14-night observational study. The sensor hardware ran reliably every night with no data loss, the analysis pipeline produced reproducible results, and the dashboard successfully communicates the findings to a non-technical audience. The main limitation was not the system itself but the study duration: 14 nights provides enough data to identify strong patterns but not enough to confirm them statistically. In hindsight, choosing a calibrated sound sensor and a lux-capable light sensor from the start would have made the findings more directly comparable with published guidelines. Despite these limitations, the project demonstrates that affordable IoT hardware (under \pounds30) combined with public APIs and a wearable device can produce actionable, personalised sleep environment insights.
+The end-to-end system worked well for a 14-night observational study. The sensor hardware ran reliably every night with no data loss, the analysis pipeline produced reproducible results, and the dashboard successfully communicates the findings to a non-technical audience. The main limitation was not the system itself but the study duration: 14 nights provides enough data to identify strong patterns but not enough to confirm them statistically. In hindsight, choosing a calibrated sound sensor and a lux-capable light sensor from the start would have made the findings more directly comparable with published guidelines. Despite these limitations, the study demonstrates that affordable IoT hardware (under \pounds30) combined with public APIs and a wearable device can produce actionable, personalised sleep environment insights.
 
 % ── References ────────────────────────────────────────────────────────
 \newpage
-\begin{thebibliography}{14}
+\begin{thebibliography}{17}
 
 \bibitem[Amphetamine(2026)]{amphetamine2026}
 Amphetamine (2026) \textit{Amphetamine for macOS} [Online]. Available at: \url{https://apps.apple.com/us/app/amphetamine/id937984704} (Accessed: March 2026).
@@ -552,8 +522,29 @@ Amphetamine (2026) \textit{Amphetamine for macOS} [Online]. Available at: \url{h
 \bibitem[Basner et~al.(2023)]{basner2023}
 Basner, M., Smith, M.G., Jones, C.W. et al. (2023) `Associations of bedroom PM2.5, CO2, temperature, humidity, and noise with sleep: an observational actigraphy study', \textit{Sleep Health}, 9(3), pp.~253--263. doi:10.1016/j.sleh.2023.02.010.
 
+\bibitem[Breathe~London(2026)]{breathelondon}
+Breathe London (2026) Air Quality Monitoring Network. Available at: \url{https://www.breathelondon.org/} (Accessed: March 2026).
+
 \bibitem[Caddick et~al.(2018)]{caddick2018}
 Caddick, Z.A., Gregory, K., Arsintescu, L. and Flynn-Evans, E.E. (2018) `A review of the environmental parameters necessary for an optimal sleep environment', \textit{Building and Environment}, 132, pp.~11--20. doi:10.1016/j.buildenv.2018.01.020.
+
+\bibitem[Dormann et~al.(2013)]{dormann2013}
+Dormann, C.F. et al. (2013) `Collinearity: a review of methods to deal with it and a simulation study evaluating their performance', \textit{Ecography}, 36(1), pp.~27--46. doi:10.1111/j.1600-0587.2012.07348.x.
+
+\bibitem[Field(2018)]{field2018}
+Field, A. (2018) \textit{Discovering Statistics Using IBM SPSS Statistics}. 5th edn. London: SAGE Publications.
+
+\bibitem[Halperin(2014)]{halperin2014}
+Halperin, D. (2014) `Environmental noise and sleep disturbances: A threat to health?', \textit{Sleep Science}, 7(4), pp.~209--212. doi:10.1016/j.slsci.2014.11.003.
+
+\bibitem[ICO(2025)]{ico2025iot}
+Information Commissioner's Office (2025) \textit{Guidance for consumer Internet of Things products and services}. Available at: \url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/online-tracking/guidance-for-consumer-internet-of-things-products-and-services/} (Accessed: March 2026).
+
+\bibitem[Medic et~al.(2017)]{medic2017}
+Medic, G., Wille, M. and Hemels, M.E. (2017) `Short- and long-term health consequences of sleep disruption', \textit{Nature and Science of Sleep}, 9, pp.~151--161. doi:10.2147/NSS.S134864.
+
+\bibitem[Muzet(2007)]{muzet2007}
+Muzet, A. (2007) `Environmental noise, sleep and health', \textit{Sleep Medicine Reviews}, 11(2), pp.~135--142. doi:10.1016/j.smrv.2006.09.001.
 
 \bibitem[ResMed(2025)]{resmed2025}
 ResMed (2025) \textit{ResMed's fifth annual global sleep survey reveals a world struggling with poor sleep}. Available at: \url{https://newsroom.resmed.com/news-releases/news-details/2025/ResMeds-Fifth-Annual-Global-Sleep-Survey-Reveals-a-World-Struggling-with-Poor-Sleep/} (Accessed: March 2026).
@@ -561,29 +552,17 @@ ResMed (2025) \textit{ResMed's fifth annual global sleep survey reveals a world 
 \bibitem[Sleep~Cycle(2025)]{sleepcycle2025}
 Sleep Cycle (2025) \textit{New Sleep Cycle report: 105 million nights reveal a global decline in sleep quality}. Available at: \url{https://sleepcycle.com/newsroom/press-release/new-sleep-cycle-report-unveiling-global-sleep-trends-and-insights} (Accessed: March 2026).
 
-\bibitem[Yasmeen et~al.(2025)]{yasmeen2025}
-Yasmeen, S., Li, B., Du, C. and Liu, H. (2025) `Exploring the interconnection of sleep quality, indoor environmental factors, and energy efficiency: strategies for sustainable sleep environments', \textit{Indoor Air}, 2025, 8245786. doi:10.1155/ina/8245786.
-
-\bibitem[Muzet(2007)]{muzet2007}
-Muzet, A. (2007) `Environmental noise, sleep and health', \textit{Sleep Medicine Reviews}, 11(2), pp.~135--142. doi:10.1016/j.smrv.2006.09.001.
-
-\bibitem[Breathe~London(2026a)]{breathelondon}
-Breathe London (2026) Air Quality Monitoring Network. Available at: \url{https://www.breathelondon.org/} (Accessed: March 2026).
+\bibitem[UK~GDPR(2018)]{ukgdpr2018}
+UK GDPR (2018) \textit{The General Data Protection Regulation as incorporated into UK law by the European Union (Withdrawal) Act 2018 and the Data Protection, Privacy and Electronic Communications (Amendments etc) (EU Exit) Regulations 2019}. Available at: \url{https://www.legislation.gov.uk/eur/2016/679/contents} (Accessed: March 2026).
 
 \bibitem[Ultrahuman(2026)]{ultrahuman}
 Ultrahuman (2026) Ultrahuman Ring Air. Available at: \url{https://www.ultrahuman.com/ring/} (Accessed: March 2026).
 
-\bibitem[Halperin(2014)]{halperin2014}
-Halperin, D. (2014) `Environmental noise and sleep disturbances: A threat to health?', \textit{Sleep Science}, 7(4), pp.~209--212. doi:10.1016/j.slsci.2014.11.003.
+\bibitem[WHO(2009)]{who2009}
+World Health Organization (2009) \textit{Night Noise Guidelines for Europe}. Copenhagen: WHO Regional Office for Europe. Available at: \url{https://www.who.int/europe/publications/i/item/9789289041737} (Accessed: March 2026).
 
-\bibitem[Field(2018)]{field2018}
-Field, A. (2018) \textit{Discovering Statistics Using IBM SPSS Statistics}. 5th edn. London: SAGE Publications.
-
-\bibitem[Dormann et~al.(2013)]{dormann2013}
-Dormann, C.F. et al. (2013) `Collinearity: a review of methods to deal with it and a simulation study evaluating their performance', \textit{Ecography}, 36(1), pp.~27--46. doi:10.1111/j.1600-0587.2012.07348.x.
-
-\bibitem[Medic et~al.(2017)]{medic2017}
-Medic, G., Wille, M. and Hemels, M.E. (2017) `Short- and long-term health consequences of sleep disruption', \textit{Nature and Science of Sleep}, 9, pp.~151--161. doi:10.2147/NSS.S134864.
+\bibitem[Yasmeen et~al.(2025)]{yasmeen2025}
+Yasmeen, S., Li, B., Du, C. and Liu, H. (2025) `Exploring the interconnection of sleep quality, indoor environmental factors, and energy efficiency: strategies for sustainable sleep environments', \textit{Indoor Air}, 2025, 8245786. doi:10.1155/ina/8245786.
 
 \bibitem[Zhao et~al.(2024)]{zhao2024}
 Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants and the risk of sleep disorders: a systematic review and meta-analysis', \textit{Aerosol and Air Quality Research}, 24, 230197. doi:10.4209/aaqr.230197.
@@ -596,43 +575,48 @@ Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants a
 
 \textit{This appendix contains all figures, diagrams, and screenshots referenced in the report.}
 
-\subsection*{Appendix A: Fritzing Wiring Diagram}
-\textit{Circuit diagram showing the Heltec WiFi LoRa 32 V3 board connected to the DHT11 (GPIO~7), ELB0604 photoresistor (GPIO~1), and KY-038 microphone (GPIO~2), all powered at 3.3\,V. Referenced in Section~1.2.}
+\subsection*{Appendix A: Wiring Diagram and Sensor Assembly}
+\textit{(a) Circuit diagram showing the Heltec WiFi LoRa 32 V3 board connected to the KY-015/DHT11 (GPIO~7), ELB0604 photoresistor (GPIO~1), and KY-038 sound sensor (GPIO~2), all powered at 3.3\,V.}
 
-% \includegraphics[width=\textwidth]{figures/fritzing-wiring.png}
-\begin{center}\textit{[ Insert Fritzing Wiring Diagram here ]}\end{center}
+\begin{center}
+\includegraphics[width=0.60\textwidth]{figures/wiring_diagram.png}
+\end{center}
 
-\subsection*{Appendix B: Physical Sensor Setup}
-\textit{Annotated photograph of the bedside sensor installation, showing the breadboard position relative to the bed ($\sim$0.5\,m from pillow), window ($\sim$2\,m), and laptop. Microphone oriented towards the window (noise source). Referenced in Section~1.2.}
+\textit{(b) Sensor assembly: KY-015/DHT11 (left), KY-038 microphone (middle), ELB0604 photoresistor (right), wired to the Heltec WiFi LoRa 32 V3 on a mini breadboard, powered via USB.}
 
-% \includegraphics[width=\textwidth]{figures/sensor-setup.jpg}
-\begin{center}\textit{[ Insert Physical Sensor Setup here ]}\end{center}
+\begin{center}
+\includegraphics[width=0.60\textwidth]{figures/sensor_assembly.png}
+\end{center}
 
-\subsection*{Appendix C: Data Flow Diagram}
-\textit{Diagram showing the end-to-end data pipeline: three sources (Heltec board via USB serial, Breathe London API, Ultrahuman app) producing raw CSV files, combined into a unified dataset, feeding into the Jupyter notebook analysis and Streamlit dashboard. Referenced in Section~1.3.}
+\subsection*{Appendix B: Data Flow Diagram}
+\textit{Diagram showing the end-to-end data pipeline: three sources (Heltec board via USB serial, Breathe London API, Ultrahuman app) producing raw CSV files, combined into a unified dataset, feeding into the Jupyter notebook analysis and Streamlit dashboard.}
 
-% \includegraphics[width=\textwidth]{figures/data-flow.png}
-\begin{center}\textit{[ Insert Data Flow Diagram here ]}\end{center}
+\begin{center}
+\includegraphics[width=0.60\textwidth]{figures/data_flow_diagram.png}
+\end{center}
 
-\subsection*{Appendix D: Spearman Correlation Heatmap}
-\textit{Annotated heatmap showing Spearman rank correlations between all 12 environment features and 6 sleep metrics, with significance stars ($^*\,p < 0.05$, $^{**}\,p < 0.01$). From notebook Subpart~2. Referenced in Section~2.2, Step~2.}
+\subsection*{Appendix C: Spearman Correlation Heatmap}
+\textit{Heatmap showing Spearman rank correlations between all 12 environment features and 6 sleep metrics, with significance stars ($^*\,p < 0.05$, $^{**}\,p < 0.01$).}
 
-% \includegraphics[width=\textwidth]{figures/correlation-heatmap.png}
-\begin{center}\textit{[ Insert Figure 1: Spearman Correlation Heatmap here ]}\end{center}
+\begin{center}
+\includegraphics[width=0.60\textwidth]{figures/spearman_heatmap.png}
+\end{center}
 
-\subsection*{Appendix E: Good vs Poor Sleep Nights}
-\textit{Bar charts comparing environment conditions (mean and standard deviation) on the top~7 vs bottom~7 nights by sleep score. From notebook Subpart~4. Referenced in Section~2.2, Step~4.}
+\subsection*{Appendix D: Good vs Poor Sleep Nights}
+\textit{Bar charts comparing environment conditions (mean and standard deviation) on the top~7 vs bottom~7 nights by sleep score. }
 
-% \includegraphics[width=\textwidth]{figures/good-vs-poor.png}
-\begin{center}\textit{[ Insert Figure 2: Good vs Poor Sleep Nights here ]}\end{center}
+\begin{center}
+\includegraphics[width=0.60\textwidth]{figures/good_vs_poor_bars.png}
+\end{center}
 
-\subsection*{Appendix F: Intra-Night Environment Profiles}
-\textit{Side-by-side minute-by-minute plots of temperature, humidity, and noise for the best and worst sleep nights. From notebook Subpart~5. Referenced in Section~2.2, Step~5.}
+\subsection*{Appendix E: Intra-Night Environment Profiles}
+\textit{Side-by-side minute-by-minute plots of temperature, humidity, and noise for the best and worst sleep nights. }
 
-% \includegraphics[width=\textwidth]{figures/intra-night-profiles.png}
-\begin{center}\textit{[ Insert Figure 3: Intra-Night Environment Profiles here ]}\end{center}
+\begin{center}
+\includegraphics[width=0.60\textwidth]{figures/intra_night_profiles.png}
+\end{center}
 
-\subsection*{Appendix J: Hardware and System Trade-offs}
+\subsection*{Appendix F: Hardware and System Trade-offs}
 
 \begin{table}[H]
 \centering
@@ -659,9 +643,7 @@ Data privacy & All local / Cloud & A & Zero exposure of personal sleep data to t
 \end{tabular}
 \end{table}
 
-\subsection*{Appendix K: Platform and Visualisation Trade-offs}
-
-{\small\color{red}\textbf{TODO:} Review this table, check all entries are accurate and complete.}
+\subsection*{Appendix G: Platform and Visualisation Trade-offs}
 
 \begin{table}[H]
 \centering
@@ -677,27 +659,39 @@ Functionality vs.\ Rapid development & Streamlit / Flask with Dash & A & Rapid p
 \midrule
 Price vs.\ Robustness & Streamlit Community Cloud (free) / Self-hosted server & A & Zero cost, automatic deploys from GitHub, HTTPS by default & Limited server resources, no custom domain, cold starts after inactivity \\[4pt]
 \midrule
-Performance vs.\ Usability & Cached data loading / No caching & A & Data processing runs once per session rather than on every page change, keeping navigation responsive & Slightly higher memory usage; cached results not updated if source files change mid-session \\
+Performance vs.\ Usability & Cached data loading / No caching & A & Data processing runs once per session rather than on every page change, keeping navigation responsive & Slightly higher memory usage; cached results not updated if source files change mid-session \\[4pt]
+\midrule
+Functionality vs.\ Usability & Full statistical output (notebook) / Simplified visual summaries (dashboard) & Both & Notebook provides full regression diagnostics and p-values for academic rigour; dashboard presents key findings in plain language with interactive charts for non-technical users & Two separate codebases to maintain; aggregation logic duplicated across notebook and dashboard script \\[4pt]
+\midrule
+Price vs.\ Usability & Custom HTML/CSS theming / Streamlit native components & A & Full control over colour scheme, section headers, and metric card layout, enabling sleep-score colour coding and dark theme & 88 \texttt{unsafe\_allow\_html=True} calls; higher development time; harder to maintain if Streamlit updates break HTML rendering \\[4pt]
+\midrule
+Latency/Delay vs.\ Accuracy & Real-time per-reading analysis / Retrospective batch analysis & B & All three sources merged after collection, ensuring complete data with no gaps before any statistics are computed & No real-time feedback during the study; user cannot act on conditions as they happen overnight \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection*{Appendix G: Sleep Dashboard Page}
-\textit{Annotated screenshot of Page~1 (Sleep Dashboard) showing sleep score bar chart, bedroom environment tabs, and air quality trends. Referenced in Section~2.1.}
+\newpage
+\subsection*{Appendix H: Sleep Dashboard Page}
+\textit{Screenshot of Page~1 (Sleep Dashboard) showing sleep score bar chart, bedroom environment tabs, and air quality trends. To explore the full interactive functionality, visit \url{https://sleep-monitor.streamlit.app}.}
+\vspace{0.5em}
+\begin{center}
+\includegraphics[width=0.80\textwidth,keepaspectratio]{figures/dashboard_sleep.pdf}
+\end{center}
 
-% \includegraphics[width=\textwidth]{figures/dashboard-sleep.png}
-\begin{center}\textit{[ Insert Dashboard Screenshot: Sleep Dashboard Page here ]}\end{center}
+\newpage
+\subsection*{Appendix I: Night Explorer Page}
+\textit{Screenshot of Page~2 (Night Explorer) showing sleep architecture, minute-level sensor timelines, night-at-a-glance summary, air quality verdict, and predictor comparison cards. To explore the full interactive functionality, visit \url{https://sleep-monitor.streamlit.app}.}
+\vspace{0.5em}
+\begin{center}
+\includegraphics[width=0.80\textwidth,keepaspectratio]{figures/dashboard_explorer.pdf}
+\end{center}
 
-\subsection*{Appendix H: Night Explorer Page}
-\textit{Annotated screenshot of Page~2 (Night Explorer) showing sleep architecture, minute-level sensor timelines, air quality verdict, and predictor comparison cards. Referenced in Section~2.1.}
-
-% \includegraphics[width=\textwidth]{figures/dashboard-explorer.png}
-\begin{center}\textit{[ Insert Dashboard Screenshot: Night Explorer Page here ]}\end{center}
-
-\subsection*{Appendix I: My Sleep Insights Page}
-\textit{Annotated screenshot of Page~3 (My Sleep Insights) showing scatter plots, optimal ranges table, and actionable takeaway. Referenced in Section~2.1.}
-
-% \includegraphics[width=\textwidth]{figures/dashboard-insights.png}
-\begin{center}\textit{[ Insert Dashboard Screenshot: My Sleep Insights Page here ]}\end{center}
+\newpage
+\subsection*{Appendix J: My Sleep Insights Page}
+\textit{Screenshot of Page~3 (My Sleep Insights) showing best vs worst night comparison, correlation scatter plots, optimal ranges table, and actionable takeaway. To explore the full interactive functionality, visit \url{https://sleep-monitor.streamlit.app}.}
+\vspace{0.5em}
+\begin{center}
+\includegraphics[width=0.80\textwidth,keepaspectratio]{figures/dashboard_insights.pdf}
+\end{center}
 
 \end{document}

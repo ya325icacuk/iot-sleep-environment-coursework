@@ -8,13 +8,13 @@ Investigating the relationship between bedroom environmental conditions and slee
 
 ## Overview
 
-This project combines three data sources to examine how sleeping environment conditions affect sleep quality metrics (total sleep, awake time, deep sleep, REM sleep, and light sleep):
+This project combines three data sources to examine how sleeping environment conditions affect sleep quality metrics (sleep score, total sleep, awake time, deep sleep, REM sleep, and light sleep):
 
 | # | Data Source | Method | Frequency | Parameters |
 |---|---|---|---|---|
 | 1 | Bedroom environment sensors | Heltec WiFi LoRa 32 V3 with DHT11, photoresistor, microphone; logged via USB serial | Every minute | Temperature, humidity, light, sound avg, sound peak |
 | 2 | External air quality | Breathe London API (Horseferry Road, BL0046) | Hourly | NO2, PM2.5 |
-| 3 | Personal sleep metrics | Ultrahuman Ring wearable, manually exported | Daily | Total sleep, awake time, deep sleep, REM sleep, light sleep |
+| 3 | Personal sleep metrics | Ultrahuman Ring wearable, downloaded manually from the website | Daily | Sleep score, total sleep, awake time, deep sleep, REM sleep, light sleep |
 
 All data was collected or filtered to the sleep window of 11pm-9am.
 
@@ -31,6 +31,9 @@ sleep-monitor/
 │   └── ultrahuman_sleep_data.csv                            # Sleep metrics from ring
 ├── notebooks/
 │   └── sleep_analysis.ipynb                                  # Data collection, analysis and visualisation
+├── report/
+│   └── main.tex                                             # LaTeX report source
+├── report-figures/                                          # Figures used in the report
 ├── streamlit/
 │   └── config.toml                                          # Streamlit theme config
 ├── app.py                                                   # Streamlit dashboard application
@@ -75,7 +78,7 @@ The project notebook (`notebooks/sleep_analysis.ipynb`) is structured in three p
 **Part 1: Data Collection** - documents the methodology and code for collecting data from all three sources, and evaluates data quality:
 1. **Bedroom environment sensors** - serial logging from the Heltec board, one reading per minute. Each night produces a separate CSV file (14 in total), which are then combined into a single `bedroom_sensors.csv` for analysis
 2. **External air quality** - bulk retrieval from the Breathe London API after the collection period
-3. **Personal sleep metrics** - manual export from the Ultrahuman app
+3. **Personal sleep metrics** - downloaded manually from the Ultrahuman website
 4. **Data collection evaluation** - completeness, missing value, and sleep window validation checks across all three sources
 
 **Part 2: Data Analysis** - analyses the integrated dataset in five steps:
