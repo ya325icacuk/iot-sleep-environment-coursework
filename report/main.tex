@@ -173,15 +173,7 @@ Two factors make this study feasible. First, low-cost IoT hardware now makes per
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Sources and Sensing Set-up}
 
-To address the study's objectives, three time-series data sources of different nature were integrated:
-
-\begin{itemize}[nosep]
-    \item \textbf{Bedroom environment sensors:} a custom-built system monitoring indoor temperature, humidity, light, and noise throughout the night.
-    \item \textbf{External air quality data:} hourly NO\textsubscript{2} and PM2.5 concentrations from the Breathe London network~\citep{breathelondon}, capturing outdoor conditions that could affect sleep.
-    \item \textbf{Personal sleep metrics:} daily sleep quality and duration data from an Ultrahuman Ring~\citep{ultrahuman} wearable device, providing the outcome measures against which the environment data is compared.
-\end{itemize}
-
-Table~\ref{tab:sources} summarises each source, its collection method, and measured parameters. All data was collected or filtered to a consistent sleep window of 11\,pm to 9\,am over 14 consecutive nights (9 to 22 February 2026).
+To address the study's objectives, three time-series data sources of different nature were integrated. All data was collected or filtered to a consistent sleep window of 11\,pm to 9\,am over 14 consecutive nights (9 to 22 February 2026). Table~\ref{tab:sources} summarises each source, its collection method, and measured parameters.
 
 \begin{table}[H]
 \centering
@@ -201,9 +193,7 @@ Table~\ref{tab:sources} summarises each source, its collection method, and measu
 \end{tabularx}
 \end{table}
 
-\subsubsection{Data Sources}
-
-Each of the three data sources is described below.
+\subsubsection{Sensor Hardware and Signal Processing}
 
 \textbf{Source 1: Bedroom environment sensors.} The Heltec WiFi LoRa 32 V3 development board (ESP32-S3 microcontroller) was chosen as it provides analog-to-digital conversion pins required by the KY-038 sound sensor, as well as digital GPIO for the other sensors. Three sensors were connected, all powered at 3.3\,V to remain within the safe operating range of the ESP32-S3. Table~\ref{tab:sensorspecs} details each sensor's specifications and signal processing.
 
@@ -231,13 +221,11 @@ The Arduino sketch computes both sound average and sound peak each minute, and b
 
 \textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm. The exact formula is not published, so it is treated as a ``black box'' measure in this study. To aid interpretation in the dashboard, sleep scores are grouped into three quality tiers: green ($\geq$80), gold (70--79), and red ($<$70).
 
-\subsubsection{System Design and Limitations}
-
-This section covers the physical installation and sensor limitations.
-
 \textbf{Physical installation.} The Heltec board and all three sensors were mounted on a breadboard placed on the bedside table, approximately 0.5\,m from the pillow and 2\,m from the bedroom window facing Horse Ferry Road. The microphone was oriented towards the window (the primary noise source) to maximise sensitivity to external sound events. The DHT11 sensor was positioned away from the laptop's exhaust fan to avoid heat contamination of temperature readings. The photoresistor was left unshielded to capture ambient room light conditions. A single USB cable connected the board to the laptop for both power and serial data transfer. As all sensors are at a single bedside location, the readings represent conditions at that position rather than across the entire room. The wiring diagram and a photograph of the sensor assembly are provided in Appendix~A.
 
-\textbf{Sensor limitations and upgrade path.} Understanding the limitations of the current sensors is important for interpreting the results and for planning improvements in future iterations. Table~\ref{tab:upgrades} summarises the key limitation of each sensor and a recommended upgrade that would address it.
+\subsubsection{Sensor Limitations and Upgrade Path}
+
+Table~\ref{tab:upgrades} summarises the key limitation of each sensor and a recommended upgrade that would address it.
 
 \begin{table}[H]
 \centering
@@ -260,7 +248,7 @@ KY-038 microphone & Outputs a raw voltage with no calibration to decibels or sou
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Data Collection and Storage/Communications Process}
 
-This section describes how each data source was collected, stored, and communicated to the analysis pipeline. Subsection~1.3.1 covers the collection process for each of the three sources. Subsection~1.3.2 explains the storage and communication design choices and their trade-offs. The end-to-end data flow, from raw data sources through to the three CSV files used in Part~2, is illustrated in Appendix~B. The accompanying code for all collection, retrieval, and preprocessing steps can be found in Part~1 of the \texttt{sleep\_analysis} notebook.
+This section describes how each data source was collected, stored, and communicated to the analysis pipeline. The end-to-end data flow, from raw data sources through to the three CSV files used in Part~2, is illustrated in Appendix~B. The accompanying code for all collection, retrieval, and preprocessing steps can be found in Part~1 of the \texttt{sleep\_analysis} notebook.
 
 \subsubsection{Data Collection}
 
