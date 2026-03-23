@@ -212,15 +212,15 @@ Each of the three data sources is described below.
 \caption{Sensor Specifications and Signal Processing}
 \label{tab:sensorspecs}
 \scriptsize
-\begin{tabularx}{\textwidth}{l c l X}
+\begin{tabularx}{\textwidth}{l l X}
 \toprule
-\textbf{Sensor} & \textbf{GPIO} & \textbf{Function} & \textbf{Key Specifications} \\
+\textbf{Sensor} & \textbf{Function} & \textbf{Key Specifications} \\
 \midrule
-KY-015 / DHT11 & 7 & Temperature and humidity & \textbullet{} $\pm2$\,\textdegree C, $\pm5$\%\,RH accuracy \newline \textbullet{} Reads once per minute \newline \textbullet{} Retries up to 3 times with 500\,ms delays on failed reads \\
+KY-015 / DHT11 & Temperature and humidity & \textbullet{} $\pm2$\,\textdegree C, $\pm5$\%\,RH accuracy \newline \textbullet{} Reads once per minute \newline \textbullet{} Retries up to 3 times with 500\,ms delays on failed reads \\
 \midrule
-ELB0604 photoresistor & 1 & Light detection & \textbullet{} Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as an adjustable threshold comparator \newline \textbullet{} Potentiometer manually calibrated to bedroom ambient light conditions \newline \textbullet{} Module outputs 0 for light and 1 for dark. Inverted in the Arduino sketch so that 1 = light detected \\
+ELB0604 photoresistor & Light detection & \textbullet{} Non-linear analog response converted to binary output (light on/off) by the onboard potentiometer, which acts as an adjustable threshold comparator \newline \textbullet{} Potentiometer manually calibrated to bedroom ambient light conditions \newline \textbullet{} Module outputs 0 for light and 1 for dark. Inverted in the Arduino sketch so that 1 = light detected \\
 \midrule
-KY-038 microphone & 2 & Sound level & \textbullet{} Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \newline \textbullet{} Raw analog readings on a 0--4095 scale \newline \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute). The Arduino sketch then computes two summary features per minute: sound average (sum/count) and sound peak (max in interval) \\
+KY-038 microphone & Sound level & \textbullet{} Outputs a voltage proportional to overall sound level, with no frequency or decibel calibration \newline \textbullet{} Raw analog readings on a 0--4095 scale \newline \textbullet{} Sampled every 5\,ms ($\sim$12,000 samples per minute). The Arduino sketch then computes two summary features per minute: sound average (sum/count) and sound peak (max in interval) \\
 \bottomrule
 \end{tabularx}
 \end{table}
