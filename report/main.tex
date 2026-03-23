@@ -97,14 +97,19 @@ Interactive Visualisation Dashboard & \textit{\href{https://sleep-monitor.stream
 
 \vspace{0.4cm}
 
-\begin{tabular*}{\wd\infotablebox}{@{} l @{\dotfill} r @{}}
-Executive Summary & 1 \\[4pt]
-Part 1: Sensing & 2 \\[4pt]
-Part 2: Internet of Things & 6 \\[4pt]
-Conclusion & 10 \\[4pt]
-References & 10 \\[4pt]
-Appendix: Figures and Illustrations & 12 \\
-\end{tabular*}
+\newlength{\tocwidth}
+\setlength{\tocwidth}{\wd\infotablebox}
+\noindent\begin{minipage}{\tocwidth}
+\makeatletter
+\newcommand{\tocline}[2]{#1\nobreak\leaders\hbox to 0.5em{\hss.\hss}\hfill\nobreak\hbox to 1.5em{\hfil#2}\par\vspace{4pt}}
+\makeatother
+\tocline{Executive Summary}{1}
+\tocline{Part 1: Sensing}{2}
+\tocline{Part 2: Internet of Things}{6}
+\tocline{Conclusion}{10}
+\tocline{References}{10}
+\tocline{Appendix: Figures and Illustrations}{12}
+\end{minipage}
 
 \vspace{\fill}
 \end{center}
