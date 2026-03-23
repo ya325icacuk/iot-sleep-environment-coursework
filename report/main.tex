@@ -252,7 +252,7 @@ This section describes how each data source was collected, stored, and communica
 
 \subsubsection{Data Collection}
 
-\textbf{Bedroom sensors.} The most complex collection path was the bedroom sensors. The data moves through four stages:
+\textbf{Bedroom sensors.} The most complex collection path was the bedroom sensors. USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. No readings were lost to network dropouts over the 14-night study. The data moves through four stages:
 
 \begin{enumerate}[nosep]
     \item Each minute, the Arduino sketch outputs a single CSV-formatted line containing five sensor values over USB serial.
@@ -261,17 +261,15 @@ This section describes how each data source was collected, stored, and communica
     \item Over the 14-night study, this produced 14 files of approximately 600 rows each. After the collection period, all files were manually combined in Excel into a single \texttt{bedroom\_sensors.csv} for analysis.
 \end{enumerate}
 
-\textbf{Air quality.} The air quality data followed a different approach. Rather than fetching data in real-time during each night, which risked missed API calls during overnight sessions, the data was retrieved in bulk from the Breathe London API after the two-week collection period completed. The API was found to timeout (HTTP 504) when requesting large date ranges in a single call, so the data was fetched in two weekly chunks with a 15-second pause between requests. The API returns data in long format (one row per measurement per species), which was transformed to wide format (one row per hour) with columns for the hour, PM2.5, and NO\textsubscript{2}. Only readings within the sleep window were retained, and the result was saved as \texttt{breathe\_london\_air\_quality.csv}.
+\textbf{Air quality.} The air quality data followed a different approach. Rather than fetching data in real-time during each night, which risked missed API calls during overnight sessions, the data was retrieved in bulk from the Breathe London API after the two-week collection period completed. The API was chosen over web scraping as it provides structured JSON that is easier to filter and transform programmatically. The API was found to timeout (HTTP 504) when requesting large date ranges in a single call, so the data was fetched in two weekly chunks with a 15-second pause between requests. The API returns data in long format (one row per measurement per species), which was transformed to wide format (one row per hour) with columns for the hour, PM2.5, and NO\textsubscript{2}. Only readings within the sleep window were retained, and the result was saved as \texttt{breathe\_london\_air\_quality.csv}.
 
 \textbf{Sleep data.} The sleep data was the simplest to collect. The Ultrahuman data was downloaded manually from the website at the end of the collection period and saved as \texttt{ultrahuman\_sleep\_data.csv}.
 
-\subsubsection{Storage and Communications}
+\subsubsection{Local Storage and Trade-offs}
 
-The three sources use distinct communication paths: USB serial for the bedroom sensors, HTTPS API calls for air quality, and manual app export for sleep data. Each was chosen to match the constraints of its source.
+All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private.
 
-USB serial was chosen over the Heltec board's built-in WiFi because the laptop was physically close to the sensor board, making a wired connection simpler and more reliable. No readings were lost to network dropouts over the 14-night study. WiFi would have introduced additional complexity (network configuration, NTP time synchronisation, reconnection logic) without a clear benefit in this setup. The Breathe London data was retrieved via API rather than scraped from the website, as the API provides structured JSON that is easier to work with and can be filtered and transformed programmatically.
-
-All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private. The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~F (Table~\ref{tab:tradeoffs-hw}).
+The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~F (Table~\ref{tab:tradeoffs-hw}).
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
