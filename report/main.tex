@@ -372,14 +372,12 @@ Each page targets a distinct user question:
 \end{itemize}
 \end{tcolorbox}
 
-\textbf{Colour scheme.} The dashboard uses a dark theme because the primary user context is reviewing sleep data, often in the evening or at night. A dark interface reduces eye strain and feels contextually appropriate, with a warm coral accent providing contrast without harsh brightness. Two colour systems operate across the dashboard:
+\textbf{Colour scheme.} The dashboard uses a dark theme because the primary user context is reviewing sleep data, often in the evening or at night. A dark interface reduces eye strain and feels contextually appropriate, with a warm coral accent providing contrast without harsh brightness. To achieve this level of visual control, all metric cards, section headers, and insight panels were built as custom HTML and CSS rather than using Streamlit's native components, which offered limited control over colour and layout. Two colour systems operate across the dashboard:
 
 \begin{itemize}[nosep]
     \item \textbf{Section colours:} each data source has its own colour (gold for sleep metrics, turquoise for bedroom environment, rose for air quality, purple for comparisons and recommendations), consistent across all three pages so the user always knows what type of content they are viewing.
     \item \textbf{Sleep-score colours:} a separate scheme (green for scores $\geq$80, gold for 70--79, red for $<$70) is applied to bars, dots, and cards across all charts, allowing the user to visually scan any chart and immediately see whether good or poor sleep nights cluster at certain values. These quality tiers are defined by this dashboard and are not official Ultrahuman classifications.
 \end{itemize}
-
-\noindent To achieve this theming, all metric cards, section headers, and insight panels were built as custom HTML and CSS rather than using Streamlit's native components, which offered limited control over colour and layout.
 
 \textbf{Readability.} All graphs are interactive: users can hover over any data point to see its exact value, zoom into specific time ranges, and pan across the timeline. All labels use plain language (e.g.\ ``Noise Variability'' rather than ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. Matplotlib was retained in the notebook where static figures are more appropriate.
 
