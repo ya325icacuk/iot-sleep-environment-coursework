@@ -1410,20 +1410,20 @@ elif page == "My Sleep Insights":
         table_html = """<table style="width: 100%; border-collapse: collapse; font-size: 1.5rem;">
             <thead>
                 <tr style="border-bottom: 2px solid rgba(148, 163, 184, 0.2);">
-                    <th style="text-align: left; padding: 1rem 1.3rem; color: #F1F5F9; font-weight: 600;">Condition</th>
+                    <th style="text-align: left; padding: 1rem 1.3rem; color: #475569; font-weight: 600;">Condition</th>
                     <th style="text-align: left; padding: 1rem 1.3rem; color: #9EDEBE; font-weight: 600;">Good Nights Avg</th>
                     <th style="text-align: left; padding: 1rem 1.3rem; color: #E09C9C; font-weight: 600;">Poor Nights Avg</th>
-                    <th style="text-align: left; padding: 1rem 1.3rem; color: #F1F5F9; font-weight: 600;">Difference</th>
+                    <th style="text-align: left; padding: 1rem 1.3rem; color: #475569; font-weight: 600;">Difference</th>
                 </tr>
             </thead>
             <tbody>"""
         for row in rows_data:
             table_html += f"""
                 <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.1);">
-                    <td style="padding: 1rem 1.3rem; color: #F8FAFC; font-weight: 500;">{row["Condition"]}</td>
+                    <td style="padding: 1rem 1.3rem; color: #334155; font-weight: 500;">{row["Condition"]}</td>
                     <td style="padding: 1rem 1.3rem; color: #9EDEBE;">{row["Good Nights Avg"]}</td>
                     <td style="padding: 1rem 1.3rem; color: #E09C9C;">{row["Poor Nights Avg"]}</td>
-                    <td style="padding: 1rem 1.3rem; color: #F8FAFC;">{row["Difference"]}</td>
+                    <td style="padding: 1rem 1.3rem; color: #334155;">{row["Difference"]}</td>
                 </tr>"""
         table_html += "</tbody></table>"
         st.markdown(table_html, unsafe_allow_html=True)
