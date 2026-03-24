@@ -217,9 +217,9 @@ KY-038 microphone & Sound level & \textbullet{} Outputs a voltage proportional t
 
 The Arduino sketch computes both sound average and sound peak each minute, and both are logged to the CSV. During analysis, only sound average was retained as it represents the sustained noise level during each one-minute interval, which is more relevant to sleep disruption than the momentary spikes captured by sound peak.
 
-\textbf{Source 2: External air quality.} The Horseferry Road sensor (site code BL0046) was selected from the Breathe London network (Breathe London, 2026) due to its proximity to the study location.
+\textbf{Source 2: External air quality.} The Horseferry Road sensor (site code BL0046) was selected from the Breathe London network \citep{breathelondon} due to its proximity to the study location.
 
-\textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device (Ultrahuman, 2026) worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm. The exact formula is not published, so it is treated as a ``black box'' measure in this study. To aid interpretation in the dashboard, sleep scores are grouped into three quality tiers: green ($\geq$80), gold (70--79), and red ($<$70).
+\textbf{Source 3: Personal sleep metrics.} Sleep data was collected using an Ultrahuman Ring Air wearable device \citep{ultrahuman} worn each night. The ring uses photoplethysmography (PPG) and accelerometer sensors to track sleep stages and produces a daily summary including sleep score (0--100), total sleep, awake time, deep sleep, REM sleep, and light sleep (all in minutes). The sleep score is a proprietary composite metric computed by Ultrahuman's algorithm. The exact formula is not published, so it is treated as a ``black box'' measure in this study. To aid interpretation in the dashboard, sleep scores are grouped into three quality tiers: green ($\geq$80), gold (70--79), and red ($<$70).
 
 \subsubsection{Physical Installation and Sensor Limitations}
 
