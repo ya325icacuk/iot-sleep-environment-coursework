@@ -1,6 +1,6 @@
 # Sleep Environment Monitor
 
-Investigating the relationship between bedroom environmental conditions and sleep quality over a 2-week study period (9-22 February 2026).
+Investigating the relationship between bedroom environmental conditions and sleep quality over a 2-week study period (9–22 February 2026).
 
 **Student:** Yasmin Akhmedova
 **Programme:** MSc AI Applications and Innovation

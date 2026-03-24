@@ -11,6 +11,7 @@
  *   temperature_c, humidity_pct, light_detected, sound_avg, sound_peak
  *
  * The Python notebook adds timestamps from the laptop clock.
+ * Study period: 9-22 February 2026 (14 nights).
  */
 
 #include "DHT.h"
