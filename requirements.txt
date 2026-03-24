@@ -1,10 +1,19 @@
+# Dashboard
 streamlit
 plotly
+
+# Data processing
 pandas
 numpy
 scipy
-pyserial
-requests
+
+# Visualisation
 seaborn
 matplotlib
+
+# Statistical modelling
 statsmodels
+
+# Hardware and API
+pyserial
+requests
