@@ -269,7 +269,7 @@ This section describes how each data source was collected, stored, and communica
 
 All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private.
 
-The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~F (Table~\ref{tab:tradeoffs-hw}).
+The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in Appendix~C (Table~\ref{tab:tradeoffs-hw}).
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
@@ -348,7 +348,7 @@ The dashboard, named RestNet, was built using Streamlit, a Python framework for 
 
 \subsubsection{User Interface Design}
 
-Three design principles guided the dashboard's interface: a progressive page structure, consistent colour coding, and plain-language readability. Screenshots of all three pages are provided in Appendices~H, I, and~J.
+Three design principles guided the dashboard's interface: a progressive page structure, consistent colour coding, and plain-language readability. Screenshots of all three pages are provided in Appendices~E, F, and~G.
 
 \textbf{Three-page structure.} Rather than presenting all data on a single scrolling page, the dashboard splits content across three pages so that users see summary-level information first and can drill into detail when needed.
 
@@ -381,7 +381,7 @@ Each page targets a distinct user question:
 
 \textbf{Readability.} All graphs are interactive: users can hover over any data point to see its exact value, zoom into specific time ranges, and pan across the timeline. All labels use plain language (e.g.\ ``Noise Variability'' rather than ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. Matplotlib was retained in the notebook where static figures are more appropriate.
 
-Further platform and visualisation trade-offs are summarised in Appendix~G (Table~\ref{tab:tradeoffs-vis}).
+Further platform and visualisation trade-offs are summarised in Appendix~D (Table~\ref{tab:tradeoffs-vis}).
 
 \subsubsection{Dashboard Pages}
 
@@ -443,7 +443,7 @@ The raw bedroom sensor and air quality data is then converted into 12 nightly en
 
 \noindent These are merged with the six Ultrahuman sleep metrics into a unified dataset of 14 rows $\times$ 18 columns.
 
-\textbf{Step 2: Spearman correlation analysis.} To identify which environment features are most strongly associated with sleep quality, Spearman rank correlations are computed between all 12 environment features and all 6 sleep metrics. Spearman was chosen over Pearson because normality cannot be verified with $n = 14$~\citep{field2018}. Four features showed statistically significant correlations with sleep score ($p < 0.05$): noise variability, mean humidity, mean noise level, and temperature range. Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration, making noise the most consistent predictor across sleep metrics. Light exposure, PM2.5, and NO\textsubscript{2} showed no significant correlations with any sleep metric. The full correlation heatmap is provided in Appendix~C.
+\textbf{Step 2: Spearman correlation analysis.} To identify which environment features are most strongly associated with sleep quality, Spearman rank correlations are computed between all 12 environment features and all 6 sleep metrics. Spearman was chosen over Pearson because normality cannot be verified with $n = 14$~\citep{field2018}. Four features showed statistically significant correlations with sleep score ($p < 0.05$): noise variability, mean humidity, mean noise level, and temperature range. Both noise features were also significantly correlated with total sleep duration, awake time, and light sleep duration, making noise the most consistent predictor across sleep metrics. Light exposure, PM2.5, and NO\textsubscript{2} showed no significant correlations with any sleep metric. The full correlation heatmap is provided in Appendix~H.
 
 \textbf{Step 3: OLS regression.} To explore whether multiple features together better explain sleep outcomes, OLS regression models were fitted. For each of three target metrics, the two environment features with the highest absolute Spearman correlation were selected as predictors (limited to two by the rule of thumb requiring 7--10 observations per predictor~\citep{field2018}), meaning interactions between more than two features cannot be modelled. All predictor pairs passed the $|r| > 0.7$ multicollinearity threshold~\citep{dormann2013} (Std Noise and Mean Humidity: $r = 0.60$, Std Noise and Mean Noise: $r = 0.57$). Table~\ref{tab:regression} summarises the regression results for all three models.
 
@@ -475,9 +475,9 @@ Jarque--Bera $p$-value & 0.59 & 0.58 & 0.40 \\
 
 All three models are statistically significant ($p < 0.05$), with Sleep Score showing the strongest fit (Adj~$R^2 = 0.643$). Noise variability is significant or borderline significant in every model, while the second predictor does not reach significance once noise variability is accounted for. Residual diagnostics (Durbin--Watson, Jarque--Bera, Breusch--Pagan, Shapiro--Wilk) are reported but have limited power with only 14 observations.
 
-\textbf{Step 4: Optimal conditions comparison (median split).} To compare how bedroom conditions differ between good and poor sleep nights, the 14 nights are split at the median sleep score into the top 7 (``good sleep'', scores 86--96) and bottom 7 (``poor sleep'', scores 66--82). A descriptive comparison was used given the low test power at $n = 7$ per group. Mean noise was 15.2 points higher on poor nights (86.0 vs 70.7), noise variability was greater (22.2 vs 20.3), and humidity was 5.3 percentage points higher (53.4\% vs 48.1\%). Temperature differed by only 0.6\,\textdegree C. Light, PM2.5, and NO\textsubscript{2} showed negligible differences (all $<$1 unit). The bar charts for this comparison are shown in Appendix~D.
+\textbf{Step 4: Optimal conditions comparison (median split).} To compare how bedroom conditions differ between good and poor sleep nights, the 14 nights are split at the median sleep score into the top 7 (``good sleep'', scores 86--96) and bottom 7 (``poor sleep'', scores 66--82). A descriptive comparison was used given the low test power at $n = 7$ per group. Mean noise was 15.2 points higher on poor nights (86.0 vs 70.7), noise variability was greater (22.2 vs 20.3), and humidity was 5.3 percentage points higher (53.4\% vs 48.1\%). Temperature differed by only 0.6\,\textdegree C. Light, PM2.5, and NO\textsubscript{2} showed negligible differences (all $<$1 unit). The bar charts for this comparison are shown in Appendix~I.
 
-\textbf{Step 5: Intra-night profiles.} Steps 2--4 use nightly aggregates and cannot capture variation within a single night. To examine how conditions evolved overnight, minute-by-minute sensor data for the best and worst sleep nights was plotted side by side. The worst night was warmer (20.5\,\textdegree C vs 18.6\,\textdegree C), more humid ($\sim$58\% vs $\sim$44\%), and had more frequent noise spikes, particularly around 11\,pm--1\,am and after 5\,am. The best night had early spikes but settled into a quieter, more stable pattern overnight. This illustrates why noise variability (not just average level) emerged as the dominant predictor. The intra-night profiles are shown in Appendix~E.
+\textbf{Step 5: Intra-night profiles.} Steps 2--4 use nightly aggregates and cannot capture variation within a single night. To examine how conditions evolved overnight, minute-by-minute sensor data for the best and worst sleep nights was plotted side by side. The worst night was warmer (20.5\,\textdegree C vs 18.6\,\textdegree C), more humid ($\sim$58\% vs $\sim$44\%), and had more frequent noise spikes, particularly around 11\,pm--1\,am and after 5\,am. The best night had early spikes but settled into a quieter, more stable pattern overnight. This illustrates why noise variability (not just average level) emerged as the dominant predictor. The intra-night profiles are shown in Appendix~J.
 
 \subsubsection{Key Findings by Study Objective}
 
@@ -647,44 +647,15 @@ Zhao, Y., Zhang, S., Guo, L. et al. (2024) `Association between air pollutants a
 
 \vspace{12pt}
 
-\noindent
-\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Appendix B: Data Flow Diagram}
 \textit{\small End-to-end data pipeline: three sources (Heltec board, Breathe London API, Ultrahuman app) producing CSV files, unified into a single dataset for notebook analysis and Streamlit dashboard.}
 
 \vspace{4pt}
-\centering
-\includegraphics[width=\textwidth]{data_flow_pipeline.png}
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\subsection*{Appendix C: Spearman Correlation Heatmap}
-\textit{\small Heatmap showing Spearman rank correlations between all 12 environment features and 6 sleep metrics, with significance stars ($^*\,p < 0.05$, $^{**}\,p < 0.01$).}
-
-\vspace{4pt}
-\centering
-\includegraphics[width=\textwidth]{spearman_corr_heatmap.png}
-\end{minipage}
-
-\clearpage
-\subsection*{Appendix D: Good vs Poor Sleep Nights}
-\vspace{-2pt}
-\textit{\small Bar charts comparing environment conditions (mean and standard deviation) on the top~7 vs bottom~7 nights by sleep score.}
-
 \begin{center}
-\includegraphics[width=0.65\textwidth]{figures/good_vs_poor_bars.png}
+\includegraphics[width=0.48\textwidth]{data_flow_pipeline.png}
 \end{center}
 
-\vspace{-4pt}
-\subsection*{Appendix E: Intra-Night Environment Profiles}
-\vspace{-2pt}
-\textit{\small Side-by-side minute-by-minute plots of temperature, humidity, and noise for the best and worst sleep nights.}
-
-\begin{center}
-\includegraphics[width=0.65\textwidth]{figures/intra_night_profiles.png}
-\end{center}
-
-\subsection*{Appendix F: Hardware and System Trade-offs}
+\subsection*{Appendix C: Hardware and System Trade-offs}
 
 \begin{table}[H]
 \centering
@@ -711,7 +682,7 @@ Data privacy & All local / Cloud & A & Zero exposure of personal sleep data to t
 \end{tabular}
 \end{table}
 
-\subsection*{Appendix G: Platform and Visualisation Trade-offs}
+\subsection*{Appendix D: Platform and Visualisation Trade-offs}
 
 \begin{table}[H]
 \centering
@@ -739,7 +710,7 @@ Latency/Delay vs.\ Accuracy & Real-time per-reading analysis / Retrospective bat
 \end{table}
 
 \newpage
-\subsection*{Appendix H: Sleep Dashboard Page}
+\subsection*{Appendix E: Sleep Dashboard Page}
 \vspace{-4pt}
 \textit{\small Sleep score bar chart, bedroom environment tabs, and air quality trends. Interactive version: \url{https://sleep-monitor.streamlit.app}.}
 \vspace{2pt}
@@ -748,7 +719,7 @@ Latency/Delay vs.\ Accuracy & Real-time per-reading analysis / Retrospective bat
 \end{center}
 
 \newpage
-\subsection*{Appendix I: Night Explorer Page}
+\subsection*{Appendix F: Night Explorer Page}
 \vspace{-4pt}
 \textit{\small Sleep architecture, sensor timelines, night-at-a-glance summary, air quality verdict, and predictor comparisons. Interactive version: \url{https://sleep-monitor.streamlit.app}.}
 \vspace{2pt}
@@ -757,12 +728,38 @@ Latency/Delay vs.\ Accuracy & Real-time per-reading analysis / Retrospective bat
 \end{center}
 
 \newpage
-\subsection*{Appendix J: My Sleep Insights Page}
+\subsection*{Appendix G: My Sleep Insights Page}
 \vspace{-4pt}
 \textit{\small Best vs worst night comparison, correlation scatter plots, optimal ranges, and actionable takeaway. Interactive version: \url{https://sleep-monitor.streamlit.app}.}
 \vspace{2pt}
 \begin{center}
 \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{figures/dashboard_insights.pdf}
+\end{center}
+
+\clearpage
+\subsection*{Appendix H: Spearman Correlation Heatmap}
+\textit{\small Heatmap showing Spearman rank correlations between all 12 environment features and 6 sleep metrics, with significance stars ($^*\,p < 0.05$, $^{**}\,p < 0.01$).}
+
+\vspace{4pt}
+\begin{center}
+\includegraphics[width=0.48\textwidth]{spearman_corr_heatmap.png}
+\end{center}
+
+\subsection*{Appendix I: Good vs Poor Sleep Nights}
+\vspace{-2pt}
+\textit{\small Bar charts comparing environment conditions (mean and standard deviation) on the top~7 vs bottom~7 nights by sleep score.}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth]{figures/good_vs_poor_bars.png}
+\end{center}
+
+\vspace{-4pt}
+\subsection*{Appendix J: Intra-Night Environment Profiles}
+\vspace{-2pt}
+\textit{\small Side-by-side minute-by-minute plots of temperature, humidity, and noise for the best and worst sleep nights.}
+
+\begin{center}
+\includegraphics[width=0.65\textwidth]{figures/intra_night_profiles.png}
 \end{center}
 
 \end{document}
