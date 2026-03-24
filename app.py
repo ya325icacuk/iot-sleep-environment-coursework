@@ -1471,3 +1471,4 @@ elif page == "My Sleep Insights":
         </div>""", unsafe_allow_html=True)
 
         st.markdown(f'<div style="font-size: 1.3rem; color: #64748B; font-style: italic; margin-top: 1rem;">These insights are based on {n_nights} nights. As your dataset grows, recommendations will become more reliable.</div>', unsafe_allow_html=True)
+
