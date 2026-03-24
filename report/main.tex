@@ -269,7 +269,7 @@ This section describes how each data source was collected, stored, and communica
 
 All data is stored locally as CSV files on the laptop, with no cloud database or remote server involved. CSV was chosen because the files are human-readable, easy to inspect, and require no database setup. The total data volume is small (8,400 sensor readings, 140 air quality readings, and 14 sleep summaries), making CSV more than adequate for this study. Storing everything locally also keeps the pipeline simple, avoids dependencies on internet connectivity during overnight collection, and ensures personal sleep data remains private.
 
-The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in \hyperref[app:C]{Appendix~C} (Table~\ref{tab:tradeoffs-hw}).
+The trade-off is that there is no automated backup or remote access to the data. If the laptop failed, the collected data could be lost. For a longer study or one involving multiple participants, a cloud-backed database would be worth the added complexity. Trade-off analysis for other factors, including processing, power, and sensor selection, is provided in \hyperref[app:C]{Appendix~C}.
 
 % ──────────────────────────────────────────────────────────────────────
 \subsection{Basic Characteristics of the End-to-End Data Acquisition Setup}
@@ -381,7 +381,7 @@ Each page targets a distinct user question:
 
 \textbf{Readability.} All graphs are interactive: users can hover over any data point to see its exact value, zoom into specific time ranges, and pan across the timeline. All labels use plain language (e.g.\ ``Noise Variability'' rather than ``Std Dev''), targeting a non-technical user who wants to understand their own sleep. Matplotlib was retained in the notebook where static figures are more appropriate.
 
-Further platform and visualisation trade-offs are summarised in \hyperref[app:G]{Appendix~G} (Table~\ref{tab:tradeoffs-vis}).
+Further platform and visualisation trade-offs are summarised in \hyperref[app:G]{Appendix~G}.
 
 \subsubsection{Dashboard Pages}
 
